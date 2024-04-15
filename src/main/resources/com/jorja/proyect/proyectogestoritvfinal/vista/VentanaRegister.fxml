@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jorja.proyect.proyectogestoritvfinal.controlador.RegisterController">
+   <children>
+      <VBox prefHeight="600.0" prefWidth="280.0" stylesheets="@../css/register.css">
+         <children>
+            <AnchorPane prefHeight="316.0" prefWidth="280.0">
+               <children>
+                  <Label fx:id="lblITV" layoutX="34.0" layoutY="71.0" prefHeight="175.0" prefWidth="197.0" styleClass="etiNombreLogo" text="ITV">
+                     <font>
+                        <Font size="71.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblEx" layoutX="134.0" layoutY="180.0" styleClass="etiNombreLogoEx" stylesheets="@../css/register.css" text="Ex" />
+               </children>
+            </AnchorPane>
+         </children>
+      </VBox>
+      <VBox prefHeight="600.0" prefWidth="520.0" styleClass="fondo" stylesheets="@../css/register.css">
+         <children>
+            <HBox prefHeight="109.0" prefWidth="520.0">
+               <children>
+                  <Label prefHeight="56.0" prefWidth="356.0" text="REGISTRATE" textFill="WHITE">
+                     <HBox.margin>
+                        <Insets left="110.0" right="50.0" top="20.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font name="Tahoma Bold" size="44.0" />
+                     </font>
+                  </Label>
+                  <Button mnemonicParsing="false" onAction="#btnClose" styleClass="btnclose">
+                     <graphic>
+                        <FontAwesomeIconView glyphName="CLOSE" />
+                     </graphic>
+                     <HBox.margin>
+                        <Insets right="10.0" top="10.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
+            <HBox prefHeight="499.0" prefWidth="520.0">
+               <children>
+                  <VBox prefHeight="517.0" prefWidth="253.0" styleClass="sectorUno">
+                     <children>
+                        <Label styleClass="etiInfo" text="Nombre:">
+                           <VBox.margin>
+                              <Insets bottom="5.0" left="10.0" />
+                           </VBox.margin>
+                        </Label>
+                        <TextField fx:id="txtNombre" promptText="Introduzca su nombre" styleClass="txtField">
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
+                        </TextField>
+                        <Label styleClass="etiInfo" text="Apellido">
+                           <VBox.margin>
+                              <Insets bottom="5.0" left="10.0" />
+                           </VBox.margin>
+                        </Label>
+                        <TextField fx:id="txtApellido" promptText="Introduzca su apellido" styleClass="txtField">
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
+                        </TextField>
+                        <Label styleClass="etiInfo" text="Telefono">
+                           <VBox.margin>
+                              <Insets bottom="5.0" left="10.0" />
+                           </VBox.margin>
+                        </Label>
+                        <TextField promptText="Introduzca su telefono" styleClass="txtField" />
+                     </children></VBox>
+                  <VBox prefHeight="425.0" prefWidth="269.0" styleClass="sectorUno">
+                     <children>
+                        <Label styleClass="etiInfo" text="Correo:">
+                           <VBox.margin>
+                              <Insets bottom="5.0" left="10.0" />
+                           </VBox.margin>
+                        </Label>
+                        <TextField promptText="Introduzca su correo" styleClass="txtField">
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
+                        </TextField>
+                        <Label styleClass="etiInfo" text="Contraseña:">
+                           <VBox.margin>
+                              <Insets bottom="5.0" left="10.0" />
+                           </VBox.margin>
+                        </Label>
+                        <PasswordField promptText="Introduzca su contraseña" styleClass="txtField">
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
+                        </PasswordField>
+                        <Label styleClass="etiInfo" text="Repita Contraseña:">
+                           <VBox.margin>
+                              <Insets bottom="5.0" left="10.0" />
+                           </VBox.margin>
+                        </Label>
+                        <PasswordField promptText="Repita su contraseña" styleClass="txtField">
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
+                        </PasswordField>
+                     </children></VBox>
+               </children>
+            </HBox>
+            <HBox prefHeight="312.0" prefWidth="520.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#btnRegister" prefHeight="30.0" prefWidth="120.0" styleClass="btnRegistrar" text="Registarse">
+                     <HBox.margin>
+                        <Insets left="120.0" right="25.0" top="20.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#btnCancelar" prefHeight="30.0" prefWidth="120.0" styleClass="btnCancelar" text="Cancelar">
+                     <HBox.margin>
+                        <Insets top="20.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</HBox>

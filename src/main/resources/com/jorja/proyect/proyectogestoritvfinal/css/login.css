@@ -1,0 +1,62 @@
+.titulo {
+    -fx-text-fill: white;
+    -fx-font-family: Tahoma;
+    -fx-font-weight: bold;
+    -fx-font-size: 34px;
+
+}
+
+
+.fondo {
+    -fx-background-color: linear-gradient(to bottom right, #21666C, #745be3);
+    -fx-border-color: #000000;
+    -fx-border-width: .4px 0px .4px .4px;
+}
+
+.fondo2 {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #000000;
+    -fx-border-width: .4px 0px .4px .4px;
+}
+
+.txtField {
+    -fx-background-radius: 15px;
+    -fx-padding: 8px; /* Ajustar el relleno */
+    -fx-border-radius: 15px;
+    -fx-border-color: #ccc; /* Color del borde */
+    -fx-border-width: 1px; /* Ancho del borde */
+}
+
+.btnIniciar {
+    -fx-background-color: #8671e0;
+    -fx-text-fill: white;
+    -fx-font-weight: bold; /* Hacer el texto en negrita */
+    -fx-cursor: hand;
+    -fx-background-radius: 15px;
+    -fx-padding: 8px 16px; /* Ajustar el relleno */
+    -fx-font-size: 17px; /* Tamaño de fuente */
+}
+
+.btnIniciar:hover {
+    -fx-background-color: #9089cb;
+}
+
+.btnRegister {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold; /* Hacer el texto en negrita */
+    -fx-cursor: hand;
+}
+
+.btnRegister:hover {
+    -fx-background-color: #8671e0;
+}
+.btnclose {
+    -fx-background-color: transparent;
+
+}
+
+.btnclose:hover {
+    -fx-background-color: #FF0000;
+}

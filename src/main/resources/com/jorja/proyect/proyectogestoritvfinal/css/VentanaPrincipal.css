@@ -1,0 +1,102 @@
+/* Colores Fondos*/
+.fondo {
+    -fx-background-color: linear-gradient(to bottom right, #21666C, #745be3);
+    -fx-border-color: #000000;
+    -fx-border-width: .4px 0px .4px .4px;
+}
+
+.fondo-superior {
+    -fx-background-color: #ffffff;
+}
+
+/* Estilo labels*/
+.titulo {
+    -fx-text-fill: #000000;
+    -fx-font-family: Tahoma;
+    -fx-font-weight: bold;
+    -fx-font-size: 23px;
+}
+
+.lbl-General {
+    -fx-text-fill: #ffffff;
+    -fx-font-family: Tahoma;
+    -fx-font-size: 18px;
+}
+
+.lbl-Nombre-Usuario {
+    -fx-text-fill: #ffffff;
+    -fx-font-family: Tahoma;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.lbl-Tarjetas-Inicio {
+    -fx-text-fill: #ffffff;
+    -fx-font-family: Tahoma;
+    -fx-font-size: 24px;
+
+}
+.lbl-Tarjetas-Inicio-Contador {
+    -fx-text-fill: #ffffff;
+    -fx-font-family: Tahoma;
+    -fx-font-size: 34px;
+
+}
+
+/* Estilo botones*/
+
+/*Botones principales parte izquierda*/
+.btn-Izquierda {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+    -fx-text-fill: #ffffff;
+    -fx-alignment: CENTER-LEFT;
+    -fx-font-family: Tahoma;
+    -fx-font-size: 18px;
+
+
+
+}
+
+.btn-Izquierda:hover {
+    -fx-text-fill: #d0cdcd;
+}
+
+/* Tarjetas Inicio*/
+
+.tarjetas {
+    -fx-background-color: linear-gradient(to right, #2b303c, #525968);
+    -fx-background-radius: 5px;
+}
+
+
+/*Botones Minimizar y cerrar*/
+
+.btn-Minimizar {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+}
+
+.btn-Minimizar:hover {
+    -fx-background-color: #C8C8C8;
+}
+
+.btn-close {
+    -fx-background-color: transparent;
+
+}
+
+.btn-close:hover {
+    -fx-background-color: #FF0000;
+}
+
+.btn-CerrarSesion {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 10px;
+    -fx-cursor: hand;
+}
+
+.btn-Cerrar-Sesion:hover {
+    -fx-background-color: #8f8f8f;
+}
+

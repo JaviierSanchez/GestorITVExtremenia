@@ -1,0 +1,66 @@
+.fondo {
+    -fx-background-color: linear-gradient(to bottom right, #21666C, #745be3);
+    -fx-border-color: #000000;
+    -fx-border-width: .4px 0px .4px .4px;
+}
+
+.sectorUno {
+
+    -fx-padding: 35 20;
+}
+
+.etiInfo {
+    -fx-text-fill: white;
+    -fx-font-family: Tahoma;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-margin: 5px;
+}
+
+.txtField {
+    -fx-background-radius: 15px;
+    -fx-padding: 8px; /* Ajustar el relleno */
+    -fx-border-radius: 15px;
+    -fx-border-color: #ccc; /* Color del borde */
+    -fx-border-width: 1px; /* Ancho del borde */
+}
+
+.btnRegistrar {
+
+    -fx-background-color: #8671e0;
+    -fx-text-fill: white;
+    -fx-font-weight: bold; /* Hacer el texto en negrita */
+    -fx-cursor: hand;
+    -fx-background-radius: 15px;
+    -fx-padding: 8px 16px; /* Ajustar el relleno */
+    -fx-font-size: 17px; /* Tamaño de fuente */
+
+}
+
+.btnRegistrar:hover {
+    -fx-background-color: #9089cb;
+}
+
+.btnCancelar {
+    -fx-cursor: hand;
+    -fx-background-color: #e04559;
+    -fx-text-fill: white;
+    -fx-font-weight: bold; /* Hacer el texto en negrita */
+    -fx-background-radius: 15px;
+    -fx-padding: 8px 16px; /* Ajustar el relleno */
+    -fx-font-size: 17px; /* Tamaño de fuente */
+}
+
+.btnCancelar:hover {
+
+    -fx-background-color: #f5253d;
+}
+
+.btnclose {
+    -fx-background-color: transparent;
+
+}
+
+.btnclose:hover {
+    -fx-background-color: #FF0000;
+}

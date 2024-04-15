@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<HBox maxHeight="600.0" maxWidth="800.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jorja.proyect.proyectogestoritvfinal.controlador.LoginController">
+   <children>
+      <VBox prefHeight="600.0" prefWidth="280.0" stylesheets="@../css/login.css">
+         <children>
+            <ImageView fitHeight="127.0" fitWidth="223.0" pickOnBounds="true" preserveRatio="true">
+               <VBox.margin>
+                  <Insets left="25.0" top="100.0" />
+               </VBox.margin>
+               <image>
+                  <Image url="@../source/Logo-ITV.png" />
+               </image>
+            </ImageView>
+            <Label alignment="CENTER" prefHeight="32.0" prefWidth="209.0" text="ITV EXTREMEÑA">
+               <font>
+                  <Font name="Tahoma Bold" size="25.0" />
+               </font>
+               <VBox.margin>
+                  <Insets left="40.0" top="55.0" />
+               </VBox.margin>
+            </Label>
+         </children>
+      </VBox>
+      <VBox prefHeight="600.0" prefWidth="538.0" styleClass="fondo" stylesheets="@../css/login.css">
+         <children>
+            <Button mnemonicParsing="false" onAction="#btnClose" styleClass="btnclose">
+               <VBox.margin>
+                  <Insets left="475.0" top="5.0" />
+               </VBox.margin>
+               <graphic>
+                  <FontAwesomeIconView glyphName="CLOSE" selectionFill="BLACK" size="35" styleClass="btnclose" textAlignment="RIGHT" />
+               </graphic>
+            </Button>
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="148.0" prefWidth="394.0" styleClass="titulo" text="Bienvenido a ITVEXTREMEÑA" textAlignment="CENTER" wrapText="true">
+               <font>
+                  <Font name="Alef Bold" size="25.0" />
+               </font>
+               <VBox.margin>
+                  <Insets left="75.0" top="25.0" />
+               </VBox.margin>
+            </Label>
+            <TextField fx:id="txtEmail" prefHeight="40.0" prefWidth="220.0" promptText="Correo Electrónico" styleClass="txtField">
+               <VBox.margin>
+                  <Insets left="50.0" right="50.0" top="55.0" />
+               </VBox.margin>
+            </TextField>
+            <PasswordField fx:id="txtPassword" prefHeight="40.0" prefWidth="220.0" promptText="Contraseña" styleClass="txtField">
+               <VBox.margin>
+                  <Insets left="50.0" right="50.0" top="20.0" />
+               </VBox.margin>
+            </PasswordField>
+            <Button mnemonicParsing="false" onAction="#btnLogin" prefHeight="40.0" prefWidth="150.0" styleClass="btnIniciar" text="Iniciar Sesión">
+               <VBox.margin>
+                  <Insets left="175.0" top="75.0" />
+               </VBox.margin>
+            </Button>
+            <Button mnemonicParsing="false" onAction="#btnRegister" styleClass="btnRegister" text="¿No tienes cuenta? Registrate">
+               <VBox.margin>
+                  <Insets left="145.0" top="40.0" />
+               </VBox.margin>
+            </Button>
+         </children>
+      </VBox>
+   </children>
+</HBox>
