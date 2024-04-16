@@ -20,13 +20,13 @@
 .lbl-General {
     -fx-text-fill: #ffffff;
     -fx-font-family: Tahoma;
-    -fx-font-size: 18px;
+    -fx-font-size: 20px;
 }
 
 .lbl-Nombre-Usuario {
     -fx-text-fill: #ffffff;
     -fx-font-family: Tahoma;
-    -fx-font-size: 18px;
+    -fx-font-size: 22px;
     -fx-font-weight: bold;
 }
 
@@ -36,6 +36,7 @@
     -fx-font-size: 24px;
 
 }
+
 .lbl-Tarjetas-Inicio-Contador {
     -fx-text-fill: #ffffff;
     -fx-font-family: Tahoma;
@@ -52,14 +53,18 @@
     -fx-text-fill: #ffffff;
     -fx-alignment: CENTER-LEFT;
     -fx-font-family: Tahoma;
-    -fx-font-size: 18px;
-
-
-
+    -fx-font-size: 22px;
 }
 
 .btn-Izquierda:hover {
     -fx-text-fill: #d0cdcd;
+}
+
+
+.btn-Izquierda-shadow {
+
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.4), 6, 0, 0, 0);
+
 }
 
 /* Tarjetas Inicio*/

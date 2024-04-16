@@ -1,23 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="599.0" prefWidth="1000.0" stylesheets="@../css/VentanaPrincipal.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <HBox prefHeight="45.0" prefWidth="800.0" styleClass="fondo-superior">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" stylesheets="@../css/Ventana-Principal-Inicio.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jorja.proyect.proyectogestoritvfinal.controlador.VentanaPrincipalControlador">
+   <top>
+      <HBox prefHeight="53.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
          <children>
-            <HBox prefHeight="47.0" prefWidth="691.0">
+            <HBox prefHeight="39.0" prefWidth="600.0" styleClass="fondo-superior">
                <children>
                   <Label styleClass="titulo" text="ITV Extremeña">
                      <HBox.margin>
@@ -25,176 +31,209 @@
                      </HBox.margin>
                   </Label>
                </children>
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
             </HBox>
-            <HBox alignment="TOP_RIGHT" prefHeight="47.0" prefWidth="723.0">
+            <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="600.0" styleClass="fondo-superior">
                <children>
-                  <Button mnemonicParsing="false" styleClass="btn-Minimizar">
+                  <Button alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" styleClass="btn-close">
                      <graphic>
                         <FontAwesomeIconView glyphName="MINUS" size="18" />
                      </graphic>
                      <HBox.margin>
-                        <Insets right="10.0" top="8.0" />
+                        <Insets right="5.0" top="10.0" />
                      </HBox.margin>
                   </Button>
-                  <Button mnemonicParsing="false" styleClass="btn-close">
+                  <Button contentDisplay="RIGHT" mnemonicParsing="false" styleClass="btn-close">
                      <graphic>
                         <FontAwesomeIconView glyphName="CLOSE" size="18" />
                      </graphic>
                      <HBox.margin>
-                        <Insets right="10.0" top="8.0" />
+                        <Insets right="8.0" top="10.0" />
                      </HBox.margin>
                   </Button>
                </children>
             </HBox>
          </children>
       </HBox>
-      <HBox prefHeight="555.0" prefWidth="800.0">
+   </top>
+   <left>
+      <VBox prefHeight="747.0" prefWidth="210.0" styleClass="fondo" BorderPane.alignment="CENTER">
          <children>
-            <VBox prefHeight="760.0" prefWidth="220.0" styleClass="fondo">
+            <FontAwesomeIconView fill="WHITE" glyphName="USER" size="112">
+               <VBox.margin>
+                  <Insets left="65.0" top="30.0" />
+               </VBox.margin>
+            </FontAwesomeIconView>
+            <Label styleClass="lbl-General" text="Bienvenido">
+               <VBox.margin>
+                  <Insets left="55.0" top="10.0" />
+               </VBox.margin>
+            </Label>
+            <Label styleClass="lbl-Nombre-Usuario" text="nombreUsuario">
+               <VBox.margin>
+                  <Insets left="20.0" top="5.0" />
+               </VBox.margin>
+            </Label>
+            <Separator prefWidth="200.0">
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </Separator>
+            <Button mnemonicParsing="false" text="Inicio">
+               <graphic>
+                  <FontAwesomeIconView fill="WHITE" glyphName="HOME" size="24" />
+               </graphic>
+               <VBox.margin>
+                  <Insets left="15.0" top="50.0" />
+               </VBox.margin>
+               <styleClass>
+                  <String fx:value="btn-Izquierda" />
+                  <String fx:value="btn-Izquierda-shadow" />
+               </styleClass>
+            </Button>
+            <Button mnemonicParsing="false" text="Pedir Cita">
+               <graphic>
+                  <FontAwesomeIconView fill="WHITE" glyphName="PLUS" size="24" />
+               </graphic>
+               <VBox.margin>
+                  <Insets left="15.0" />
+               </VBox.margin>
+               <styleClass>
+                  <String fx:value="btn-Izquierda" />
+                  <String fx:value="btn-Izquierda-shadow" />
+               </styleClass>
+            </Button>
+            <Button mnemonicParsing="false" text="Vehículo">
+               <graphic>
+                  <FontAwesomeIconView fill="WHITE" glyphName="CAR" size="24" />
+               </graphic>
+               <VBox.margin>
+                  <Insets left="15.0" />
+               </VBox.margin>
+               <styleClass>
+                  <String fx:value="btn-Izquierda" />
+                  <String fx:value="btn-Izquierda-shadow" />
+               </styleClass>
+            </Button>
+            <Button mnemonicParsing="false" text="Perfil">
+               <graphic>
+                  <FontAwesomeIconView fill="WHITE" glyphName="USER" size="24" />
+               </graphic>
+               <VBox.margin>
+                  <Insets left="15.0" />
+               </VBox.margin>
+               <styleClass>
+                  <String fx:value="btn-Izquierda" />
+                  <String fx:value="btn-Izquierda-shadow" />
+               </styleClass>
+            </Button>
+            <HBox alignment="CENTER" prefHeight="104.0" prefWidth="210.0">
                <children>
-                  <FontAwesomeIconView fill="WHITE" glyphName="USER" size="112">
-                     <VBox.margin>
-                        <Insets left="65.0" top="30.0" />
-                     </VBox.margin>
-                  </FontAwesomeIconView>
-                  <Label styleClass="lbl-General" text="Bienvenido">
-                     <VBox.margin>
-                        <Insets left="60.0" top="10.0" />
-                     </VBox.margin>
-                  </Label>
-                  <Label styleClass="lbl-Nombre-Usuario" text="nombreUsuario">
-                     <VBox.margin>
-                        <Insets left="40.0" top="5.0" />
-                     </VBox.margin>
-                  </Label>
-                  <Separator prefWidth="200.0">
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                  </Separator>
-                  <Button alignment="CENTER" mnemonicParsing="false" prefHeight="30.0" prefWidth="215.0" styleClass="btn-Izquierda" text="Inicio" textAlignment="RIGHT">
+                  <Button mnemonicParsing="false" styleClass="btn-CerrarSesion">
                      <graphic>
-                        <FontAwesomeIconView fill="WHITE" glyphName="HOME" size="24" />
+                        <FontAwesomeIconView glyphName="SIGN_OUT" size="35" />
                      </graphic>
-                     <VBox.margin>
-                        <Insets bottom="8.0" top="40.0" />
-                     </VBox.margin>
-                     <padding>
-                        <Insets left="20.0" />
-                     </padding>
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
                   </Button>
-                  <Button mnemonicParsing="false" prefWidth="215.0" styleClass="btn-Izquierda" text="Pedir Cita">
-                     <graphic>
-                        <FontAwesomeIconView fill="WHITE" glyphName="PLUS" size="24" />
-                     </graphic>
-                     <VBox.margin>
-                        <Insets bottom="8.0" top="5.0" />
-                     </VBox.margin>
-                     <padding>
-                        <Insets left="20.0" />
-                     </padding>
-                  </Button>
-                  <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="215.0" styleClass="btn-Izquierda" text="Vehículo">
-                     <graphic>
-                        <FontAwesomeIconView fill="WHITE" glyphName="CAR" size="20" />
-                     </graphic>
-                     <VBox.margin>
-                        <Insets bottom="8.0" top="5.0" />
-                     </VBox.margin>
-                     <padding>
-                        <Insets left="20.0" />
-                     </padding>
-                  </Button>
-                  <Button mnemonicParsing="false" prefWidth="215.0" styleClass="btn-Izquierda" text="Perfil">
-                     <graphic>
-                        <FontAwesomeIconView fill="WHITE" glyphName="USER" size="24" />
-                     </graphic>
-                     <VBox.margin>
-                        <Insets top="5.0" />
-                     </VBox.margin>
-                     <padding>
-                        <Insets left="20.0" />
-                     </padding>
-                  </Button>
-                  <HBox alignment="CENTER_LEFT" prefHeight="73.0" prefWidth="220.0">
-                     <VBox.margin>
-                        <Insets top="110.0" />
-                     </VBox.margin>
-                     <children>
-                        <Button mnemonicParsing="false" prefHeight="34.0" prefWidth="38.0" styleClass="btn-CerrarSesion">
-                           <graphic>
-                              <FontAwesomeIconView glyphName="SIGN_OUT" size="32" />
-                           </graphic>
-                           <HBox.margin>
-                              <Insets left="10.0" />
-                           </HBox.margin>
-                        </Button>
-                        <Label styleClass="lbl-General" text="Cerrar Sesión">
-                           <HBox.margin>
-                              <Insets left="10.0" />
-                           </HBox.margin>
-                        </Label>
-                     </children>
-                  </HBox>
+                  <Label styleClass="lbl-General" text="Cerrar Sesión" />
                </children>
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-            </VBox>
-            <VBox prefHeight="555.0" prefWidth="780.0">
-               <children>
-                  <HBox prefHeight="276.0" prefWidth="780.0">
-                     <children>
-                        <AnchorPane prefHeight="130.0" prefWidth="240.0" styleClass="tarjetas">
-                           <HBox.margin>
-                              <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
-                           </HBox.margin>
-                           <children>
-                              <FontAwesomeIconView layoutX="40.0" layoutY="114.0" />
-                              <Label layoutX="32.0" layoutY="34.0" styleClass="lbl-Tarjetas-Inicio" text="Total Citas Itv" textFill="WHITE" />
-                              <Label layoutX="115.0" layoutY="107.0" styleClass="lbl-Tarjetas-Inicio-Contador" text="1" />
-                           </children>
-                        </AnchorPane>
-                        <AnchorPane prefHeight="200.0" prefWidth="240.0" styleClass="tarjetas">
-                           <HBox.margin>
-                              <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
-                           </HBox.margin>
-                           <children>
-                              <FontAwesomeIconView layoutX="29.0" layoutY="127.0" />
-                              <Label layoutX="27.0" layoutY="32.0" styleClass="lbl-Tarjetas-Inicio" text="Total" />
-                              <Label layoutX="101.0" layoutY="120.0" styleClass="lbl-Tarjetas-Inicio-Contador" text="1" />
-                           </children>
-                        </AnchorPane>
-                        <AnchorPane prefHeight="200.0" prefWidth="240.0" styleClass="tarjetas">
-                           <HBox.margin>
-                              <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
-                           </HBox.margin>
-                           <children>
-                              <FontAwesomeIconView layoutX="22.0" layoutY="127.0" />
-                              <Label layoutX="74.0" layoutY="36.0" styleClass="lbl-Tarjetas-Inicio" text="Total" />
-                              <Label layoutX="101.0" layoutY="129.0" styleClass="lbl-Tarjetas-Inicio-Contador" text="1" />
-                           </children>
-                        </AnchorPane>
-                     </children>
-                  </HBox>
-                  <HBox prefHeight="280.0" prefWidth="780.0">
-                     <children>
-                        <BarChart prefHeight="280.0" prefWidth="780.0">
-                          <xAxis>
-                            <CategoryAxis side="BOTTOM" />
-                          </xAxis>
-                          <yAxis>
-                            <NumberAxis side="LEFT" />
-                          </yAxis>
-                        </BarChart>
-                     </children>
-                  </HBox>
-               </children>
-            </VBox>
+               <VBox.margin>
+                  <Insets top="160.0" />
+               </VBox.margin>
+            </HBox>
          </children>
-      </HBox>
-   </children>
-</VBox>
+      </VBox>
+   </left>
+   <center>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <AnchorPane prefHeight="748.0" prefWidth="991.0">
+               <children>
+                  <VBox prefHeight="746.0" prefWidth="992.0">
+                     <children>
+                        <HBox alignment="CENTER" prefHeight="262.0" prefWidth="992.0">
+                           <children>
+                              <AnchorPane prefHeight="280.0" prefWidth="240.0" styleClass="tarjetas">
+                                 <HBox.margin>
+                                    <Insets bottom="50.0" left="15.0" right="20.0" top="50.0" />
+                                 </HBox.margin>
+                                 <children>
+                                    <Label layoutX="50.0" layoutY="33.0" styleClass="lbl-Tarjetas-Inicio" text="Total Usuarios" />
+                                    <Label layoutX="111.0" layoutY="105.0" styleClass="lbl-Tarjetas-Inicio-Contador" text="1" />
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane prefHeight="200.0" prefWidth="240.0" styleClass="tarjetas">
+                                 <HBox.margin>
+                                    <Insets bottom="50.0" left="20.0" right="20.0" top="50.0" />
+                                 </HBox.margin>
+                                 <children>
+                                    <Label layoutX="39.0" layoutY="34.0" styleClass="lbl-Tarjetas-Inicio" text="Total Vehículos" />
+                                    <Label layoutX="111.0" layoutY="105.0" styleClass="lbl-Tarjetas-Inicio-Contador" text="1" />
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane prefHeight="200.0" prefWidth="240.0" styleClass="tarjetas">
+                                 <HBox.margin>
+                                    <Insets bottom="50.0" left="20.0" right="15.0" top="50.0" />
+                                 </HBox.margin>
+                                 <children>
+                                    <Label layoutX="64.0" layoutY="33.0" styleClass="lbl-Tarjetas-Inicio" text="Total Citas" />
+                                    <Label layoutX="111.0" layoutY="105.0" styleClass="lbl-Tarjetas-Inicio-Contador" text="1" />
+                                 </children>
+                              </AnchorPane>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="482.0" prefWidth="992.0">
+                           <children>
+                              <BarChart prefHeight="482.0" prefWidth="957.0">
+                                <xAxis>
+                                  <CategoryAxis side="BOTTOM" />
+                                </xAxis>
+                                <yAxis>
+                                  <NumberAxis side="LEFT" />
+                                </yAxis>
+                                 <HBox.margin>
+                                    <Insets bottom="20.0" left="15.0" />
+                                 </HBox.margin>
+                              </BarChart>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+            <AnchorPane prefHeight="748.0" prefWidth="993.0" visible="false">
+               <children>
+                  <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="721.0" prefWidth="967.0" styleClass="fondo-superior">
+                     <children>
+                        <AnchorPane layoutY="8.0" prefHeight="705.0" prefWidth="953.0" styleClass="fondo">
+                           <children>
+                              <TableView layoutX="7.0" layoutY="11.0" prefHeight="375.0" prefWidth="940.0">
+                                <columns>
+                                  <TableColumn prefWidth="119.0" text="Matricula" />
+                                  <TableColumn prefWidth="112.0" text="Fecha" />
+                                    <TableColumn prefWidth="115.0" text="Hora" />
+                                    <TableColumn prefWidth="236.0" text="Tipo Vehículo" />
+                                    <TableColumn prefWidth="165.0" text="Tipo Inspección" />
+                                    <TableColumn prefWidth="178.0" text="Precio" />
+                                </columns>
+                              </TableView>
+                              <TextField layoutX="42.0" layoutY="433.0" />
+                              <ComboBox layoutX="42.0" layoutY="497.0" prefWidth="150.0" />
+                              <ComboBox layoutX="241.0" layoutY="433.0" prefWidth="150.0" />
+                              <TextField editable="false" layoutX="242.0" layoutY="497.0" />
+                              <DatePicker layoutX="483.0" layoutY="433.0" prefHeight="25.0" prefWidth="204.0" />
+                              <Button layoutX="620.0" layoutY="510.0" mnemonicParsing="false" text="Button" />
+                              <Button layoutX="714.0" layoutY="510.0" mnemonicParsing="false" text="Button" />
+                              <Button layoutX="620.0" layoutY="611.0" mnemonicParsing="false" text="Button" />
+                              <Button layoutX="720.0" layoutY="611.0" mnemonicParsing="false" text="Button" />
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </AnchorPane>
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>
