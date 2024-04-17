@@ -1,0 +1,117 @@
+/* Colores fondos */
+
+.fondo{
+    -fx-background-color: #ffffff;
+}
+
+/* Estilos labels */
+
+.lbl-General {
+    -fx-text-fill: #000000;
+    -fx-font-family: Tahoma;
+    -fx-font-size: 15px;
+    /*-fx-font-weight: bold;*/
+}
+
+
+/* Estilo tablaView*/
+
+.table-view{
+    -fx-background-color:transparent;
+    -fx-border-color: linear-gradient(to bottom right, #21666C, #745be3);
+    -fx-border-radius:4px;
+    -fx-padding:0px;
+}
+.table-view .table-column{
+    -fx-alignment:CENTER;
+}
+.table-view .column-header-background{
+
+    -fx-background-color: linear-gradient(to bottom right, #21666C, #745be3);
+    -fx-background-insets: 0 0 0 0;
+    -f-background-radius:8px 8px 0px 0px;
+}
+.table-view .column-header, .filter{
+    -fx-background-color: transparent;
+    -fx-size:40px;
+}
+.table-view .column-header .label{
+    -fx-text-fill:#fff;
+    -fx-font-family:"Arial";
+}
+
+.textfield{
+    -fx-background-color: linear-gradient(to bottom, #efefef,#eeeeee);
+    -fx-border-color: linear-gradient(to bottom right, #21666C, #745be3);
+    -fx-border-width: 1px;
+    -fx-border-radius: 5px;
+}
+.textfield:focused{
+    -fx-border-width:1.8px;
+    -fx-background-color:#fff;
+}
+
+/* TextField busqueda */
+.textfiedl-busqueda{
+    -fx-background-color:transparent;
+    -fx-border-color:linear-gradient(to bottom right, #21666C, #745be3);
+    -fx-border-radius:5px;
+    -fx-font-size:13px;
+    -fx-font-family:"Arial";
+    -fx-border-width:1px;
+    -fx-padding:0px 0px 0px 22px;
+}
+.textfiedl-busqueda:focused{
+    -fx-border-width:2px;
+}
+
+/* Botones CRUD */
+.btn-add{
+
+    -fx-background-color:#327252;
+    -fx-background-radius:8px;
+    -fx-text-fill:#fff;
+    -fx-font-size:16px;
+    -fx-font-family:"Arial";
+    -fx-cursor:hand;
+}
+.btn-add:hover{
+    -fx-background-color:#309a65;
+
+}
+
+.btn-update{
+    -fx-background-color:#304575;
+    -fx-background-radius:8px;
+    -fx-text-fill:#fff;
+    -fx-font-size:16px;
+    -fx-font-family:"Arial";
+    -fx-cursor:hand;
+}
+.btn-update:hover{
+    -fx-background-color:#3357a4;
+}
+
+.btn-delete{
+    -fx-background-color:#86253f;
+    -fx-background-radius:8px;
+    -fx-text-fill:#fff;
+    -fx-font-size:16px;
+    -fx-font-family:"Arial";
+    -fx-cursor:hand;
+}
+.btn-delete:hover{
+    -fx-background-color:#ae1d46;
+}
+
+.btn-clear{
+    -fx-background-color:#753566;
+    -fx-background-radius:8px;
+    -fx-text-fill:#fff;
+    -fx-font-size:16px;
+    -fx-font-family:"Arial";
+    -fx-cursor:hand;
+}
+.btn-clear:hover{
+    -fx-background-color:#9d3485;
+}

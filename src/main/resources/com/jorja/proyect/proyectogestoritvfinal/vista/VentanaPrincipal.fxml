@@ -18,6 +18,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" stylesheets="@../css/Ventana-Principal-Inicio.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jorja.proyect.proyectogestoritvfinal.controlador.VentanaPrincipalControlador">
    <top>
@@ -148,7 +149,7 @@
    <center>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <AnchorPane prefHeight="748.0" prefWidth="991.0">
+            <AnchorPane prefHeight="748.0" prefWidth="991.0" visible="false">
                <children>
                   <VBox prefHeight="746.0" prefWidth="992.0">
                      <children>
@@ -202,31 +203,50 @@
                   </VBox>
                </children>
             </AnchorPane>
-            <AnchorPane prefHeight="748.0" prefWidth="993.0" visible="false">
+            <AnchorPane prefHeight="748.0" prefWidth="993.0" stylesheets="@../css/Ventana-Principal-Cita.css">
                <children>
                   <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="721.0" prefWidth="967.0" styleClass="fondo-superior">
                      <children>
-                        <AnchorPane layoutY="8.0" prefHeight="705.0" prefWidth="953.0" styleClass="fondo">
+                        <AnchorPane layoutY="8.0" prefHeight="709.0" prefWidth="963.0" styleClass="fondo">
                            <children>
-                              <TableView layoutX="7.0" layoutY="11.0" prefHeight="375.0" prefWidth="940.0">
+                              <TextField layoutX="21.0" layoutY="13.0" prefHeight="25.0" prefWidth="181.0" promptText="Búsqueda" styleClass="textfiedl-busqueda" />
+                              <FontAwesomeIconView glyphName="SEARCH" layoutX="26.0" layoutY="31.0" size="14" />
+                              <TableView layoutX="7.0" layoutY="44.0" prefHeight="375.0" prefWidth="940.0">
                                 <columns>
                                   <TableColumn prefWidth="119.0" text="Matricula" />
                                   <TableColumn prefWidth="112.0" text="Fecha" />
                                     <TableColumn prefWidth="115.0" text="Hora" />
                                     <TableColumn prefWidth="236.0" text="Tipo Vehículo" />
-                                    <TableColumn prefWidth="165.0" text="Tipo Inspección" />
-                                    <TableColumn prefWidth="178.0" text="Precio" />
+                                    <TableColumn prefWidth="204.0" text="Tipo Inspección" />
+                                    <TableColumn prefWidth="153.0" text="Precio" />
                                 </columns>
                               </TableView>
-                              <TextField layoutX="42.0" layoutY="433.0" />
-                              <ComboBox layoutX="42.0" layoutY="497.0" prefWidth="150.0" />
-                              <ComboBox layoutX="241.0" layoutY="433.0" prefWidth="150.0" />
-                              <TextField editable="false" layoutX="242.0" layoutY="497.0" />
-                              <DatePicker layoutX="483.0" layoutY="433.0" prefHeight="25.0" prefWidth="204.0" />
-                              <Button layoutX="620.0" layoutY="510.0" mnemonicParsing="false" text="Button" />
-                              <Button layoutX="714.0" layoutY="510.0" mnemonicParsing="false" text="Button" />
-                              <Button layoutX="620.0" layoutY="611.0" mnemonicParsing="false" text="Button" />
-                              <Button layoutX="720.0" layoutY="611.0" mnemonicParsing="false" text="Button" />
+                              <TextField layoutX="109.0" layoutY="445.0" prefHeight="35.0" prefWidth="170.0" promptText="Introduzca su matrícula" styleClass="textfield">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font></TextField>
+                              <ComboBox layoutX="438.0" layoutY="447.0" prefHeight="35.0" prefWidth="220.0" promptText="Seleccione el tipo de vehículo" styleClass="textfield" />
+                              <ComboBox layoutX="438.0" layoutY="493.0" prefHeight="35.0" prefWidth="220.0" promptText="Seleccione el tipo de inspección" styleClass="textfield" />
+                              <TextField editable="false" layoutX="438.0" layoutY="539.0" prefHeight="35.0" prefWidth="220.0" promptText="Precio" styleClass="textfield">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font></TextField>
+                              <DatePicker layoutX="109.0" layoutY="494.0" prefHeight="35.0" prefWidth="170.0" promptText="Seleccione la fecha" styleClass="textfield" />
+                              <Button layoutX="152.0" layoutY="620.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="95.0" styleClass="btn-add" text="Añadir" />
+                              <Button layoutX="401.0" layoutY="620.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="95.0" styleClass="btn-delete" text="Borrar" />
+                              <Button layoutX="273.0" layoutY="620.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="95.0" styleClass="btn-update" text="Actualizar" />
+                              <Button layoutX="529.0" layoutY="620.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="95.0" styleClass="btn-clear" text="Limpiar" />
+                              <Label alignment="CENTER_RIGHT" layoutX="-17.0" layoutY="451.0" prefHeight="20.0" prefWidth="115.0" styleClass="lbl-General" text="Matrícula:" />
+                              <Label alignment="CENTER_RIGHT" layoutX="309.0" layoutY="452.0" prefHeight="20.0" prefWidth="115.0" styleClass="lbl-General" text="Tipo Vehículo:" />
+                              <Label alignment="CENTER_RIGHT" layoutX="-17.0" layoutY="500.0" prefHeight="20.0" prefWidth="115.0" styleClass="lbl-General" text="Fecha:" />
+                              <Label alignment="CENTER_RIGHT" layoutX="309.0" layoutY="497.0" prefHeight="20.0" prefWidth="115.0" styleClass="lbl-General" text="Tipo Inspección:" />
+                              <Label alignment="CENTER_RIGHT" layoutX="309.0" layoutY="547.0" prefHeight="20.0" prefWidth="115.0" styleClass="lbl-General" text="Precio:" />
+                              <Label alignment="CENTER_RIGHT" layoutX="-17.0" layoutY="546.0" prefHeight="20.0" prefWidth="115.0" styleClass="lbl-General" text="Hora:" />
+                              <TextField layoutX="109.0" layoutY="541.0" prefHeight="35.0" prefWidth="170.0" promptText="Introduzca la hora" styleClass="textfield">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </TextField>
                            </children>
                         </AnchorPane>
                      </children>
