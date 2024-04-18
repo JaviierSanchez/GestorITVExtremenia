@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import static com.jorja.proyect.proyectogestoritvfinal.controlador.Utils.VENTANAREGISTER;
 
@@ -14,7 +15,7 @@ public class VentanaRegister extends Application {
 
         HBox root = FXMLLoader.load(getClass().getResource(VENTANAREGISTER));
         Scene scene = new Scene(root);
-
+        stage.initStyle(StageStyle.TRANSPARENT);
         stage.setScene(scene);
         stage.show();
 

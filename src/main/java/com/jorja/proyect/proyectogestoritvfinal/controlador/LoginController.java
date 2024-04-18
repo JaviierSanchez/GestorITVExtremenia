@@ -61,7 +61,7 @@ public class LoginController implements Initializable {
 
     private void iniciarSesion() {
 
-        String sql = "SELECT du.Correo, du.Password FROM datos_usuario WHERE du.Correo = ? and du.Password = ?";
+        String sql = "SELECT du.Correo,du.Contraseña FROM datos_usuario du WHERE du.Correo = ? and du.Contraseña = ?";
         cbd = new CONEXIONBD();
         conexion = cbd.abrirConexion();
 
@@ -72,7 +72,7 @@ public class LoginController implements Initializable {
             resultado = sentencia.executeQuery();
 
             if (txtEmail.getText().isEmpty() || txtPassword.getText().isEmpty()) {
-                mostrarAlerta("Error", "Rellene los campos");
+                mostrarAlerta("Campos Vacíos", "¡Campos vacíos! Por favor, completa todos los campos antes de continuar.");
             } else if (resultado.next()) {
                 txtEmail.getScene().getWindow().hide();
                 try {
@@ -81,7 +81,7 @@ public class LoginController implements Initializable {
                     throw new RuntimeException(e);
                 }
             } else {
-                mostrarAlerta("Error", "Credenciales erroneas, compruebe las credenciales");
+                mostrarAlerta("Error de Credenciales", "¡Error de credenciales! Por favor, verifica tus datos e inténtalo nuevamente.");
             }
 
 

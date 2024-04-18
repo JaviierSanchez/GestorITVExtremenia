@@ -41,7 +41,7 @@
                   </Label>
                   <Button mnemonicParsing="false" onAction="#btnClose" styleClass="btnclose">
                      <graphic>
-                        <FontAwesomeIconView glyphName="CLOSE" />
+                        <FontAwesomeIconView glyphName="CLOSE" selectionFill="BLACK" size="35"/>
                      </graphic>
                      <HBox.margin>
                         <Insets right="10.0" top="10.0" />
