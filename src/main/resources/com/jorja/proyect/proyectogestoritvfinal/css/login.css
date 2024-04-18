@@ -1,5 +1,5 @@
 .titulo {
-    -fx-text-fill: white;
+    -fx-text-fill: #000000;
     -fx-font-family: Tahoma;
     -fx-font-weight: bold;
     -fx-font-size: 34px;
@@ -14,7 +14,7 @@
 }
 
 .fondo2 {
-    -fx-background-color: #FFFFFF;
+    -fx-background-color: #F5F9FA;
     -fx-border-color: #000000;
     -fx-border-width: .4px 0px .4px .4px;
 }
@@ -25,10 +25,14 @@
     -fx-border-radius: 15px;
     -fx-border-color: #ccc; /* Color del borde */
     -fx-border-width: 1px; /* Ancho del borde */
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
 }
 
 .btnIniciar {
-    -fx-background-color: #8671e0;
+    /*-fx-background-color: #8671e0;*/
+
+    -fx-background-color:#309a65;
     -fx-text-fill: white;
     -fx-font-weight: bold; /* Hacer el texto en negrita */
     -fx-cursor: hand;
@@ -38,19 +42,21 @@
 }
 
 .btnIniciar:hover {
-    -fx-background-color: #9089cb;
+    /*-fx-background-color: #9089cb;*/
+    -fx-background-color:#327252;
 }
 
 .btnRegister {
     -fx-background-color: transparent;
-    -fx-text-fill: white;
+    -fx-text-fill: #000000;
     -fx-font-size: 14px;
     -fx-font-weight: bold; /* Hacer el texto en negrita */
     -fx-cursor: hand;
+    -fx-background-radius: 10px;
 }
 
 .btnRegister:hover {
-    -fx-background-color: #8671e0;
+    -fx-background-color: #e5e2e2;
 }
 .btnclose {
     -fx-background-color: transparent;
@@ -58,5 +64,5 @@
 }
 
 .btnclose:hover {
-    -fx-background-color: #FF0000;
+    -fx-background-color: #c42b1c;
 }

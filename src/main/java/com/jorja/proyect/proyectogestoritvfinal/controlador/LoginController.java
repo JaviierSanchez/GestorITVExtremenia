@@ -60,8 +60,7 @@ public class LoginController implements Initializable {
     }
 
     private void iniciarSesion() {
-
-        String sql = "SELECT du.Correo,du.Contraseña FROM datos_usuario du WHERE du.Correo = ? and du.Contraseña = ?";
+        String sql = "SELECT du.Correo, du.Contraseña, du.administrador FROM datos_usuario du WHERE du.Correo = ? AND du.Contraseña = ?";
         cbd = new CONEXIONBD();
         conexion = cbd.abrirConexion();
 
@@ -74,22 +73,27 @@ public class LoginController implements Initializable {
             if (txtEmail.getText().isEmpty() || txtPassword.getText().isEmpty()) {
                 mostrarAlerta("Campos Vacíos", "¡Campos vacíos! Por favor, completa todos los campos antes de continuar.");
             } else if (resultado.next()) {
-                txtEmail.getScene().getWindow().hide();
-                try {
-                    new VentanaPrincipal().start(new Stage());
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
+                boolean esAdministrador = resultado.getBoolean("administrador");
+                if (esAdministrador) {
+                    // Si el usuario es administrador
+                    txtEmail.getScene().getWindow().hide();
+                    try {
+                        new VentanaPrincipal().start(new Stage());
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                } else {
+                    // Si el usuario no es administrador
+                    mostrarAlerta("Acceso Denegado", "No tienes permisos de administrador para acceder a esta aplicación.");
                 }
             } else {
                 mostrarAlerta("Error de Credenciales", "¡Error de credenciales! Por favor, verifica tus datos e inténtalo nuevamente.");
             }
-
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
     }
+
 
 
     private void mostrarAlerta(String titulo, String mensaje) {

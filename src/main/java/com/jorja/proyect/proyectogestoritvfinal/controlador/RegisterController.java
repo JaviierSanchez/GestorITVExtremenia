@@ -51,6 +51,14 @@ public class RegisterController implements Initializable {
      * si todo esta bien te dirije hacia la ventana login y ya puedes iniciar sesion
      *
      */
+
+    /*
+
+    INSERT INTO datos_usuario(Nombre,Apellido,Telefono,Correo,Contraseña,Administrador) values ("Jorge","Gomez",656745693,"jorgollo04@gmail.com","1234",False)
+
+     */
+
+
     private void registrarUsuario() {
 
 

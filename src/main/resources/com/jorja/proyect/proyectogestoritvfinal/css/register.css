@@ -1,5 +1,13 @@
+
+/* Estilos fondos*/
 .fondo {
     -fx-background-color: linear-gradient(to bottom right, #21666C, #745be3);
+    -fx-border-color: #000000;
+    -fx-border-width: .4px 0px .4px .4px;
+}
+
+.fondo2 {
+    -fx-background-color: #F5F9FA;
     -fx-border-color: #000000;
     -fx-border-width: .4px 0px .4px .4px;
 }
@@ -10,9 +18,9 @@
 }
 
 .etiInfo {
-    -fx-text-fill: white;
+    -fx-text-fill: #000000;
     -fx-font-family: Tahoma;
-    -fx-font-weight: bold;
+
     -fx-font-size: 14px;
     -fx-margin: 5px;
 }
@@ -21,13 +29,15 @@
     -fx-background-radius: 15px;
     -fx-padding: 8px; /* Ajustar el relleno */
     -fx-border-radius: 15px;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
     -fx-border-color: #ccc; /* Color del borde */
     -fx-border-width: 1px; /* Ancho del borde */
 }
 
 .btnRegistrar {
-
-    -fx-background-color: #8671e0;
+    -fx-background-color:#309a65;
+    /*-fx-background-color: #8671e0;*/
     -fx-text-fill: white;
     -fx-font-weight: bold; /* Hacer el texto en negrita */
     -fx-cursor: hand;
@@ -38,12 +48,14 @@
 }
 
 .btnRegistrar:hover {
-    -fx-background-color: #9089cb;
+    /*-fx-background-color: #9089cb;*/
+
+    -fx-background-color:#327252;
 }
 
 .btnCancelar {
     -fx-cursor: hand;
-    -fx-background-color: #e04559;
+    -fx-background-color: #c42b1c;
     -fx-text-fill: white;
     -fx-font-weight: bold; /* Hacer el texto en negrita */
     -fx-background-radius: 15px;
@@ -53,7 +65,7 @@
 
 .btnCancelar:hover {
 
-    -fx-background-color: #f5253d;
+    -fx-background-color: #b22f22;
 }
 
 .btnclose {
@@ -62,5 +74,5 @@
 }
 
 .btnclose:hover {
-    -fx-background-color: #FF0000;
+    -fx-background-color: #c42b1c;
 }

@@ -4,6 +4,11 @@
     -fx-background-color: #ffffff;
 }
 
+.fondo-principal{
+    -fx-background-radius: 10px;
+    -fx-background-color: #ffffff;
+}
+
 /* Estilos labels */
 
 .lbl-General {
