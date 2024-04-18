@@ -4,18 +4,31 @@ import com.jorja.proyect.proyectogestoritvfinal.vista.VentanaPrincipal;
 import com.jorja.proyect.proyectogestoritvfinal.vista.VentanaRegister;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
-public class LoginController {
+import java.net.URL;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ResourceBundle;
+
+public class LoginController implements Initializable {
 
     @FXML
     private TextField txtEmail;
 
     @FXML
     private PasswordField txtPassword;
+    private Connection conexion;
+    private PreparedStatement sentencia;
+    private ResultSet resultado;
+    private CONEXIONBD cbd;
 
     @FXML
     void btnLogin(ActionEvent event) {
@@ -47,22 +60,35 @@ public class LoginController {
     }
 
     private void iniciarSesion() {
-        String email = txtEmail.getText(); // Obtener el texto del campo de correo electrónico
-        String password = txtPassword.getText(); // Obtener el texto del campo de contraseña
 
-        if (email.isEmpty() || password.isEmpty()) {
-            mostrarAlerta("Error", "Rellena los campos");
-        } else if (!email.equals("admin@gmail.es") || !password.equals("admin")) {
-            mostrarAlerta("Error", "Credenciales erróneas");
-        } else {
-            // Las credenciales son válidas, ocultar la ventana de inicio de sesión y mostrar la ventana principal
-            txtEmail.getScene().getWindow().hide();
-            try {
-                new VentanaPrincipal().start(new Stage());
-            } catch (Exception e) {
-                throw new RuntimeException(e);
+        String sql = "SELECT du.Correo, du.Password FROM datos_usuario WHERE du.Correo = ? and du.Password = ?";
+        cbd = new CONEXIONBD();
+        conexion = cbd.abrirConexion();
+
+        try {
+            sentencia = conexion.prepareStatement(sql);
+            sentencia.setString(1, txtEmail.getText());
+            sentencia.setString(2, txtPassword.getText());
+            resultado = sentencia.executeQuery();
+
+            if (txtEmail.getText().isEmpty() || txtPassword.getText().isEmpty()) {
+                mostrarAlerta("Error", "Rellene los campos");
+            } else if (resultado.next()) {
+                txtEmail.getScene().getWindow().hide();
+                try {
+                    new VentanaPrincipal().start(new Stage());
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            } else {
+                mostrarAlerta("Error", "Credenciales erroneas, compruebe las credenciales");
             }
+
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
+
     }
 
 
@@ -72,5 +98,14 @@ public class LoginController {
         alert.setTitle(titulo);
         alert.setContentText(mensaje);
         alert.showAndWait();
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        txtPassword.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.ENTER) {
+                iniciarSesion();
+            }
+        });
     }
 }

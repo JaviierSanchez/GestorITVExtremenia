@@ -1,6 +1,7 @@
 module com.jorja.proyect.proyectogestoritvfinal {
     requires javafx.controls;
     requires javafx.fxml;
+    requires java.sql;
 
 
     opens com.jorja.proyect.proyectogestoritvfinal to javafx.fxml;
