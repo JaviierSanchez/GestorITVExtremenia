@@ -87,7 +87,7 @@
                               <Insets bottom="5.0" left="10.0" />
                            </VBox.margin>
                         </Label>
-                        <TextField promptText="Introduzca su telefono" styleClass="txtField" />
+                        <TextField fx:id="txtTelefono" promptText="Introduzca su telefono" styleClass="txtField" />
                      </children></VBox>
                   <Separator orientation="VERTICAL" prefHeight="150.0" />
                   <VBox prefHeight="425.0" prefWidth="269.0" styleClass="sectorUno">
@@ -97,7 +97,7 @@
                               <Insets bottom="5.0" left="10.0" />
                            </VBox.margin>
                         </Label>
-                        <TextField promptText="Introduzca su correo" styleClass="txtField">
+                        <TextField fx:id="txtCorreo" promptText="Introduzca su correo" styleClass="txtField">
                            <VBox.margin>
                               <Insets bottom="10.0" />
                            </VBox.margin>
@@ -107,21 +107,34 @@
                               <Insets bottom="5.0" left="10.0" />
                            </VBox.margin>
                         </Label>
-                        <PasswordField promptText="Introduzca su contraseña" styleClass="txtField">
+                        <PasswordField fx:id="txtPassword" promptText="Introduzca su contraseña" styleClass="txtField">
                            <VBox.margin>
                               <Insets bottom="10.0" />
                            </VBox.margin>
                         </PasswordField>
+                        <Label fx:id="lblPasswordError1" text="Las contraseñas no coinciden." textFill="RED" visible="false">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
                         <Label styleClass="etiInfo" text="Repita Contraseña:" visible="false">
                            <VBox.margin>
                               <Insets bottom="5.0" left="10.0" />
                            </VBox.margin>
                         </Label>
-                        <PasswordField promptText="Repita su contraseña" styleClass="txtField">
+                        <PasswordField fx:id="txtPassword2" promptText="Repita su contraseña" styleClass="txtField">
                            <VBox.margin>
                               <Insets bottom="10.0" />
                            </VBox.margin>
                         </PasswordField>
+                        <Label fx:id="lblPasswordError2" prefHeight="37.0" prefWidth="262.0" text="Las contraseñas no coinciden." textAlignment="CENTER" textFill="RED" visible="false" wrapText="true">
+                           <padding>
+                              <Insets bottom="20.0" />
+                           </padding>
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
                      </children></VBox>
                </children>
                <VBox.margin>

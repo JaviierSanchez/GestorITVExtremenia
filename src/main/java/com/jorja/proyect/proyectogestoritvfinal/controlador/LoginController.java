@@ -91,9 +91,18 @@ public class LoginController implements Initializable {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            if (conexion != null) {
+
+                try {
+                    cbd.cerrarConexion();
+                    conexion.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
         }
     }
-
 
 
     private void mostrarAlerta(String titulo, String mensaje) {
