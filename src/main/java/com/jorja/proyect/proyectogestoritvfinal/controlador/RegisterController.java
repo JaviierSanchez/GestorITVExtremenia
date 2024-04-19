@@ -76,10 +76,6 @@ public class RegisterController implements Initializable {
 
     }
 
-/*
-    INSERT INTO datos_usuario(Nombre,Apellido,Telefono,Correo,Contraseña,Administrador) values ("Jorge","Gomez",656745693,"jorgollo04@gmail.com","1234",False)
-     */
-
     /***
      *  Metodo para registar el usuario:
      *
@@ -99,7 +95,7 @@ public class RegisterController implements Initializable {
             resultado = sentencia.executeQuery();
 
             if (txtNombre.getText().isEmpty() || txtApellido.getText().isEmpty() || txtTelefono.getText().isEmpty() || txtCorreo.getText().isEmpty() || txtPassword.getText().isEmpty() || txtPassword2.getText().isEmpty()) {
-                mostrarAlertaError("Campos Vacíos", "¡Campos vacíos! Por favor, completa todos los campos antes de continuar.");
+                mostrarAlerta("Campos Vacíos", "¡Campos vacíos! Por favor, completa todos los campos antes de continuar.", Alert.AlertType.ERROR);
             } else if (!txtPassword.getText().equals(txtPassword2.getText())) {
                 lblPasswordError1.setVisible(true);
                 lblPasswordError2.setVisible(true);
@@ -107,7 +103,7 @@ public class RegisterController implements Initializable {
             } else {
                 if (resultado.next()) {
                     // El usuario ya existe
-                    mostrarAlertaError("Usuario Existente", "¡El usuario ya está registrado!");
+                    mostrarAlerta("Usuario Existente", "¡El usuario ya está registrado!", Alert.AlertType.ERROR);
                 } else {
                     // El usuario no existe y se crea
                     String sqlInsert = "INSERT INTO datos_usuario(Nombre,Apellido,Telefono,Correo,Contraseña) VALUES (?,?,?,?,?)";
@@ -120,7 +116,7 @@ public class RegisterController implements Initializable {
                     int filas = sentencia.executeUpdate();
 
                     if (filas > 0) {
-                        mostrarAlertaInfo("Usuario registrado", "El usuario se registro con exito, inicie sesion");
+                        mostrarAlerta("Usuario registrado", "El usuario se registro con exito, inicie sesion", Alert.AlertType.INFORMATION);
                         // Nos dirige hacia la ventana Login
                         txtCorreo.getScene().getWindow().hide();
                         try {
@@ -129,7 +125,7 @@ public class RegisterController implements Initializable {
                             throw new RuntimeException(e);
                         }
                     } else {
-                        mostrarAlertaError("Error", "¡Ocurrió un error al registrar el usuario!");
+                        mostrarAlerta("Error", "¡Ocurrió un error al registrar el usuario!", Alert.AlertType.ERROR);
 
                     }
 
@@ -145,17 +141,8 @@ public class RegisterController implements Initializable {
 
     }
 
-
-    private void mostrarAlertaError(String titulo, String mensaje) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setHeaderText(null);
-        alert.setTitle(titulo);
-        alert.setContentText(mensaje);
-        alert.showAndWait();
-    }
-
-    private void mostrarAlertaInfo(String titulo, String mensaje) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipoAlerta) {
+        Alert alert = new Alert(tipoAlerta);
         alert.setHeaderText(null);
         alert.setTitle(titulo);
         alert.setContentText(mensaje);

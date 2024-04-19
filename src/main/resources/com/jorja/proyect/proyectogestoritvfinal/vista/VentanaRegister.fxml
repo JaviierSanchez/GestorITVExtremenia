@@ -116,10 +116,8 @@
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
-                        </Label>
-                        <Label styleClass="etiInfo" text="Repita Contraseña:" visible="false">
                            <VBox.margin>
-                              <Insets bottom="5.0" left="10.0" />
+                              <Insets bottom="8.0" />
                            </VBox.margin>
                         </Label>
                         <PasswordField fx:id="txtPassword2" promptText="Repita su contraseña" styleClass="txtField">

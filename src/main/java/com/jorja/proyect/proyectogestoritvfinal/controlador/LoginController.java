@@ -104,7 +104,6 @@ public class LoginController implements Initializable {
         }
     }
 
-
     private void mostrarAlerta(String titulo, String mensaje) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setHeaderText(null);
