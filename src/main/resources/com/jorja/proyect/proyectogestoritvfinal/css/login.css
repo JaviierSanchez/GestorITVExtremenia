@@ -32,7 +32,7 @@
 .btnIniciar {
     /*-fx-background-color: #8671e0;*/
 
-    -fx-background-color:#309a65;
+    -fx-background-color: #309a65;
     -fx-text-fill: white;
     -fx-font-weight: bold; /* Hacer el texto en negrita */
     -fx-cursor: hand;
@@ -43,7 +43,7 @@
 
 .btnIniciar:hover {
     /*-fx-background-color: #9089cb;*/
-    -fx-background-color:#327252;
+    -fx-background-color: #327252;
 }
 
 .btnRegister {
@@ -58,6 +58,7 @@
 .btnRegister:hover {
     -fx-background-color: #e5e2e2;
 }
+
 .btnclose {
     -fx-background-color: transparent;
 

@@ -71,9 +71,7 @@ public class RegisterController implements Initializable {
 
     @FXML
     void btnClose(ActionEvent event) {
-
         System.exit(0);
-
     }
 
     /***
@@ -126,16 +124,21 @@ public class RegisterController implements Initializable {
                         }
                     } else {
                         mostrarAlerta("Error", "¡Ocurrió un error al registrar el usuario!", Alert.AlertType.ERROR);
-
                     }
-
-
                 }
             }
-
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            if (conexion != null) {
+
+                try {
+                    cbd.cerrarConexion();
+                    conexion.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
         }
 
 
