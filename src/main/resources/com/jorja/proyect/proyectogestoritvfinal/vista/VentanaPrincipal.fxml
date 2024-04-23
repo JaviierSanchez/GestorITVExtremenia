@@ -10,10 +10,12 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -239,7 +241,7 @@
                   </VBox>
                </children>
             </AnchorPane>
-            <AnchorPane prefHeight="748.0" prefWidth="993.0" stylesheets="@../css/Ventana-Principal-Cita.css">
+            <AnchorPane prefHeight="748.0" prefWidth="993.0" stylesheets="@../css/Ventana-Principal-Cita.css" visible="false">
                <children>
                   <AnchorPane layoutX="10.0" layoutY="20.0" prefHeight="709.0" prefWidth="973.0" styleClass="fondo-principal">
                      <children>
@@ -312,6 +314,35 @@
                         <TextField layoutX="149.0" layoutY="550.0" styleClass="textfield" />
                         <TextField layoutX="456.0" layoutY="467.0" styleClass="textfield" />
                         <ComboBox layoutX="456.0" layoutY="506.0" prefWidth="150.0" styleClass="textfield" />
+                     </children>
+                  </AnchorPane>
+               </children>
+            </AnchorPane>
+            <AnchorPane prefHeight="748.0" prefWidth="992.0">
+               <children>
+                  <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="718.0" prefWidth="964.0" styleClass="fondo-principal" stylesheets="@../css/Ventana-Principal-Vehiculo.css">
+                     <children>
+                        <Label layoutX="31.0" layoutY="26.0" styleClass="lbl-Titulos" text="Datos Usuario:" />
+                        <TextField layoutX="92.0" layoutY="98.0" promptText="Nombre" styleClass="textfield" />
+                        <TextField layoutX="348.0" layoutY="98.0" promptText="Apellido" styleClass="textfield" />
+                        <TextField layoutX="590.0" layoutY="98.0" promptText="Telefono" styleClass="textfield" />
+                        <TextField layoutX="92.0" layoutY="161.0" promptText="Correo" styleClass="textfield" />
+                        <PasswordField layoutX="348.0" layoutY="161.0" promptText="Contraseña" styleClass="textfield" />
+                        <Label layoutX="31.0" layoutY="102.0" styleClass="lbl-General" text="Nombre" />
+                        <Label layoutX="281.0" layoutY="102.0" styleClass="lbl-General" text="Apellido" />
+                        <Label layoutX="31.0" layoutY="165.0" styleClass="lbl-General" text="Correo" />
+                        <Label layoutX="514.0" layoutY="102.0" styleClass="lbl-General" text="Telefono" />
+                        <Label layoutX="258.0" layoutY="165.0" styleClass="lbl-General" text="Contraseña" />
+                        <TableView layoutX="37.0" layoutY="311.0" prefHeight="294.0" prefWidth="360.0">
+                          <columns>
+                            <TableColumn prefWidth="75.0" text="C1" />
+                            <TableColumn prefWidth="75.0" text="C2" />
+                              <TableColumn prefWidth="75.0" text="Column X" />
+                              <TableColumn prefWidth="75.0" text="Column X" />
+                          </columns>
+                        </TableView>
+                        <ToggleButton layoutX="528.0" layoutY="162.0" mnemonicParsing="false" text="Editar" />
+                        <Button layoutX="614.0" layoutY="162.0" mnemonicParsing="false" text="Actualizar" />
                      </children>
                   </AnchorPane>
                </children>
