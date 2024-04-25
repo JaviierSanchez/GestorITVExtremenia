@@ -25,7 +25,7 @@ public class CONEXIONBD {
             Class.forName("com.mysql.cj.jdbc.Driver");
 
             try {
-                conexion = (Connection) DriverManager.getConnection("jdbc:mysql://" + DBHOST + ":3306/" + DBNAME, "root", "root");
+                conexion = (Connection) DriverManager.getConnection("jdbc:mysql://" + DBHOST + ":3306/" + DBNAME, "root", "");
 
 
             } catch (SQLException e) {

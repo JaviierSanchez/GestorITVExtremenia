@@ -14,11 +14,11 @@
 
 <HBox maxHeight="600.0" maxWidth="903.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="903.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jorja.proyect.proyectogestoritvfinal.controlador.LoginController">
    <children>
-      <VBox prefHeight="600.0" prefWidth="357.0" styleClass="fondo" stylesheets="@../css/login.css">
+      <VBox alignment="CENTER" prefHeight="600.0" prefWidth="357.0" styleClass="fondo" stylesheets="@../css/login.css">
          <children>
             <ImageView fitHeight="285.0" fitWidth="385.0" pickOnBounds="true" preserveRatio="true">
                <VBox.margin>
-                  <Insets top="120.0" />
+                  <Insets />
                </VBox.margin>
                <image>
                   <Image url="@../source/logo.png" />

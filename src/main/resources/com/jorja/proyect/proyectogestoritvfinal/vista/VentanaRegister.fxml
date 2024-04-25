@@ -15,14 +15,14 @@
 
 <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="903.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jorja.proyect.proyectogestoritvfinal.controlador.RegisterController">
    <children>
-      <VBox alignment="TOP_CENTER" prefHeight="600.0" prefWidth="280.0" styleClass="fondo" stylesheets="@../css/register.css">
+      <VBox alignment="CENTER" prefHeight="600.0" prefWidth="280.0" styleClass="fondo" stylesheets="@../css/register.css">
          <children>
             <ImageView fitHeight="285.0" fitWidth="385.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../source/logo.png" />
                </image>
                <VBox.margin>
-                  <Insets top="100.0" />
+                  <Insets />
                </VBox.margin>
             </ImageView>
          </children>
@@ -31,7 +31,7 @@
          <children>
             <HBox prefHeight="105.0" prefWidth="518.0">
                <children>
-                  <Label prefHeight="56.0" prefWidth="356.0" text="REGISTRATE">
+                  <Label prefHeight="56.0" prefWidth="356.0" text="REGÍSTRATE">
                      <HBox.margin>
                         <Insets left="110.0" right="50.0" top="20.0" />
                      </HBox.margin>
@@ -56,33 +56,33 @@
                <children>
                   <VBox prefHeight="517.0" prefWidth="253.0" styleClass="sectorUno">
                      <children>
-                        <Label styleClass="etiInfo" text="Nombre:" visible="false">
+                        <Label styleClass="etiInfo" text="Nombre">
                            <VBox.margin>
                               <Insets bottom="5.0" left="10.0" />
                            </VBox.margin>
                         </Label>
                         <TextField fx:id="txtNombre" promptText="Introduzca su nombre" styleClass="txtField">
                            <VBox.margin>
-                              <Insets bottom="10.0" />
+                              <Insets bottom="20.0" />
                            </VBox.margin>
                            <font>
-                              <Font name="System Bold" size="14.0" />
+                              <Font size="14.0" />
                            </font>
                         </TextField>
-                        <Label styleClass="etiInfo" text="Apellido:" visible="false">
+                        <Label styleClass="etiInfo" text="Apellido">
                            <VBox.margin>
                               <Insets bottom="5.0" left="10.0" />
                            </VBox.margin>
                         </Label>
                         <TextField fx:id="txtApellido" promptText="Introduzca su apellido" styleClass="txtField">
                            <VBox.margin>
-                              <Insets bottom="10.0" />
+                              <Insets bottom="28.0" />
                            </VBox.margin>
                            <font>
                               <Font size="14.0" />
                            </font>
                         </TextField>
-                        <Label styleClass="etiInfo" text="Telefono:" visible="false">
+                        <Label styleClass="etiInfo" text="Telefono">
                            <VBox.margin>
                               <Insets bottom="5.0" left="10.0" />
                            </VBox.margin>
@@ -92,24 +92,24 @@
                   <Separator orientation="VERTICAL" prefHeight="150.0" />
                   <VBox prefHeight="425.0" prefWidth="269.0" styleClass="sectorUno">
                      <children>
-                        <Label styleClass="etiInfo" text="Correo:" visible="false">
+                        <Label styleClass="etiInfo" text="Correo">
                            <VBox.margin>
                               <Insets bottom="5.0" left="10.0" />
                            </VBox.margin>
                         </Label>
                         <TextField fx:id="txtCorreo" promptText="Introduzca su correo" styleClass="txtField">
                            <VBox.margin>
-                              <Insets bottom="10.0" />
+                              <Insets bottom="20.0" />
                            </VBox.margin>
                         </TextField>
-                        <Label styleClass="etiInfo" text="Contraseña:" visible="false">
+                        <Label styleClass="etiInfo" text="Contraseña">
                            <VBox.margin>
                               <Insets bottom="5.0" left="10.0" />
                            </VBox.margin>
                         </Label>
                         <PasswordField fx:id="txtPassword" promptText="Introduzca su contraseña" styleClass="txtField">
                            <VBox.margin>
-                              <Insets bottom="10.0" />
+                              <Insets bottom="1.0" />
                            </VBox.margin>
                         </PasswordField>
                         <Label fx:id="lblPasswordError1" text="Las contraseñas no coinciden." textFill="RED" visible="false">
@@ -117,12 +117,17 @@
                               <Font name="System Bold" size="12.0" />
                            </font>
                            <VBox.margin>
-                              <Insets bottom="8.0" />
+                              <Insets bottom="12.0" left="5.0" />
+                           </VBox.margin>
+                        </Label>
+                        <Label styleClass="etiInfo" text="Repita su contraseña">
+                           <VBox.margin>
+                              <Insets bottom="5.0" />
                            </VBox.margin>
                         </Label>
                         <PasswordField fx:id="txtPassword2" promptText="Repita su contraseña" styleClass="txtField">
                            <VBox.margin>
-                              <Insets bottom="10.0" />
+                              <Insets bottom="3.0" />
                            </VBox.margin>
                         </PasswordField>
                         <Label fx:id="lblPasswordError2" prefHeight="37.0" prefWidth="262.0" text="Las contraseñas no coinciden." textAlignment="CENTER" textFill="RED" visible="false" wrapText="true">
@@ -132,6 +137,9 @@
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
+                           <VBox.margin>
+                              <Insets left="5.0" />
+                           </VBox.margin>
                         </Label>
                      </children></VBox>
                </children>
