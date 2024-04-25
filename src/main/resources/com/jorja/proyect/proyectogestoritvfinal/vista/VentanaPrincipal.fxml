@@ -10,7 +10,6 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -81,19 +80,15 @@
                   <Insets top="10.0" />
                </VBox.margin>
             </Separator>
-            <Button mnemonicParsing="false" text="Inicio">
+            <Button fx:id="btnLateralInicio" mnemonicParsing="false" onAction="#cambiarVentana" prefHeight="42.0" style="-fx-background-color: #429b7f; -fx-background-radius: 15;" styleClass="btn-Izquierda" text="Inicio">
                <graphic>
                   <FontAwesomeIconView fill="WHITE" glyphName="HOME" size="24" />
                </graphic>
                <VBox.margin>
                   <Insets left="15.0" top="90.0" />
                </VBox.margin>
-               <styleClass>
-                  <String fx:value="btn-Izquierda" />
-                  <String fx:value="btn-Izquierda-shadow" />
-               </styleClass>
             </Button>
-            <Button mnemonicParsing="false" text="Pedir Cita">
+            <Button fx:id="btnLateralCita" mnemonicParsing="false" onAction="#cambiarVentana" prefHeight="42.0" text="Pedir Cita">
                <graphic>
                   <FontAwesomeIconView fill="WHITE" glyphName="PLUS" size="24" />
                </graphic>
@@ -105,7 +100,7 @@
                   <String fx:value="btn-Izquierda-shadow" />
                </styleClass>
             </Button>
-            <Button mnemonicParsing="false" text="Vehículo">
+            <Button fx:id="btnLateralVehiculo" mnemonicParsing="false" onAction="#cambiarVentana" text="Vehículo">
                <graphic>
                   <FontAwesomeIconView fill="WHITE" glyphName="CAR" size="24" />
                </graphic>
@@ -117,7 +112,7 @@
                   <String fx:value="btn-Izquierda-shadow" />
                </styleClass>
             </Button>
-            <Button mnemonicParsing="false" text="Perfil">
+            <Button fx:id="btnLateralPerfil" mnemonicParsing="false" onAction="#cambiarVentana" text="Perfil">
                <graphic>
                   <FontAwesomeIconView fill="WHITE" glyphName="USER" size="24" />
                </graphic>
@@ -151,7 +146,7 @@
    <center>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <AnchorPane prefHeight="748.0" prefWidth="991.0" visible="false">
+            <AnchorPane fx:id="layoutInicio" prefHeight="748.0" prefWidth="991.0">
                <children>
                   <VBox prefHeight="746.0" prefWidth="992.0">
                      <children>
@@ -241,11 +236,11 @@
                   </VBox>
                </children>
             </AnchorPane>
-            <AnchorPane prefHeight="748.0" prefWidth="993.0" stylesheets="@../css/Ventana-Principal-Cita.css" visible="false">
+            <AnchorPane fx:id="layoutPedirCita" prefHeight="748.0" prefWidth="993.0" stylesheets="@../css/Ventana-Principal-Cita.css" visible="false">
                <children>
                   <AnchorPane layoutX="10.0" layoutY="20.0" prefHeight="709.0" prefWidth="973.0" styleClass="fondo-principal">
                      <children>
-                        <TextField layoutX="21.0" layoutY="13.0" prefHeight="25.0" prefWidth="181.0" promptText="Búsqueda" styleClass="textfiedl-busqueda" visible="false" />
+                        <TextField layoutX="21.0" layoutY="13.0" prefHeight="25.0" prefWidth="181.0" promptText="Búsqueda" styleClass="textfiedl-busqueda" />
                         <FontAwesomeIconView glyphName="SEARCH" layoutX="26.0" layoutY="31.0" size="14" />
                         <TableView layoutX="17.0" layoutY="47.0" prefHeight="375.0" prefWidth="940.0">
                           <columns>
@@ -285,7 +280,7 @@
                   </AnchorPane>
                </children>
             </AnchorPane>
-            <AnchorPane prefHeight="748.0" prefWidth="992.0" stylesheets="@../css/Ventana-Principal-Vehiculo.css" visible="false">
+            <AnchorPane fx:id="layoutVehiculo" prefHeight="748.0" prefWidth="992.0" stylesheets="@../css/Ventana-Principal-Vehiculo.css" visible="false">
                <children>
                   <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="718.0" prefWidth="964.0" styleClass="fondo-principal">
                      <children>
@@ -318,21 +313,19 @@
                   </AnchorPane>
                </children>
             </AnchorPane>
-            <AnchorPane prefHeight="748.0" prefWidth="992.0">
+            <AnchorPane fx:id="layoutPerfil" prefHeight="748.0" prefWidth="992.0" visible="false">
                <children>
                   <AnchorPane layoutX="8.0" layoutY="15.0" prefHeight="718.0" prefWidth="964.0" styleClass="fondo-principal" stylesheets="@../css/Ventana-Principal-Vehiculo.css">
                      <children>
                         <Label layoutX="31.0" layoutY="26.0" styleClass="lbl-Titulos" text="Datos Usuario:" />
-                        <TextField layoutX="92.0" layoutY="98.0" promptText="Nombre" styleClass="textfield" />
-                        <TextField layoutX="348.0" layoutY="98.0" promptText="Apellido" styleClass="textfield" />
-                        <TextField layoutX="590.0" layoutY="98.0" promptText="Telefono" styleClass="textfield" />
-                        <TextField layoutX="92.0" layoutY="161.0" promptText="Correo" styleClass="textfield" />
-                        <PasswordField layoutX="348.0" layoutY="161.0" promptText="Contraseña" styleClass="textfield" />
+                        <TextField editable="false" layoutX="92.0" layoutY="98.0" promptText="Nombre" styleClass="textfield" />
+                        <TextField editable="false" layoutX="348.0" layoutY="98.0" promptText="Apellido" styleClass="textfield" />
+                        <TextField editable="false" layoutX="590.0" layoutY="98.0" promptText="Telefono" styleClass="textfield" />
+                        <TextField editable="false" layoutX="92.0" layoutY="161.0" promptText="Correo" styleClass="textfield" />
                         <Label layoutX="31.0" layoutY="102.0" styleClass="lbl-General" text="Nombre" />
                         <Label layoutX="281.0" layoutY="102.0" styleClass="lbl-General" text="Apellido" />
                         <Label layoutX="31.0" layoutY="165.0" styleClass="lbl-General" text="Correo" />
                         <Label layoutX="514.0" layoutY="102.0" styleClass="lbl-General" text="Telefono" />
-                        <Label layoutX="258.0" layoutY="165.0" styleClass="lbl-General" text="Contraseña" />
                         <TableView layoutX="28.0" layoutY="306.0" prefHeight="364.0" prefWidth="506.0">
                           <columns>
                             <TableColumn prefWidth="104.0" text="Matrícula" />
@@ -341,14 +334,16 @@
                               <TableColumn prefWidth="112.0" text="Precio" />
                           </columns>
                         </TableView>
-                        <ToggleButton layoutX="528.0" layoutY="162.0" mnemonicParsing="false" text="Editar" />
-                        <Button layoutX="632.0" layoutY="162.0" mnemonicParsing="false" text="Actualizar" />
+                        <ToggleButton layoutX="289.0" layoutY="157.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="135.0" styleClass="btn-clear" text="Editar" />
+                        <Button layoutX="447.0" layoutY="157.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="135.0" styleClass="btn-update" text="Actualizar" />
                         <Separator layoutX="6.0" layoutY="238.0" prefHeight="9.0" prefWidth="952.0" />
                         <Label layoutX="32.0" layoutY="265.0" styleClass="lbl-Titulos" text="Historial Inspecciones Vehículos" />
                         <Separator layoutX="547.0" layoutY="316.0" orientation="VERTICAL" prefHeight="324.0" prefWidth="9.0" />
-                        <Button layoutX="596.0" layoutY="334.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" styleClass="btn-clear" text="Informe Clientes" />
-                        <Button layoutX="596.0" layoutY="381.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="151.0" styleClass="btn-update" text="Informe Citas" />
-                        <Button layoutX="596.0" layoutY="434.0" mnemonicParsing="false" styleClass="btn-add" text="Informe Vehículos" />
+                        <Button layoutX="604.0" layoutY="359.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" styleClass="btn-clear" text="Informe Clientes" />
+                        <Button layoutX="604.0" layoutY="406.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="151.0" styleClass="btn-update" text="Informe Citas" />
+                        <Button layoutX="604.0" layoutY="459.0" mnemonicParsing="false" styleClass="btn-add" text="Informe Vehículos" />
+                        <Label layoutX="604.0" layoutY="273.0" styleClass="lbl-Titulos" text="Generar Informes" />
+                        <Button layoutX="612.0" layoutY="157.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="183.0" styleClass="btn-add" text="Modificar Contraseña" />
                      </children>
                   </AnchorPane>
                </children>
