@@ -1,7 +1,7 @@
-package com.jorja.proyect.proyectogestoritvfinal.controlador;
+package com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaRegister;
 
+import com.jorja.proyect.proyectogestoritvfinal.controlador.bbdd.CONEXIONBD;
 import com.jorja.proyect.proyectogestoritvfinal.vista.Main;
-import com.jorja.proyect.proyectogestoritvfinal.vista.VentanaPrincipal;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

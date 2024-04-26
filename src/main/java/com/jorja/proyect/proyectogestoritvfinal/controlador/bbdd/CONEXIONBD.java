@@ -1,4 +1,4 @@
-package com.jorja.proyect.proyectogestoritvfinal.controlador;
+package com.jorja.proyect.proyectogestoritvfinal.controlador.bbdd;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -6,8 +6,8 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.jorja.proyect.proyectogestoritvfinal.controlador.ConfiguracionBD.DBHOST;
-import static com.jorja.proyect.proyectogestoritvfinal.controlador.ConfiguracionBD.DBNAME;
+import static com.jorja.proyect.proyectogestoritvfinal.controlador.bbdd.ConfiguracionBD.DBHOST;
+import static com.jorja.proyect.proyectogestoritvfinal.controlador.bbdd.ConfiguracionBD.DBNAME;
 
 public class CONEXIONBD {
 
@@ -25,7 +25,7 @@ public class CONEXIONBD {
             Class.forName("com.mysql.cj.jdbc.Driver");
 
             try {
-                conexion = (Connection) DriverManager.getConnection("jdbc:mysql://" + DBHOST + ":3306/" + DBNAME, "root", "");
+                conexion = (Connection) DriverManager.getConnection("jdbc:mysql://" + DBHOST + ":3306/" + DBNAME, "root", "root");
 
 
             } catch (SQLException e) {

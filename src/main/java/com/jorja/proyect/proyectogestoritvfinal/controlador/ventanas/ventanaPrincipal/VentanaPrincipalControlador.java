@@ -1,4 +1,4 @@
-package com.jorja.proyect.proyectogestoritvfinal.controlador;
+package com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaPrincipal;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -43,7 +43,7 @@ public class VentanaPrincipalControlador {
             layoutPerfil.setVisible(false);
             layoutVehiculo.setVisible(false);
 
-            btnLateralInicio.setStyle("-fx-background-color: #429b7f; -fx-background-radius: 15px; -fx-cursor: hand;");
+            btnLateralInicio.setStyle("-fx-background-color: #21666C; -fx-background-radius: 15px; -fx-cursor: hand;");
             btnLateralCita.setStyle("-fx-background-color: none; -fx-cursor: hand;");
             btnLateralVehiculo.setStyle("-fx-background-color: none; -fx-cursor: hand;");
             btnLateralPerfil.setStyle("-fx-background-color: none; -fx-cursor: hand;");
@@ -55,7 +55,7 @@ public class VentanaPrincipalControlador {
             layoutPerfil.setVisible(false);
             layoutVehiculo.setVisible(false);
             btnLateralInicio.setStyle("-fx-background-color: none;  -fx-cursor: hand;");
-            btnLateralCita.setStyle("-fx-background-color: #429b7f; -fx-background-radius: 15px; -fx-cursor: hand;");
+            btnLateralCita.setStyle("-fx-background-color: #21666C; -fx-background-radius: 15px; -fx-cursor: hand;");
             btnLateralVehiculo.setStyle("-fx-background-color: none; -fx-cursor: hand;");
             btnLateralPerfil.setStyle("-fx-background-color: none; -fx-cursor: hand;");
 
@@ -69,7 +69,7 @@ public class VentanaPrincipalControlador {
             //Config style botones
             btnLateralInicio.setStyle("-fx-background-color: none; -fx-cursor: hand;");
             btnLateralCita.setStyle("-fx-background-color: none; -fx-cursor: hand;");
-            btnLateralVehiculo.setStyle("-fx-background-color: #6a52da; -fx-background-radius: 15px; -fx-cursor: hand;");
+            btnLateralVehiculo.setStyle("-fx-background-color: #21666C; -fx-background-radius: 15px; -fx-cursor: hand;");
             btnLateralPerfil.setStyle("-fx-background-color: none; -fx-cursor: hand;");
 
         }else if (actionEvent.getSource() == btnLateralPerfil) {
@@ -81,7 +81,7 @@ public class VentanaPrincipalControlador {
             btnLateralInicio.setStyle("-fx-background-color: none;  -fx-cursor: hand;");
             btnLateralCita.setStyle("-fx-background-color: none; -fx-cursor: hand;");
             btnLateralVehiculo.setStyle("-fx-background-color: none; -fx-cursor: hand;");
-            btnLateralPerfil.setStyle("-fx-background-color: #429b7f; -fx-background-radius: 15px; -fx-cursor: hand;");
+            btnLateralPerfil.setStyle("-fx-background-color: #21666C; -fx-background-radius: 15px; -fx-cursor: hand;");
         }
     }
 }

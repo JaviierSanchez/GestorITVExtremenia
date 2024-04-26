@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox maxHeight="600.0" maxWidth="903.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="903.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jorja.proyect.proyectogestoritvfinal.controlador.LoginController">
+<HBox maxHeight="600.0" maxWidth="903.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="903.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaLogin.LoginController">
    <children>
       <VBox alignment="CENTER" prefHeight="600.0" prefWidth="357.0" styleClass="fondo" stylesheets="@../css/login.css">
          <children>

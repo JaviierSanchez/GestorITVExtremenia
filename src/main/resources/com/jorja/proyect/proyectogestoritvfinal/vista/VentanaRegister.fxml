@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="903.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jorja.proyect.proyectogestoritvfinal.controlador.RegisterController">
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="903.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaRegister.RegisterController">
    <children>
       <VBox alignment="CENTER" prefHeight="600.0" prefWidth="280.0" styleClass="fondo" stylesheets="@../css/register.css">
          <children>

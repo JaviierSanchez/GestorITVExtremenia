@@ -1,4 +1,4 @@
-package com.jorja.proyect.proyectogestoritvfinal.controlador;
+package com.jorja.proyect.proyectogestoritvfinal.controlador.bbdd;
 
 public interface ConfiguracionBD {
 
