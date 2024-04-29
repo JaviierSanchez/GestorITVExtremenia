@@ -1,6 +1,8 @@
 package com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaLogin;
 
 import com.jorja.proyect.proyectogestoritvfinal.controlador.bbdd.CONEXIONBD;
+import com.jorja.proyect.proyectogestoritvfinal.modelo.Sesion;
+import com.jorja.proyect.proyectogestoritvfinal.modelo.Usuario;
 import com.jorja.proyect.proyectogestoritvfinal.vista.VentanaPrincipal;
 import com.jorja.proyect.proyectogestoritvfinal.vista.VentanaRegister;
 import javafx.event.ActionEvent;
@@ -61,7 +63,7 @@ public class LoginController implements Initializable {
     }
 
     private void iniciarSesion() {
-        String sql = "SELECT du.Correo, du.Contraseña, du.administrador FROM datos_usuario du WHERE du.Correo = ? AND du.Contraseña = ?";
+        String sql = "SELECT du.ID, du.Nombre, du.Correo, du.Contraseña, du.administrador FROM datos_usuario du WHERE du.Correo = ? AND du.Contraseña = ?";
         cbd = new CONEXIONBD();
         conexion = cbd.abrirConexion();
 
@@ -76,7 +78,19 @@ public class LoginController implements Initializable {
             } else if (resultado.next()) {
                 boolean esAdministrador = resultado.getBoolean("administrador");
                 if (esAdministrador) {
-                    // Si el usuario es administrador
+                    // Obtener los datos del usuario
+                    int idUsuario = resultado.getInt("ID");
+                    String nombreUsuario = resultado.getString("Nombre");
+                    String correoUsuario = resultado.getString("Correo");
+                    String contraseñaUsuario = resultado.getString("Contraseña");
+
+                    // Crear una instancia de Usuario con los datos obtenidos
+                    Usuario usuario = new Usuario(idUsuario, nombreUsuario, "", "", correoUsuario, contraseñaUsuario);
+
+                    // Iniciar sesión con el usuario obtenido
+                    Sesion.iniciarSesion(usuario);
+
+                    // Cerrar esta ventana y abrir la ventana principal
                     txtEmail.getScene().getWindow().hide();
                     try {
                         new VentanaPrincipal().start(new Stage());
@@ -94,7 +108,6 @@ public class LoginController implements Initializable {
             throw new RuntimeException(e);
         } finally {
             if (conexion != null) {
-
                 try {
                     cbd.cerrarConexion();
                     conexion.close();
@@ -104,6 +117,7 @@ public class LoginController implements Initializable {
             }
         }
     }
+
 
     private void mostrarAlerta(String titulo, String mensaje) {
         Alert alert = new Alert(Alert.AlertType.ERROR);

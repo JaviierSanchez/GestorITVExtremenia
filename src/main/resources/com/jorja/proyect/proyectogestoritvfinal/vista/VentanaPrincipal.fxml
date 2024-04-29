@@ -21,7 +21,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" stylesheets="@../css/Ventana-Principal-Inicio.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaPrincipal.VentanaPrincipalControlador">
+<BorderPane fx:id="layoutPadre" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" stylesheets="@../css/Ventana-Principal-Inicio.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaPrincipal.VentanaPrincipalControlador">
    <top>
       <HBox prefHeight="53.0" prefWidth="1200.0" styleClass="fondo-superior" BorderPane.alignment="CENTER">
          <children>
@@ -36,7 +36,7 @@
             </HBox>
             <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="600.0">
                <children>
-                  <Button alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" styleClass="btn-Minimizar">
+                  <Button alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#btnMinimizar" styleClass="btn-Minimizar">
                      <graphic>
                         <FontAwesomeIconView glyphName="MINUS" size="18" />
                      </graphic>
@@ -44,7 +44,7 @@
                         <Insets right="5.0" top="10.0" />
                      </HBox.margin>
                   </Button>
-                  <Button contentDisplay="RIGHT" mnemonicParsing="false" styleClass="btn-close">
+                  <Button contentDisplay="RIGHT" mnemonicParsing="false" onAction="#btnSalir" styleClass="btn-close">
                      <graphic>
                         <FontAwesomeIconView glyphName="CLOSE" size="18" />
                      </graphic>
@@ -60,73 +60,81 @@
    <left>
       <VBox prefHeight="747.0" prefWidth="210.0" styleClass="fondo" BorderPane.alignment="CENTER">
          <children>
-            <FontAwesomeIconView fill="WHITE" glyphName="USER" size="112">
-               <VBox.margin>
-                  <Insets left="65.0" top="30.0" />
-               </VBox.margin>
-            </FontAwesomeIconView>
-            <Label styleClass="lbl-General" text="Bienvenido">
-               <VBox.margin>
-                  <Insets left="55.0" top="10.0" />
-               </VBox.margin>
-            </Label>
-            <Label styleClass="lbl-Nombre-Usuario" text="nombreUsuario">
-               <VBox.margin>
-                  <Insets left="20.0" top="5.0" />
-               </VBox.margin>
-            </Label>
-            <Separator prefHeight="3.0" prefWidth="76.0" visible="false">
-               <VBox.margin>
-                  <Insets top="10.0" />
-               </VBox.margin>
-            </Separator>
-            <Button fx:id="btnLateralInicio" mnemonicParsing="false" onAction="#cambiarVentana" prefHeight="42.0" style="-fx-background-color: #21666C; -fx-background-radius: 15;" styleClass="btn-Izquierda" text="Inicio">
-               <graphic>
-                  <FontAwesomeIconView fill="WHITE" glyphName="HOME" size="24" />
-               </graphic>
-               <VBox.margin>
-                  <Insets left="15.0" top="90.0" />
-               </VBox.margin>
-            </Button>
-            <Button fx:id="btnLateralCita" mnemonicParsing="false" onAction="#cambiarVentana" prefHeight="42.0" text="Pedir Cita">
-               <graphic>
-                  <FontAwesomeIconView fill="WHITE" glyphName="PLUS" size="24" />
-               </graphic>
-               <VBox.margin>
-                  <Insets left="15.0" />
-               </VBox.margin>
-               <styleClass>
-                  <String fx:value="btn-Izquierda" />
-                  <String fx:value="btn-Izquierda-shadow" />
-               </styleClass>
-            </Button>
-            <Button fx:id="btnLateralVehiculo" mnemonicParsing="false" onAction="#cambiarVentana" text="Vehículo">
-               <graphic>
-                  <FontAwesomeIconView fill="WHITE" glyphName="CAR" size="24" />
-               </graphic>
-               <VBox.margin>
-                  <Insets left="15.0" />
-               </VBox.margin>
-               <styleClass>
-                  <String fx:value="btn-Izquierda" />
-                  <String fx:value="btn-Izquierda-shadow" />
-               </styleClass>
-            </Button>
-            <Button fx:id="btnLateralPerfil" mnemonicParsing="false" onAction="#cambiarVentana" text="Perfil">
-               <graphic>
-                  <FontAwesomeIconView fill="WHITE" glyphName="USER" size="24" />
-               </graphic>
-               <VBox.margin>
-                  <Insets left="15.0" />
-               </VBox.margin>
-               <styleClass>
-                  <String fx:value="btn-Izquierda" />
-                  <String fx:value="btn-Izquierda-shadow" />
-               </styleClass>
-            </Button>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <FontAwesomeIconView fill="WHITE" glyphName="USER" size="112">
+                     <VBox.margin>
+                        <Insets top="30.0" />
+                     </VBox.margin>
+                  </FontAwesomeIconView>
+                  <Label styleClass="lbl-General" text="Bienvenido">
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label fx:id="lblNombreUsuario" alignment="CENTER" prefHeight="46.0" prefWidth="205.0" styleClass="lbl-Nombre-Usuario" text="nombreUsuario" wrapText="true">
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Separator prefHeight="3.0" prefWidth="76.0" visible="false">
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </Separator>
+               </children>
+            </VBox>
+            <VBox prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <Button fx:id="btnLateralInicio" mnemonicParsing="false" onAction="#cambiarVentana" prefHeight="42.0" style="-fx-background-color: #21666C; -fx-background-radius: 15;" styleClass="btn-Izquierda" text="Inicio">
+                     <graphic>
+                        <FontAwesomeIconView fill="WHITE" glyphName="HOME" size="24" />
+                     </graphic>
+                     <VBox.margin>
+                        <Insets left="15.0" top="90.0" />
+                     </VBox.margin>
+                  </Button>
+                  <Button fx:id="btnLateralCita" mnemonicParsing="false" onAction="#cambiarVentana" prefHeight="42.0" text="Pedir Cita">
+                     <graphic>
+                        <FontAwesomeIconView fill="WHITE" glyphName="PLUS" size="24" />
+                     </graphic>
+                     <VBox.margin>
+                        <Insets left="15.0" />
+                     </VBox.margin>
+                     <styleClass>
+                        <String fx:value="btn-Izquierda" />
+                        <String fx:value="btn-Izquierda-shadow" />
+                     </styleClass>
+                  </Button>
+                  <Button fx:id="btnLateralVehiculo" mnemonicParsing="false" onAction="#cambiarVentana" text="Vehículo">
+                     <graphic>
+                        <FontAwesomeIconView fill="WHITE" glyphName="CAR" size="24" />
+                     </graphic>
+                     <VBox.margin>
+                        <Insets left="10.0" />
+                     </VBox.margin>
+                     <styleClass>
+                        <String fx:value="btn-Izquierda" />
+                        <String fx:value="btn-Izquierda-shadow" />
+                     </styleClass>
+                  </Button>
+                  <Button fx:id="btnLateralPerfil" mnemonicParsing="false" onAction="#cambiarVentana" text="Perfil">
+                     <graphic>
+                        <FontAwesomeIconView fill="WHITE" glyphName="USER" size="24" />
+                     </graphic>
+                     <VBox.margin>
+                        <Insets left="15.0" />
+                     </VBox.margin>
+                     <styleClass>
+                        <String fx:value="btn-Izquierda" />
+                        <String fx:value="btn-Izquierda-shadow" />
+                     </styleClass>
+                  </Button>
+               </children>
+            </VBox>
             <HBox alignment="CENTER" prefHeight="104.0" prefWidth="210.0">
                <children>
-                  <Button mnemonicParsing="false" styleClass="btn-CerrarSesion">
+                  <Button mnemonicParsing="false" onAction="#cerrarVentana" styleClass="btn-CerrarSesion">
                      <graphic>
                         <FontAwesomeIconView glyphName="SIGN_OUT" size="35" />
                      </graphic>
@@ -146,7 +154,7 @@
    <center>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <AnchorPane fx:id="layoutInicio" prefHeight="748.0" prefWidth="991.0" visible="false">
+            <AnchorPane fx:id="layoutInicio" prefHeight="748.0" prefWidth="991.0">
                <children>
                   <VBox prefHeight="746.0" prefWidth="992.0">
                      <children>
@@ -157,10 +165,13 @@
                                     <Insets bottom="50.0" left="15.0" right="15.0" top="50.0" />
                                  </HBox.margin>
                                  <children>
-                                    <Label alignment="CENTER" prefHeight="37.0" prefWidth="151.0" styleClass="lbl-Tarjetas-Inicio" text="Total Usuarios" wrapText="true" />
-                                    <Label styleClass="lbl-Tarjetas-Inicio-Contador" text="1">
+                                    <Label alignment="CENTER" prefHeight="37.0" prefWidth="151.0" styleClass="lbl-Tarjetas-Inicio" text="Total Usuarios" wrapText="true">
                                        <VBox.margin>
-                                          <Insets bottom="20.0" top="15.0" />
+                                          <Insets bottom="10.0" top="5.0" />
+                                       </VBox.margin></Label>
+                                    <Label fx:id="lblCountUser" styleClass="lbl-Tarjetas-Inicio-Contador" text="1">
+                                       <VBox.margin>
+                                          <Insets bottom="20.0" top="30.0" />
                                        </VBox.margin>
                                     </Label>
                                  </children>
@@ -172,12 +183,12 @@
                                  <children>
                                     <Label styleClass="lbl-Tarjetas-Inicio" text="Total Vehículos" wrapText="true">
                                        <VBox.margin>
-                                          <Insets />
+                                          <Insets bottom="10.0" top="5.0" />
                                        </VBox.margin>
                                     </Label>
-                                    <Label styleClass="lbl-Tarjetas-Inicio-Contador" text="1">
+                                    <Label fx:id="lblCountvehicle" styleClass="lbl-Tarjetas-Inicio-Contador" text="1">
                                        <VBox.margin>
-                                          <Insets bottom="20.0" top="15.0" />
+                                          <Insets bottom="20.0" top="35.0" />
                                        </VBox.margin>
                                     </Label>
                                  </children>
@@ -187,10 +198,13 @@
                                     <Insets bottom="50.0" left="20.0" right="15.0" top="50.0" />
                                  </HBox.margin>
                                  <children>
-                                    <Label styleClass="lbl-Tarjetas-Inicio" text="Total Citas" />
-                                    <Label styleClass="lbl-Tarjetas-Inicio-Contador" text="1">
+                                    <Label alignment="CENTER" styleClass="lbl-Tarjetas-Inicio" text="Total Citas">
                                        <VBox.margin>
-                                          <Insets bottom="20.0" top="20.0" />
+                                          <Insets bottom="10.0" top="5.0" />
+                                       </VBox.margin></Label>
+                                    <Label fx:id="lblCountDate" styleClass="lbl-Tarjetas-Inicio-Contador" text="1">
+                                       <VBox.margin>
+                                          <Insets bottom="20.0" top="35.0" />
                                        </VBox.margin>
                                     </Label>
                                  </children>
@@ -200,16 +214,21 @@
                                     <Insets bottom="50.0" left="20.0" right="15.0" top="50.0" />
                                  </HBox.margin>
                                  <children>
-                                    <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="77.0" prefWidth="215.0" styleClass="lbl-Tarjetas-Inicio" text="Total Ganancias Mensual" textAlignment="CENTER" wrapText="true">
+                                    <Label alignment="TOP_CENTER" contentDisplay="CENTER" prefHeight="70.0" prefWidth="215.0" styleClass="lbl-Tarjetas-Inicio" text="Total Ganancias Mensual" textAlignment="CENTER" wrapText="true">
                                        <VBox.margin>
                                           <Insets />
                                        </VBox.margin>
                                     </Label>
-                                    <Label styleClass="lbl-Tarjetas-Inicio-Contador" text="1">
-                                       <VBox.margin>
-                                          <Insets bottom="20.0" top="15.0" />
-                                       </VBox.margin>
-                                    </Label>
+                                    <HBox alignment="CENTER" prefHeight="60.0" prefWidth="215.0">
+                                       <children>
+                                          <Label fx:id="lblCountMoney" styleClass="lbl-Tarjetas-Inicio-Contador" text="1">
+                                             <HBox.margin>
+                                                <Insets right="5.0" />
+                                             </HBox.margin>
+                                          </Label>
+                                          <Label styleClass="lbl-Tarjetas-Inicio-Contador" text="€" />
+                                       </children>
+                                    </HBox>
                                  </children>
                               </VBox>
                            </children>
@@ -313,7 +332,7 @@
                   </AnchorPane>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="layoutPerfil" prefHeight="748.0" prefWidth="992.0">
+            <AnchorPane fx:id="layoutPerfil" prefHeight="748.0" prefWidth="992.0" visible="false">
                <children>
                   <AnchorPane layoutX="8.0" layoutY="15.0" prefHeight="718.0" prefWidth="964.0" styleClass="fondo-principal" stylesheets="@../css/Ventana-Principal-Vehiculo.css">
                      <children>
