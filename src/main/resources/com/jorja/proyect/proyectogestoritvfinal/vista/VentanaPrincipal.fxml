@@ -106,12 +106,24 @@
                         <String fx:value="btn-Izquierda-shadow" />
                      </styleClass>
                   </Button>
-                  <Button fx:id="btnLateralVehiculo" mnemonicParsing="false" onAction="#cambiarVentana" text="Vehículo">
+                  <Button fx:id="btnLateralUsuarios" mnemonicParsing="false" onAction="#cambiarVentana" text="Usuarios">
                      <graphic>
-                        <FontAwesomeIconView fill="WHITE" glyphName="CAR" size="24" />
+                        <FontAwesomeIconView fill="WHITE" glyphName="USERS" />
                      </graphic>
                      <VBox.margin>
-                        <Insets left="10.0" />
+                        <Insets left="15.0" />
+                     </VBox.margin>
+                     <styleClass>
+                        <String fx:value="btn-Izquierda" />
+                        <String fx:value="btn-Izquierda-shadow" />
+                     </styleClass>
+                  </Button>
+                  <Button fx:id="btnLateralVehiculo" mnemonicParsing="false" onAction="#cambiarVentana" text="Vehículo">
+                     <graphic>
+                        <FontAwesomeIconView fill="WHITE" glyphName="CAR" size="22" />
+                     </graphic>
+                     <VBox.margin>
+                        <Insets left="15.0" />
                      </VBox.margin>
                      <styleClass>
                         <String fx:value="btn-Izquierda" />
@@ -145,7 +157,7 @@
                   <Label styleClass="lbl-General" text="Cerrar Sesión" />
                </children>
                <VBox.margin>
-                  <Insets top="140.0" />
+                  <Insets top="110.0" />
                </VBox.margin>
             </HBox>
          </children>
@@ -154,7 +166,7 @@
    <center>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <AnchorPane fx:id="layoutInicio" prefHeight="748.0" prefWidth="991.0">
+            <AnchorPane fx:id="layoutInicio" prefHeight="748.0" prefWidth="991.0" visible="false">
                <children>
                   <VBox prefHeight="746.0" prefWidth="992.0">
                      <children>
@@ -238,7 +250,7 @@
                         </HBox>
                         <HBox prefHeight="482.0" prefWidth="992.0">
                            <children>
-                              <BarChart prefHeight="482.0" prefWidth="957.0">
+                              <BarChart fx:id="graficoUsuarios" prefHeight="482.0" prefWidth="957.0" title="Usuarios">
                                 <xAxis>
                                   <CategoryAxis side="BOTTOM" />
                                 </xAxis>
@@ -299,6 +311,43 @@
                   </AnchorPane>
                </children>
             </AnchorPane>
+            <AnchorPane fx:id="layoutUsuarios" prefHeight="747.0" prefWidth="991.0" stylesheets="@../css/Ventana-Principal-Vehiculo.css" visible="false">
+               <children>
+                  <AnchorPane layoutX="14.0" layoutY="15.0" prefHeight="718.0" prefWidth="964.0" styleClass="fondo-principal">
+                     <children>
+                        <TableView layoutX="14.0" layoutY="51.0" prefHeight="376.0" prefWidth="936.0">
+                           <columns>
+                              <TableColumn prefWidth="33.0" text="ID" />
+                              <TableColumn prefWidth="98.0" text="Nombre" />
+                              <TableColumn prefWidth="206.0" text="Apellido" />
+                              <TableColumn prefWidth="123.0" text="Telefono" />
+                              <TableColumn prefWidth="198.0" text="Correo" />
+                              <TableColumn prefWidth="159.0" text="Contraseña" />
+                              <TableColumn prefWidth="118.0" text="Fecha Alta" />
+                           </columns>
+                        </TableView>
+                        <TextField layoutX="22.0" layoutY="14.0" prefHeight="25.0" prefWidth="180.0" promptText="Búsqueda" styleClass="textfiedl-busqueda" />
+                        <FontAwesomeIconView glyphName="SEARCH" layoutX="29.0" layoutY="31.0" />
+                        <Button layoutX="215.0" layoutY="621.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="95.0" styleClass="btn-add" text="Añadir" />
+                        <Button layoutX="334.0" layoutY="621.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="95.0" styleClass="btn-update" text="Actualizar" />
+                        <Button layoutX="451.0" layoutY="621.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="95.0" styleClass="btn-delete" text="Borrar" />
+                        <Button layoutX="570.0" layoutY="621.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="95.0" styleClass="btn-clear" text="Limpiar" />
+                        <TextField layoutX="149.0" layoutY="467.0" styleClass="textfield" />
+                        <Label alignment="CENTER_RIGHT" layoutX="35.0" layoutY="470.0" prefHeight="20.0" prefWidth="100.0" styleClass="lbl-General" text="ID:" />
+                        <Label alignment="CENTER_RIGHT" layoutX="35.0" layoutY="509.0" prefHeight="20.0" prefWidth="100.0" styleClass="lbl-General" text="Nombre:" />
+                        <Label alignment="CENTER_RIGHT" layoutX="35.0" layoutY="553.0" prefHeight="20.0" prefWidth="100.0" styleClass="lbl-General" text="Apellido:" />
+                        <Label alignment="CENTER_RIGHT" layoutX="340.0" layoutY="470.0" prefHeight="20.0" prefWidth="100.0" styleClass="lbl-General" text="Telefono:" />
+                        <Label alignment="CENTER_RIGHT" layoutX="340.0" layoutY="509.0" prefHeight="20.0" prefWidth="100.0" styleClass="lbl-General" text="Correo:" />
+                        <TextField layoutX="149.0" layoutY="505.0" styleClass="textfield" />
+                        <TextField layoutX="149.0" layoutY="550.0" styleClass="textfield" />
+                        <TextField layoutX="456.0" layoutY="467.0" styleClass="textfield" />
+                        <TextField layoutX="457.0" layoutY="507.0" styleClass="textfield" />
+                        <TextField layoutX="458.0" layoutY="551.0" styleClass="textfield" />
+                        <Label layoutX="360.0" layoutY="555.0" styleClass="lbl-General" text="Contraseña:" />
+                     </children>
+                  </AnchorPane>
+               </children>
+            </AnchorPane>
             <AnchorPane fx:id="layoutVehiculo" prefHeight="748.0" prefWidth="992.0" stylesheets="@../css/Ventana-Principal-Vehiculo.css" visible="false">
                <children>
                   <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="718.0" prefWidth="964.0" styleClass="fondo-principal">
@@ -332,9 +381,9 @@
                   </AnchorPane>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="layoutPerfil" prefHeight="748.0" prefWidth="992.0" visible="false">
+            <AnchorPane fx:id="layoutPerfil" prefHeight="748.0" prefWidth="992.0">
                <children>
-                  <AnchorPane layoutX="8.0" layoutY="15.0" prefHeight="718.0" prefWidth="964.0" styleClass="fondo-principal" stylesheets="@../css/Ventana-Principal-Vehiculo.css">
+                  <AnchorPane layoutX="14.0" layoutY="15.0" prefHeight="718.0" prefWidth="964.0" styleClass="fondo-principal" stylesheets="@../css/Ventana-Principal-Vehiculo.css">
                      <children>
                         <Label layoutX="31.0" layoutY="26.0" styleClass="lbl-Titulos" text="Datos Usuario:" />
                         <TextField editable="false" layoutX="92.0" layoutY="98.0" promptText="Nombre" styleClass="textfield" />

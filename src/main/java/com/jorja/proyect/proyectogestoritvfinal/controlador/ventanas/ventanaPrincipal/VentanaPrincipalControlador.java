@@ -8,6 +8,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -21,6 +23,8 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.DateFormatSymbols;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -36,12 +40,19 @@ public class VentanaPrincipalControlador implements Initializable {
     private Button btnLateralPerfil;
 
     @FXML
-    private Button btnLateralVehiculo;
+    private Button btnLateralUsuarios;
+
     @FXML
-    private BorderPane layoutPadre;
+    private Button btnLateralVehiculo;
+
 
     @FXML
     private AnchorPane layoutInicio;
+    @FXML
+    private AnchorPane layoutUsuarios;
+
+    @FXML
+    private BorderPane layoutPadre;
 
     @FXML
     private AnchorPane layoutPedirCita;
@@ -51,6 +62,7 @@ public class VentanaPrincipalControlador implements Initializable {
 
     @FXML
     private AnchorPane layoutVehiculo;
+
     @FXML
     private Label lblCountDate;
 
@@ -62,8 +74,11 @@ public class VentanaPrincipalControlador implements Initializable {
 
     @FXML
     private Label lblCountvehicle;
+
     @FXML
     private Label lblNombreUsuario;
+    @FXML
+    private BarChart<?, ?> graficoUsuarios;
 
     private Connection conexion;
     private PreparedStatement sentencia;
@@ -89,14 +104,15 @@ public class VentanaPrincipalControlador implements Initializable {
     public void cambiarVentana(ActionEvent actionEvent) {
 
         Button botonPresionado = (Button) actionEvent.getSource();
-        Button[] botones = {btnLateralInicio, btnLateralCita, btnLateralVehiculo, btnLateralPerfil};
-        Pane[] layouts = {layoutInicio, layoutPedirCita, layoutVehiculo, layoutPerfil};
+        Button[] botones = {btnLateralInicio, btnLateralUsuarios, btnLateralCita, btnLateralVehiculo, btnLateralPerfil};
+        Pane[] layouts = {layoutInicio, layoutUsuarios, layoutPedirCita, layoutVehiculo, layoutPerfil};
         VentanaPrincipalInicioControlador.cambiarVentana(botonPresionado, botones, layouts);
 
         contadorTotalUsuarios();
         contadorTotalCitas();
         contardorTotalVehiculos();
         contadorTotalGanaciasMensuales();
+        cargarDatosGraficoUsuario();
     }
 
     public void cerrarVentana(ActionEvent actionEvent) {
@@ -156,6 +172,55 @@ public class VentanaPrincipalControlador implements Initializable {
         VentanaPrincipalInicioControlador.contadorTarjetas(sqlGanancias, lblCountMoney, cbd);
     }
 
+    public void cargarDatosGraficoUsuario() {
+
+        graficoUsuarios.getData().clear();
+
+        String sqlGrafico = """
+                SELECT
+                     MONTH(FechaAlta) AS Mes,
+                     COUNT(id) AS TotalUsuariosPorMes
+                         FROM datos_usuario
+                             GROUP BY MONTH(FechaAlta)
+                                 ORDER BY Mes
+                """;
+
+
+        conexion = cbd.abrirConexion();
+
+        XYChart.Series chart = new XYChart.Series();
+        try {
+            sentencia = conexion.prepareStatement(sqlGrafico);
+            resultado = sentencia.executeQuery();
+
+            while (resultado.next()) {
+                int mesNumero = resultado.getInt(1);
+                String nombreMes = obtenerNombreMes(mesNumero); // Obtener el nombre del mes
+                chart.getData().add(new XYChart.Data(nombreMes, resultado.getInt(2)));
+            }
+
+            graficoUsuarios.getData().add(chart);
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+
+            try {
+                cbd.cerrarConexion();
+                conexion.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    // Método para obtener el nombre del mes a partir del número del mes
+    private String obtenerNombreMes(int numeroMes) {
+        DateFormatSymbols dfs = new DateFormatSymbols();
+        String[] nombresMeses = dfs.getMonths();
+        return nombresMeses[numeroMes - 1];
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -164,9 +229,9 @@ public class VentanaPrincipalControlador implements Initializable {
         contadorTotalCitas();
         contardorTotalVehiculos();
         contadorTotalGanaciasMensuales();
+        cargarDatosGraficoUsuario();
 
         // Sacar nombre usuario que ha iniciado sesion
-
         Usuario usuarioActual = Sesion.getUsuarioActual();
         if (usuarioActual != null) {
             lblNombreUsuario.setText(usuarioActual.getNombre());
