@@ -4,10 +4,8 @@ module com.jorja.proyect.proyectogestoritvfinal {
     requires java.sql;
 
 
-    opens com.jorja.proyect.proyectogestoritvfinal to javafx.fxml;
     opens com.jorja.proyect.proyectogestoritvfinal.controlador to javafx.fxml;
 
-    exports com.jorja.proyect.proyectogestoritvfinal;
     exports com.jorja.proyect.proyectogestoritvfinal.vista;
     exports com.jorja.proyect.proyectogestoritvfinal.controlador;
     exports com.jorja.proyect.proyectogestoritvfinal.controlador.bbdd;

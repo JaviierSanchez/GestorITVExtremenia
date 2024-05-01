@@ -166,7 +166,7 @@
    <center>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <AnchorPane fx:id="layoutInicio" prefHeight="748.0" prefWidth="991.0" visible="false">
+            <AnchorPane fx:id="layoutInicio" prefHeight="748.0" prefWidth="991.0">
                <children>
                   <VBox prefHeight="746.0" prefWidth="992.0">
                      <children>
@@ -381,7 +381,7 @@
                   </AnchorPane>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="layoutPerfil" prefHeight="748.0" prefWidth="992.0">
+            <AnchorPane fx:id="layoutPerfil" prefHeight="748.0" prefWidth="992.0" visible="false">
                <children>
                   <AnchorPane layoutX="14.0" layoutY="15.0" prefHeight="718.0" prefWidth="964.0" styleClass="fondo-principal" stylesheets="@../css/Ventana-Principal-Vehiculo.css">
                      <children>
