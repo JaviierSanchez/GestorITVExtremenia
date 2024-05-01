@@ -1,4 +1,10 @@
+.titulo {
+    -fx-text-fill: #000000;
+    -fx-font-family: Tahoma;
+    -fx-font-weight: bold;
+    -fx-font-size: 34px;
 
+}
 /* Estilos fondos*/
 .fondo {
     -fx-background-color: linear-gradient(to bottom right, #21666C, #745be3);
