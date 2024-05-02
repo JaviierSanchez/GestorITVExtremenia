@@ -74,7 +74,7 @@ public class LoginController implements Initializable {
             resultado = sentencia.executeQuery();
 
             if (txtEmail.getText().isEmpty() || txtPassword.getText().isEmpty()) {
-                mostrarAlerta("Campos Vacíos", "¡Campos vacíos! Por favor, completa todos los campos antes de continuar.");
+                mostrarAlerta("Campos Vacíos", "¡Campos vacíos! Por favor, completa todos los campos antes de continuar.",Alert.AlertType.ERROR);
             } else if (resultado.next()) {
                 boolean esAdministrador = resultado.getBoolean("administrador");
                 if (esAdministrador) {
@@ -82,10 +82,10 @@ public class LoginController implements Initializable {
                     int idUsuario = resultado.getInt("ID");
                     String nombreUsuario = resultado.getString("Nombre");
                     String correoUsuario = resultado.getString("Correo");
-                    String contraseñaUsuario = resultado.getString("Contraseña");
+                    String passwordUsuario = resultado.getString("Contraseña");
 
                     // Crear una instancia de Usuario con los datos obtenidos
-                    Usuario usuario = new Usuario(idUsuario, nombreUsuario, "", "", correoUsuario, contraseñaUsuario);
+                    Usuario usuario = new Usuario(idUsuario, nombreUsuario, "", "", correoUsuario, passwordUsuario);
 
                     // Iniciar sesión con el usuario obtenido
                     Sesion.iniciarSesion(usuario);
@@ -99,10 +99,10 @@ public class LoginController implements Initializable {
                     }
                 } else {
                     // Si el usuario no es administrador
-                    mostrarAlerta("Acceso Denegado", "No tienes permisos de administrador para acceder a esta aplicación.");
+                    mostrarAlerta("Acceso Denegado", "No tienes permisos de administrador para acceder a esta aplicación.",Alert.AlertType.ERROR);
                 }
             } else {
-                mostrarAlerta("Error de Credenciales", "¡Error de credenciales! Por favor, verifica tus datos e inténtalo nuevamente.");
+                mostrarAlerta("Error de Credenciales", "¡Error de credenciales! Por favor, verifica tus datos e inténtalo nuevamente.", Alert.AlertType.ERROR);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -119,8 +119,8 @@ public class LoginController implements Initializable {
     }
 
 
-    private void mostrarAlerta(String titulo, String mensaje) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
+    private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipoAlerta) {
+        Alert alert = new Alert(tipoAlerta);
         alert.setHeaderText(null);
         alert.setTitle(titulo);
         alert.setContentText(mensaje);

@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import static com.jorja.proyect.proyectogestoritvfinal.controlador.bbdd.ConfiguracionBD.DBHOST;
 import static com.jorja.proyect.proyectogestoritvfinal.controlador.bbdd.ConfiguracionBD.DBNAME;
 
+
 public class CONEXIONBD {
 
     Connection conexion;

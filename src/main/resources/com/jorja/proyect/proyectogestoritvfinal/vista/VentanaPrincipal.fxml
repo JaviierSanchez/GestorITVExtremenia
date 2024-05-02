@@ -7,10 +7,10 @@
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -166,7 +166,7 @@
    <center>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <AnchorPane fx:id="layoutInicio" prefHeight="748.0" prefWidth="991.0">
+            <AnchorPane fx:id="layoutInicio" prefHeight="748.0" prefWidth="991.0" visible="false">
                <children>
                   <VBox prefHeight="746.0" prefWidth="992.0">
                      <children>
@@ -275,75 +275,75 @@
                         <FontAwesomeIconView glyphName="SEARCH" layoutX="26.0" layoutY="31.0" size="14" />
                         <TableView layoutX="17.0" layoutY="47.0" prefHeight="375.0" prefWidth="940.0">
                           <columns>
-                            <TableColumn prefWidth="119.0" text="Matricula" />
-                            <TableColumn prefWidth="112.0" text="Fecha" />
-                              <TableColumn prefWidth="115.0" text="Hora" />
-                              <TableColumn prefWidth="236.0" text="Tipo Vehículo" />
-                              <TableColumn prefWidth="204.0" text="Tipo Inspección" />
-                              <TableColumn prefWidth="153.0" text="Precio" />
+                            <TableColumn fx:id="columnMatriculaCita" prefWidth="119.0" text="Matricula" />
+                            <TableColumn fx:id="columnFechaCita" prefWidth="112.0" text="Fecha" />
+                              <TableColumn fx:id="columnHoraCita" prefWidth="115.0" text="Hora" />
+                              <TableColumn fx:id="columnTipoVehiculoCita" prefWidth="236.0" text="Tipo Vehículo" />
+                              <TableColumn fx:id="columnTipoInspeccionCita" prefWidth="204.0" text="Tipo Inspección" />
+                              <TableColumn fx:id="columnPrecioCita" prefWidth="153.0" text="Precio" />
                           </columns>
                         </TableView>
-                        <TextField layoutX="109.0" layoutY="445.0" prefHeight="35.0" prefWidth="170.0" promptText="Introduzca su matrícula" styleClass="textfield">
+                        <TextField fx:id="txtMatriculaCita" layoutX="109.0" layoutY="445.0" prefHeight="35.0" prefWidth="170.0" promptText="Introduzca su matrícula" styleClass="textfield">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </TextField>
-                        <ComboBox layoutX="438.0" layoutY="447.0" prefHeight="35.0" prefWidth="220.0" promptText="Seleccione el tipo de vehículo" styleClass="textfield" />
-                        <ComboBox layoutX="438.0" layoutY="493.0" prefHeight="35.0" prefWidth="220.0" promptText="Seleccione el tipo de inspección" styleClass="textfield" />
-                        <TextField editable="false" layoutX="438.0" layoutY="539.0" prefHeight="35.0" prefWidth="220.0" promptText="Precio" styleClass="textfield">
+                        <ComboBox fx:id="txtTipoVehiculoCita" layoutX="438.0" layoutY="447.0" prefHeight="35.0" prefWidth="220.0" promptText="Seleccione el tipo de vehículo" styleClass="textfield" />
+                        <ComboBox fx:id="txtTipoInspeccionCita" layoutX="438.0" layoutY="493.0" prefHeight="35.0" prefWidth="220.0" promptText="Seleccione el tipo de inspección" styleClass="textfield" />
+                        <TextField fx:id="txtPrecioCita" editable="false" layoutX="438.0" layoutY="539.0" prefHeight="35.0" prefWidth="220.0" promptText="Precio" styleClass="textfield">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </TextField>
-                        <DatePicker layoutX="109.0" layoutY="494.0" prefHeight="35.0" prefWidth="170.0" promptText="Seleccione la fecha" styleClass="textfield" />
-                        <Button layoutX="152.0" layoutY="620.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="95.0" styleClass="btn-add" text="Añadir" />
-                        <Button layoutX="401.0" layoutY="620.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="95.0" styleClass="btn-delete" text="Borrar" />
-                        <Button layoutX="273.0" layoutY="620.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="95.0" styleClass="btn-update" text="Actualizar" />
-                        <Button layoutX="529.0" layoutY="620.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="95.0" styleClass="btn-clear" text="Limpiar" />
+                        <DatePicker fx:id="txtFechaCita" layoutX="109.0" layoutY="494.0" prefHeight="35.0" prefWidth="170.0" promptText="Seleccione la fecha" styleClass="textfield" />
+                        <Button layoutX="152.0" layoutY="620.0" mnemonicParsing="false" onAction="#btnAddCita" prefHeight="40.0" prefWidth="95.0" styleClass="btn-add" text="Añadir" />
+                        <Button layoutX="401.0" layoutY="620.0" mnemonicParsing="false" onAction="#btnDeleteCita" prefHeight="40.0" prefWidth="95.0" styleClass="btn-delete" text="Borrar" />
+                        <Button layoutX="273.0" layoutY="620.0" mnemonicParsing="false" onAction="#btnUpdateCita" prefHeight="40.0" prefWidth="95.0" styleClass="btn-update" text="Actualizar" />
+                        <Button layoutX="529.0" layoutY="620.0" mnemonicParsing="false" onAction="#btnCleanCita" prefHeight="40.0" prefWidth="95.0" styleClass="btn-clear" text="Limpiar" />
                         <Label alignment="CENTER_RIGHT" layoutX="-17.0" layoutY="451.0" prefHeight="20.0" prefWidth="115.0" styleClass="lbl-General" text="Matrícula:" />
                         <Label alignment="CENTER_RIGHT" layoutX="309.0" layoutY="452.0" prefHeight="20.0" prefWidth="115.0" styleClass="lbl-General" text="Tipo Vehículo:" />
                         <Label alignment="CENTER_RIGHT" layoutX="-17.0" layoutY="500.0" prefHeight="20.0" prefWidth="115.0" styleClass="lbl-General" text="Fecha:" />
                         <Label alignment="CENTER_RIGHT" layoutX="309.0" layoutY="497.0" prefHeight="20.0" prefWidth="115.0" styleClass="lbl-General" text="Tipo Inspección:" />
                         <Label alignment="CENTER_RIGHT" layoutX="309.0" layoutY="547.0" prefHeight="20.0" prefWidth="115.0" styleClass="lbl-General" text="Precio:" />
                         <Label alignment="CENTER_RIGHT" layoutX="-17.0" layoutY="546.0" prefHeight="20.0" prefWidth="115.0" styleClass="lbl-General" text="Hora:" />
-                        <ComboBox layoutX="109.0" layoutY="539.0" prefHeight="35.0" prefWidth="170.0" promptText="Seleccione la hora" styleClass="textfield" />
+                        <ComboBox fx:id="txtHoraCita" layoutX="109.0" layoutY="539.0" prefHeight="35.0" prefWidth="170.0" promptText="Seleccione la hora" styleClass="textfield" />
                      </children>
                   </AnchorPane>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="layoutUsuarios" prefHeight="747.0" prefWidth="991.0" stylesheets="@../css/Ventana-Principal-Vehiculo.css" visible="false">
+            <AnchorPane fx:id="layoutUsuarios" prefHeight="747.0" prefWidth="991.0" stylesheets="@../css/Ventana-Principal-Vehiculo.css">
                <children>
                   <AnchorPane layoutX="14.0" layoutY="15.0" prefHeight="718.0" prefWidth="964.0" styleClass="fondo-principal">
                      <children>
                         <TableView layoutX="14.0" layoutY="51.0" prefHeight="376.0" prefWidth="936.0">
                            <columns>
-                              <TableColumn prefWidth="33.0" text="ID" />
-                              <TableColumn prefWidth="98.0" text="Nombre" />
-                              <TableColumn prefWidth="206.0" text="Apellido" />
-                              <TableColumn prefWidth="123.0" text="Telefono" />
-                              <TableColumn prefWidth="198.0" text="Correo" />
-                              <TableColumn prefWidth="159.0" text="Contraseña" />
-                              <TableColumn prefWidth="118.0" text="Fecha Alta" />
+                              <TableColumn fx:id="columnIdUsuario" prefWidth="33.0" text="ID" />
+                              <TableColumn fx:id="columnNombreUsuario" prefWidth="98.0" text="Nombre" />
+                              <TableColumn fx:id="columnApellidoUsuario" prefWidth="206.0" text="Apellido" />
+                              <TableColumn fx:id="columnTelefonoUsuario" prefWidth="123.0" text="Telefono" />
+                              <TableColumn fx:id="columnCorreoUsuario" prefWidth="198.0" text="Correo" />
+                              <TableColumn fx:id="columnPasswordUsuario" prefWidth="159.0" text="Contraseña" />
+                              <TableColumn fx:id="columnFechaAltaUsuario" prefWidth="118.0" text="Fecha Alta" />
                            </columns>
                         </TableView>
-                        <TextField layoutX="22.0" layoutY="14.0" prefHeight="25.0" prefWidth="180.0" promptText="Búsqueda" styleClass="textfiedl-busqueda" />
+                        <TextField fx:id="txtBusquedaUsuario" layoutX="22.0" layoutY="14.0" prefHeight="25.0" prefWidth="180.0" promptText="Búsqueda" styleClass="textfiedl-busqueda" />
                         <FontAwesomeIconView glyphName="SEARCH" layoutX="29.0" layoutY="31.0" />
-                        <Button layoutX="215.0" layoutY="621.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="95.0" styleClass="btn-add" text="Añadir" />
-                        <Button layoutX="334.0" layoutY="621.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="95.0" styleClass="btn-update" text="Actualizar" />
-                        <Button layoutX="451.0" layoutY="621.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="95.0" styleClass="btn-delete" text="Borrar" />
-                        <Button layoutX="570.0" layoutY="621.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="95.0" styleClass="btn-clear" text="Limpiar" />
-                        <TextField layoutX="149.0" layoutY="467.0" styleClass="textfield" />
+                        <Button layoutX="215.0" layoutY="621.0" mnemonicParsing="false" onAction="#btnAddUsuario" prefHeight="40.0" prefWidth="95.0" styleClass="btn-add" text="Añadir" />
+                        <Button layoutX="334.0" layoutY="621.0" mnemonicParsing="false" onAction="#btnUpdateUsuario" prefHeight="40.0" prefWidth="95.0" styleClass="btn-update" text="Actualizar" />
+                        <Button layoutX="451.0" layoutY="621.0" mnemonicParsing="false" onAction="#btnDeleteUsuario" prefHeight="40.0" prefWidth="95.0" styleClass="btn-delete" text="Borrar" />
+                        <Button layoutX="570.0" layoutY="621.0" mnemonicParsing="false" onAction="#btnCleanUsuarios" prefHeight="40.0" prefWidth="95.0" styleClass="btn-clear" text="Limpiar" />
+                        <TextField fx:id="txtIdUsuario" editable="false" layoutX="149.0" layoutY="467.0" styleClass="textfield" />
                         <Label alignment="CENTER_RIGHT" layoutX="35.0" layoutY="470.0" prefHeight="20.0" prefWidth="100.0" styleClass="lbl-General" text="ID:" />
                         <Label alignment="CENTER_RIGHT" layoutX="35.0" layoutY="509.0" prefHeight="20.0" prefWidth="100.0" styleClass="lbl-General" text="Nombre:" />
                         <Label alignment="CENTER_RIGHT" layoutX="35.0" layoutY="553.0" prefHeight="20.0" prefWidth="100.0" styleClass="lbl-General" text="Apellido:" />
                         <Label alignment="CENTER_RIGHT" layoutX="340.0" layoutY="470.0" prefHeight="20.0" prefWidth="100.0" styleClass="lbl-General" text="Telefono:" />
                         <Label alignment="CENTER_RIGHT" layoutX="340.0" layoutY="509.0" prefHeight="20.0" prefWidth="100.0" styleClass="lbl-General" text="Correo:" />
-                        <TextField layoutX="149.0" layoutY="505.0" styleClass="textfield" />
-                        <TextField layoutX="149.0" layoutY="550.0" styleClass="textfield" />
-                        <TextField layoutX="456.0" layoutY="467.0" styleClass="textfield" />
-                        <TextField layoutX="457.0" layoutY="507.0" styleClass="textfield" />
-                        <TextField layoutX="458.0" layoutY="551.0" styleClass="textfield" />
+                        <TextField fx:id="txtNombreUsuario" layoutX="149.0" layoutY="505.0" styleClass="textfield" />
+                        <TextField fx:id="txtApellidoUsuario" layoutX="149.0" layoutY="550.0" styleClass="textfield" />
+                        <TextField fx:id="txtTelefonoUsuario" layoutX="456.0" layoutY="467.0" styleClass="textfield" />
+                        <TextField fx:id="txtCorreoUsuario" layoutX="457.0" layoutY="507.0" styleClass="textfield" />
                         <Label layoutX="360.0" layoutY="555.0" styleClass="lbl-General" text="Contraseña:" />
+                        <PasswordField fx:id="txtPassWordUsuario" layoutX="457.0" layoutY="551.0" styleClass="textfield" />
                      </children>
                   </AnchorPane>
                </children>
@@ -354,29 +354,29 @@
                      <children>
                         <TableView layoutX="14.0" layoutY="51.0" prefHeight="376.0" prefWidth="936.0">
                           <columns>
-                            <TableColumn prefWidth="153.0" text="Matrícula" />
-                            <TableColumn prefWidth="155.0" text="Marca" />
-                              <TableColumn prefWidth="181.0" text="Módelo" />
-                              <TableColumn prefWidth="204.0" text="Año" />
-                              <TableColumn prefWidth="242.0" text="Tipo Vehículo" />
+                            <TableColumn fx:id="columnMatriculaVehiculo" prefWidth="153.0" text="Matrícula" />
+                            <TableColumn fx:id="columnMarcaVehiculo" prefWidth="155.0" text="Marca" />
+                              <TableColumn fx:id="columnModeloVehiculo" prefWidth="203.0" text="Modelo" />
+                              <TableColumn fx:id="columnAñoVehiculo" prefWidth="135.0" text="Año" />
+                              <TableColumn fx:id="columTipoVehiculoVehiculo" prefWidth="289.0" text="Tipo Vehículo" />
                           </columns>
                         </TableView>
-                        <TextField layoutX="22.0" layoutY="14.0" prefHeight="25.0" prefWidth="180.0" promptText="Búsqueda" styleClass="textfiedl-busqueda" />
+                        <TextField fx:id="txtBusquedaVehiculo" layoutX="22.0" layoutY="14.0" prefHeight="25.0" prefWidth="180.0" promptText="Búsqueda" styleClass="textfiedl-busqueda" />
                         <FontAwesomeIconView glyphName="SEARCH" layoutX="29.0" layoutY="31.0" />
-                        <Button layoutX="215.0" layoutY="621.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="95.0" styleClass="btn-add" text="Añadir" />
-                        <Button layoutX="334.0" layoutY="621.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="95.0" styleClass="btn-update" text="Actualizar" />
-                        <Button layoutX="451.0" layoutY="621.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="95.0" styleClass="btn-delete" text="Borrar" />
-                        <Button layoutX="570.0" layoutY="621.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="95.0" styleClass="btn-clear" text="Limpiar" />
-                        <TextField layoutX="149.0" layoutY="467.0" styleClass="textfield" />
+                        <Button layoutX="215.0" layoutY="621.0" mnemonicParsing="false" onAction="#btnAddVehiculo" prefHeight="40.0" prefWidth="95.0" styleClass="btn-add" text="Añadir" />
+                        <Button layoutX="334.0" layoutY="621.0" mnemonicParsing="false" onAction="#btnUpdateVehiculo" prefHeight="40.0" prefWidth="95.0" styleClass="btn-update" text="Actualizar" />
+                        <Button layoutX="451.0" layoutY="621.0" mnemonicParsing="false" onAction="#btnDeleteVehiculo" prefHeight="40.0" prefWidth="95.0" styleClass="btn-delete" text="Borrar" />
+                        <Button layoutX="570.0" layoutY="621.0" mnemonicParsing="false" onAction="#btnCleanVehiculo" prefHeight="40.0" prefWidth="95.0" styleClass="btn-clear" text="Limpiar" />
+                        <TextField fx:id="txtMatriculaVehicula" layoutX="149.0" layoutY="467.0" styleClass="textfield" />
                         <Label alignment="CENTER_RIGHT" layoutX="35.0" layoutY="470.0" prefHeight="20.0" prefWidth="100.0" styleClass="lbl-General" text="Matricula:" />
                         <Label alignment="CENTER_RIGHT" layoutX="35.0" layoutY="509.0" prefHeight="20.0" prefWidth="100.0" styleClass="lbl-General" text="Marca:" />
                         <Label alignment="CENTER_RIGHT" layoutX="35.0" layoutY="553.0" prefHeight="20.0" prefWidth="100.0" styleClass="lbl-General" text="Modelo:" />
                         <Label alignment="CENTER_RIGHT" layoutX="340.0" layoutY="470.0" prefHeight="20.0" prefWidth="100.0" styleClass="lbl-General" text="Año:" />
                         <Label alignment="CENTER_RIGHT" layoutX="340.0" layoutY="509.0" prefHeight="20.0" prefWidth="100.0" styleClass="lbl-General" text="Tipo Vehículo:" />
-                        <TextField layoutX="149.0" layoutY="505.0" styleClass="textfield" />
-                        <TextField layoutX="149.0" layoutY="550.0" styleClass="textfield" />
-                        <TextField layoutX="456.0" layoutY="467.0" styleClass="textfield" />
-                        <ComboBox layoutX="456.0" layoutY="506.0" prefWidth="150.0" styleClass="textfield" />
+                        <TextField fx:id="txtMarcaVehiculo" layoutX="149.0" layoutY="505.0" styleClass="textfield" />
+                        <TextField fx:id="txtModeloVehiculo" layoutX="149.0" layoutY="550.0" styleClass="textfield" />
+                        <TextField fx:id="txtAñoVehiculo" layoutX="456.0" layoutY="467.0" styleClass="textfield" />
+                        <ComboBox fx:id="txtTipoVehiculoVehiculo" layoutX="456.0" layoutY="506.0" prefWidth="150.0" styleClass="textfield" />
                      </children>
                   </AnchorPane>
                </children>
@@ -385,11 +385,11 @@
                <children>
                   <AnchorPane layoutX="14.0" layoutY="15.0" prefHeight="718.0" prefWidth="964.0" styleClass="fondo-principal" stylesheets="@../css/Ventana-Principal-Vehiculo.css">
                      <children>
-                        <Label layoutX="31.0" layoutY="26.0" styleClass="lbl-Titulos" text="Datos Usuario:" />
-                        <TextField editable="false" layoutX="92.0" layoutY="98.0" promptText="Nombre" styleClass="textfield" />
-                        <TextField editable="false" layoutX="348.0" layoutY="98.0" promptText="Apellido" styleClass="textfield" />
-                        <TextField editable="false" layoutX="590.0" layoutY="98.0" promptText="Telefono" styleClass="textfield" />
-                        <TextField editable="false" layoutX="92.0" layoutY="161.0" promptText="Correo" styleClass="textfield" />
+                        <Label layoutX="31.0" layoutY="26.0" styleClass="lbl-Titulos" text="Datos Usuario" />
+                        <TextField fx:id="txtNombrePerfil" editable="false" layoutX="92.0" layoutY="98.0" promptText="Nombre" styleClass="textfield" />
+                        <TextField fx:id="txtApellidoPerfil" editable="false" layoutX="348.0" layoutY="98.0" promptText="Apellido" styleClass="textfield" />
+                        <TextField fx:id="txtTelefonoPerfil" editable="false" layoutX="590.0" layoutY="98.0" promptText="Telefono" styleClass="textfield" />
+                        <TextField fx:id="txtCorreoPerfil" editable="false" layoutX="92.0" layoutY="161.0" promptText="Correo" styleClass="textfield" />
                         <Label layoutX="31.0" layoutY="102.0" styleClass="lbl-General" text="Nombre" />
                         <Label layoutX="281.0" layoutY="102.0" styleClass="lbl-General" text="Apellido" />
                         <Label layoutX="31.0" layoutY="165.0" styleClass="lbl-General" text="Correo" />
@@ -402,7 +402,6 @@
                               <TableColumn prefWidth="112.0" text="Precio" />
                           </columns>
                         </TableView>
-                        <Button layoutX="447.0" layoutY="157.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="135.0" styleClass="btn-update" text="Actualizar" />
                         <Separator layoutX="6.0" layoutY="238.0" prefHeight="9.0" prefWidth="952.0" />
                         <Label layoutX="32.0" layoutY="265.0" styleClass="lbl-Titulos" text="Historial Inspecciones Vehículos" />
                         <Separator layoutX="547.0" layoutY="316.0" orientation="VERTICAL" prefHeight="324.0" prefWidth="9.0" />
@@ -410,8 +409,7 @@
                         <Button layoutX="604.0" layoutY="406.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="151.0" styleClass="btn-update" text="Informe Citas" />
                         <Button layoutX="604.0" layoutY="459.0" mnemonicParsing="false" styleClass="btn-add" text="Informe Vehículos" />
                         <Label layoutX="604.0" layoutY="273.0" styleClass="lbl-Titulos" text="Generar Informes" />
-                        <Button layoutX="612.0" layoutY="157.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="183.0" styleClass="btn-add" text="Modificar Contraseña" />
-                        <CheckBox layoutX="288.0" layoutY="166.0" mnemonicParsing="false" text="Editar" />
+                        <Button layoutX="281.0" layoutY="157.0" mnemonicParsing="false" onAction="#btnModificarPasswordPerfil" prefHeight="35.0" prefWidth="183.0" styleClass="btn-add" text="Modificar Contraseña" />
                      </children>
                   </AnchorPane>
                </children>

@@ -10,10 +10,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -25,10 +22,24 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormatSymbols;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import static com.jorja.proyect.proyectogestoritvfinal.controlador.Utils.*;
+
 public class VentanaPrincipalControlador implements Initializable {
+
+    private Connection conexion;
+    private PreparedStatement sentencia;
+    private ResultSet resultado;
+    private CONEXIONBD cbd;
+    private Date fecha;
+
+    public VentanaPrincipalControlador() {
+        cbd = new CONEXIONBD();
+    }
 
     @FXML
     private Button btnLateralCita;
@@ -45,11 +56,59 @@ public class VentanaPrincipalControlador implements Initializable {
     @FXML
     private Button btnLateralVehiculo;
 
+    @FXML
+    private TableColumn<?, ?> columnMatriculaCita;
+    @FXML
+    private TableColumn<?, ?> columnPrecioCita;
+    @FXML
+    private TableColumn<?, ?> columnTipoInspeccionCita;
+
+    @FXML
+    private TableColumn<?, ?> columnTipoVehiculoCita;
+
+    @FXML
+    private TableColumn<?, ?> columnFechaCita;
+
+    @FXML
+    private TableColumn<?, ?> columnHoraCita;
+
+
+    @FXML
+    private TableColumn<?, ?> columnIdUsuario;
+    @FXML
+    private TableColumn<?, ?> columnNombreUsuario;
+    @FXML
+    private TableColumn<?, ?> columnApellidoUsuario;
+    @FXML
+    private TableColumn<?, ?> columnTelefonoUsuario;
+    @FXML
+    private TableColumn<?, ?> columnCorreoUsuario;
+    @FXML
+    private TableColumn<?, ?> columnPasswordUsuario;
+
+    @FXML
+    private TableColumn<?, ?> columnFechaAltaUsuario;
+
+    @FXML
+    private TableColumn<?, ?> columnAñoVehiculo;
+
+    @FXML
+    private TableColumn<?, ?> columnMarcaVehiculo;
+
+
+    @FXML
+    private TableColumn<?, ?> columnMatriculaVehiculo;
+    @FXML
+    private TableColumn<?, ?> columTipoVehiculoVehiculo;
+    @FXML
+    private TableColumn<?, ?> columnModeloVehiculo;
+
+
+    @FXML
+    private BarChart<?, ?> graficoUsuarios;
 
     @FXML
     private AnchorPane layoutInicio;
-    @FXML
-    private AnchorPane layoutUsuarios;
 
     @FXML
     private BorderPane layoutPadre;
@@ -59,6 +118,9 @@ public class VentanaPrincipalControlador implements Initializable {
 
     @FXML
     private AnchorPane layoutPerfil;
+
+    @FXML
+    private AnchorPane layoutUsuarios;
 
     @FXML
     private AnchorPane layoutVehiculo;
@@ -77,16 +139,121 @@ public class VentanaPrincipalControlador implements Initializable {
 
     @FXML
     private Label lblNombreUsuario;
+
     @FXML
-    private BarChart<?, ?> graficoUsuarios;
+    private TextField txtApellidoPerfil;
 
-    private Connection conexion;
-    private PreparedStatement sentencia;
-    private ResultSet resultado;
-    private CONEXIONBD cbd;
+    @FXML
+    private TextField txtApellidoUsuario;
 
-    public VentanaPrincipalControlador() {
-        cbd = new CONEXIONBD();
+    @FXML
+    private TextField txtAñoVehiculo;
+
+    @FXML
+    private TextField txtBusquedaUsuario;
+
+    @FXML
+    private TextField txtBusquedaVehiculo;
+
+    @FXML
+    private TextField txtCorreoPerfil;
+
+    @FXML
+    private TextField txtCorreoUsuario;
+
+    @FXML
+    private DatePicker txtFechaCita;
+
+    @FXML
+    private ComboBox<?> txtHoraCita;
+
+    @FXML
+    private TextField txtIdUsuario;
+
+    @FXML
+    private TextField txtMarcaVehiculo;
+
+    @FXML
+    private TextField txtMatriculaCita;
+
+    @FXML
+    private TextField txtMatriculaVehicula;
+
+    @FXML
+    private TextField txtModeloVehiculo;
+
+    @FXML
+    private TextField txtNombrePerfil;
+
+    @FXML
+    private TextField txtNombreUsuario;
+    @FXML
+    private PasswordField txtPassWordUsuario;
+
+    @FXML
+    private TextField txtPrecioCita;
+
+    @FXML
+    private TextField txtTelefonoPerfil;
+
+    @FXML
+    private TextField txtTelefonoUsuario;
+
+    @FXML
+    private ComboBox<?> txtTipoInspeccionCita;
+
+    @FXML
+    private ComboBox<?> txtTipoVehiculoCita;
+
+    @FXML
+    private ComboBox<?> txtTipoVehiculoVehiculo;
+
+    @FXML
+    void btnAddCita(ActionEvent event) {
+
+    }
+
+
+    @FXML
+    void btnAddVehiculo(ActionEvent event) {
+
+    }
+
+    @FXML
+    void btnCleanCita(ActionEvent event) {
+
+    }
+
+
+    @FXML
+    void btnCleanVehiculo(ActionEvent event) {
+
+    }
+
+    @FXML
+    void btnDeleteCita(ActionEvent event) {
+
+    }
+
+
+    @FXML
+    void btnDeleteVehiculo(ActionEvent event) {
+
+    }
+
+    @FXML
+    void btnModificarPasswordPerfil(ActionEvent event) {
+
+    }
+
+    @FXML
+    void btnUpdateCita(ActionEvent event) {
+
+    }
+
+
+    @FXML
+    void btnUpdateVehiculo(ActionEvent event) {
 
     }
 
@@ -139,6 +306,14 @@ public class VentanaPrincipalControlador implements Initializable {
         }
     }
 
+
+    //Logica Ventana Principal Inicio
+
+    /***
+     * Metodos para el contador de la pantalla Inicio
+     * Se crea crea la sql y se pasa a los metodos las consultas y las
+     * etiquetas que se quiere modificar
+     */
     public void contadorTotalUsuarios() {
         String sqlUsuarios = "SELECT COUNT(du.ID) as total FROM datos_usuario du";
         VentanaPrincipalInicioControlador.contadorTarjetas(sqlUsuarios, lblCountUser, cbd);
@@ -221,6 +396,114 @@ public class VentanaPrincipalControlador implements Initializable {
         return nombresMeses[numeroMes - 1];
     }
 
+    // Logica Ventana Principal Usuario
+
+
+    @FXML
+    void btnAddUsuario(ActionEvent event) {
+
+        Date fecha = new Date();
+        Date fechaActual = new Date(fecha.getTime());
+
+        String sql = """
+                INSERT INTO datos_usuario
+                 (Nombre, Apellido,Telefono, Correo, Contraseña, FechaAlta)
+                  VALUES (?, ?, ?, ?, ?, ?)
+                """;
+        conexion = cbd.abrirConexion();
+
+        // Comprobaciones de campos, si esta vacio muestra alerta error, sino compprueba que los datos se han introducido con formato correcto
+        if (txtNombreUsuario.getText().isEmpty() || txtApellidoUsuario.getText().isEmpty() || txtTelefonoUsuario.getText().isEmpty() ||
+                txtCorreoUsuario.getText().isEmpty() || txtPassWordUsuario.getText().isEmpty()) {
+            mostrarAlerta("Error", "Rellena los campos", Alert.AlertType.ERROR);
+        } else {
+
+            if (!txtTelefonoUsuario.getText().matches(TELEFONOREGEX)) {
+                mostrarAlerta("Error", "Teléfono no válido. Debe tener 9 dígitos. \n Ejemplo: 123456789", Alert.AlertType.ERROR);
+                return;
+            }
+            if (!txtCorreoUsuario.getText().matches(CORREOREGEX)) {
+                mostrarAlerta("Error", "El correo electrónico ingresado no es válido.", Alert.AlertType.ERROR);
+                return;
+            }
+            if (!txtPassWordUsuario.getText().matches(PASSWORDREGEX)) {
+                mostrarAlerta("Error", "La contraseña debe tener al menos 8 caracteres y contener al menos una letra y un número.", Alert.AlertType.ERROR);
+                return;
+            }
+
+            // Comprobar que el usuario no se encuentra en la BBDD
+            String comprobarUsuariosql = "SELECT du.Correo FROM datos_usuario du where du.Correo = ?";
+            try {
+                sentencia = conexion.prepareStatement(comprobarUsuariosql);
+                sentencia.setString(1, txtCorreoUsuario.getText());
+                resultado = sentencia.executeQuery();
+
+                if (resultado.next()) {
+                    mostrarAlerta("Error", "El usuario ya existe", Alert.AlertType.ERROR);
+                } else {
+                    String fechaActual2 = new SimpleDateFormat("yyyy-MM-dd").format(fechaActual);
+
+                    sentencia = conexion.prepareStatement(sql);
+                    sentencia.setString(1, txtNombreUsuario.getText());
+                    sentencia.setString(2, txtApellidoUsuario.getText());
+                    sentencia.setString(3, txtTelefonoUsuario.getText());
+                    sentencia.setString(4, txtCorreoUsuario.getText());
+                    sentencia.setString(5, txtPassWordUsuario.getText());
+                    sentencia.setString(6, String.valueOf(fechaActual2));
+                    sentencia.executeUpdate();
+                    mostrarAlerta("Añadido", "El usuario ha sido añadido", Alert.AlertType.INFORMATION);
+                    btnCleanUsuarios(event);
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            } finally {
+                try {
+                    if (resultado != null) {
+                        resultado.close();
+                    }
+                    if (sentencia != null) {
+                        sentencia.close();
+                    }
+                    if (conexion != null) {
+                        conexion.close();
+                    }
+                    cbd.cerrarConexion();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+    }
+
+    @FXML
+    void btnUpdateUsuario(ActionEvent event) {
+
+    }
+
+    @FXML
+    void btnDeleteUsuario(ActionEvent event) {
+
+    }
+
+    @FXML
+    public void btnCleanUsuarios(ActionEvent actionEvent) {
+        txtIdUsuario.setText("");
+        txtNombreUsuario.setText("");
+        txtApellidoUsuario.setText("");
+        txtTelefonoUsuario.setText("");
+        txtCorreoUsuario.setText("");
+        txtPassWordUsuario.setText("");
+    }
+
+
+    private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipoAlerta) {
+        Alert alert = new Alert(tipoAlerta);
+        alert.setHeaderText(null);
+        alert.setTitle(titulo);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -240,4 +523,6 @@ public class VentanaPrincipalControlador implements Initializable {
         }
 
     }
+
+
 }

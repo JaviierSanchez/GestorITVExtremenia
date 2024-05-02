@@ -13,6 +13,13 @@ import java.sql.SQLException;
 public class VentanaPrincipalInicioControlador {
 
 
+    /***
+     *  Metodo que segun el boton presionado se selecciona el layout que
+     *  se va a mostrar y se pone el estilo al boton seleccionado
+     * @param botonPresionado
+     * @param botones
+     * @param layouts
+     */
     public static void cambiarVentana(Button botonPresionado, Button[] botones, Pane[] layouts) {
         for (int i = 0; i < botones.length; i++) {
             if (botonPresionado == botones[i]) {
@@ -25,7 +32,13 @@ public class VentanaPrincipalInicioControlador {
         }
     }
 
-    public static void contadorTarjetas(String sql, Label label,CONEXIONBD cbd) {
+    /***
+     * Metodo
+     * @param sql
+     * @param label
+     * @param cbd
+     */
+    public static void contadorTarjetas(String sql, Label label, CONEXIONBD cbd) {
         try (Connection conexion = cbd.abrirConexion();
              PreparedStatement sentencia = conexion.prepareStatement(sql);
              ResultSet resultado = sentencia.executeQuery()) {
@@ -34,13 +47,8 @@ public class VentanaPrincipalInicioControlador {
                 int total = resultado.getInt("total");
                 label.setText(String.valueOf(total));
             }
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
-
-
-
-
 }
