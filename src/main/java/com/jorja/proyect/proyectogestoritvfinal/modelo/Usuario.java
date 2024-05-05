@@ -7,14 +7,18 @@ public class Usuario {
     private String telefono;
     private String correo;
     private String contraseña;
+    private boolean administrador;
+    private String FechaAlta;
 
-    public Usuario(int id, String nombre, String apellido, String telefono, String correo, String contraseña) {
+    public Usuario(int id, String nombre, String apellido, String telefono, String correo, String contraseña, boolean administrador, String fechaAlta) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
         this.telefono = telefono;
         this.correo = correo;
         this.contraseña = contraseña;
+        this.administrador = administrador;
+        FechaAlta = fechaAlta;
     }
 
     public int getId() {
@@ -63,5 +67,21 @@ public class Usuario {
 
     public void setContraseña(String contraseña) {
         this.contraseña = contraseña;
+    }
+
+    public boolean isAdministrador() {
+        return administrador;
+    }
+
+    public void setAdministrador(boolean administrador) {
+        this.administrador = administrador;
+    }
+
+    public String getFechaAlta() {
+        return FechaAlta;
+    }
+
+    public void setFechaAlta(String fechaAlta) {
+        FechaAlta = fechaAlta;
     }
 }

@@ -315,15 +315,16 @@
                <children>
                   <AnchorPane layoutX="14.0" layoutY="15.0" prefHeight="718.0" prefWidth="964.0" styleClass="fondo-principal">
                      <children>
-                        <TableView layoutX="14.0" layoutY="51.0" prefHeight="376.0" prefWidth="936.0">
+                        <TableView fx:id="TableViewUsuario" layoutX="14.0" layoutY="51.0" onMouseClicked="#mostrarUsuarioSeleccionado" prefHeight="376.0" prefWidth="936.0">
                            <columns>
                               <TableColumn fx:id="columnIdUsuario" prefWidth="33.0" text="ID" />
                               <TableColumn fx:id="columnNombreUsuario" prefWidth="98.0" text="Nombre" />
-                              <TableColumn fx:id="columnApellidoUsuario" prefWidth="206.0" text="Apellido" />
-                              <TableColumn fx:id="columnTelefonoUsuario" prefWidth="123.0" text="Telefono" />
-                              <TableColumn fx:id="columnCorreoUsuario" prefWidth="198.0" text="Correo" />
-                              <TableColumn fx:id="columnPasswordUsuario" prefWidth="159.0" text="Contraseña" />
+                              <TableColumn fx:id="columnApellidoUsuario" prefWidth="140.0" text="Apellido" />
+                              <TableColumn fx:id="columnTelefonoUsuario" prefWidth="98.0" text="Telefono" />
+                              <TableColumn fx:id="columnCorreoUsuario" prefWidth="185.0" text="Correo" />
+                              <TableColumn fx:id="columnPasswordUsuario" prefWidth="173.0" text="Contraseña" />
                               <TableColumn fx:id="columnFechaAltaUsuario" prefWidth="118.0" text="Fecha Alta" />
+                              <TableColumn fx:id="columnAdminUsuario" prefWidth="90.0" text="Admin" />
                            </columns>
                         </TableView>
                         <TextField fx:id="txtBusquedaUsuario" layoutX="22.0" layoutY="14.0" prefHeight="25.0" prefWidth="180.0" promptText="Búsqueda" styleClass="textfiedl-busqueda" />

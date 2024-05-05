@@ -85,7 +85,7 @@ public class LoginController implements Initializable {
                     String passwordUsuario = resultado.getString("Contraseña");
 
                     // Crear una instancia de Usuario con los datos obtenidos
-                    Usuario usuario = new Usuario(idUsuario, nombreUsuario, "", "", correoUsuario, passwordUsuario);
+                    Usuario usuario = new Usuario(idUsuario, nombreUsuario, "", "", correoUsuario, passwordUsuario,false,"");
 
                     // Iniciar sesión con el usuario obtenido
                     Sesion.iniciarSesion(usuario);

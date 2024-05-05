@@ -16,4 +16,5 @@ module com.jorja.proyect.proyectogestoritvfinal {
     opens com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaRegister to javafx.fxml;
     exports com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaPrincipal;
     opens com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaPrincipal to javafx.fxml;
+    opens com.jorja.proyect.proyectogestoritvfinal.modelo to javafx.base;
 }

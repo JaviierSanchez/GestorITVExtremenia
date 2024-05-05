@@ -4,6 +4,8 @@ import com.jorja.proyect.proyectogestoritvfinal.controlador.bbdd.CONEXIONBD;
 import com.jorja.proyect.proyectogestoritvfinal.modelo.Sesion;
 import com.jorja.proyect.proyectogestoritvfinal.modelo.Usuario;
 import com.jorja.proyect.proyectogestoritvfinal.vista.Main;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -11,6 +13,7 @@ import javafx.scene.Node;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -36,6 +39,7 @@ public class VentanaPrincipalControlador implements Initializable {
     private ResultSet resultado;
     private CONEXIONBD cbd;
     private Date fecha;
+    private Usuario usuario;
 
     public VentanaPrincipalControlador() {
         cbd = new CONEXIONBD();
@@ -72,22 +76,27 @@ public class VentanaPrincipalControlador implements Initializable {
     @FXML
     private TableColumn<?, ?> columnHoraCita;
 
+    @FXML
+    private TableView<Usuario> TableViewUsuario;
+    @FXML
+    private TableColumn<Usuario, String> columnIdUsuario;
+    @FXML
+    private TableColumn<Usuario, String> columnNombreUsuario;
+    @FXML
+    private TableColumn<Usuario, String> columnApellidoUsuario;
+    @FXML
+    private TableColumn<Usuario, String> columnTelefonoUsuario;
+    @FXML
+    private TableColumn<Usuario, String> columnCorreoUsuario;
+    @FXML
+    private TableColumn<Usuario, String> columnPasswordUsuario;
 
     @FXML
-    private TableColumn<?, ?> columnIdUsuario;
+    private TableColumn<Usuario, String> columnFechaAltaUsuario;
     @FXML
-    private TableColumn<?, ?> columnNombreUsuario;
-    @FXML
-    private TableColumn<?, ?> columnApellidoUsuario;
-    @FXML
-    private TableColumn<?, ?> columnTelefonoUsuario;
-    @FXML
-    private TableColumn<?, ?> columnCorreoUsuario;
-    @FXML
-    private TableColumn<?, ?> columnPasswordUsuario;
+    private TableColumn<Usuario, String> columnAdminUsuario;
 
-    @FXML
-    private TableColumn<?, ?> columnFechaAltaUsuario;
+    private ObservableList<Usuario> addUsuarioLista;
 
     @FXML
     private TableColumn<?, ?> columnAñoVehiculo;
@@ -396,8 +405,8 @@ public class VentanaPrincipalControlador implements Initializable {
         return nombresMeses[numeroMes - 1];
     }
 
-    // Logica Ventana Principal Usuario
 
+    // Logica Ventana Principal Usuario
 
     @FXML
     void btnAddUsuario(ActionEvent event) {
@@ -430,7 +439,6 @@ public class VentanaPrincipalControlador implements Initializable {
                 mostrarAlerta("Error", "La contraseña debe tener al menos 8 caracteres y contener al menos una letra y un número.", Alert.AlertType.ERROR);
                 return;
             }
-
             // Comprobar que el usuario no se encuentra en la BBDD
             String comprobarUsuariosql = "SELECT du.Correo FROM datos_usuario du where du.Correo = ?";
             try {
@@ -458,16 +466,8 @@ public class VentanaPrincipalControlador implements Initializable {
                 throw new RuntimeException(e);
             } finally {
                 try {
-                    if (resultado != null) {
-                        resultado.close();
-                    }
-                    if (sentencia != null) {
-                        sentencia.close();
-                    }
-                    if (conexion != null) {
-                        conexion.close();
-                    }
                     cbd.cerrarConexion();
+                    conexion.close();
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
@@ -483,6 +483,30 @@ public class VentanaPrincipalControlador implements Initializable {
     @FXML
     void btnDeleteUsuario(ActionEvent event) {
 
+        String sql = "DELETE from datos_usuario WHERE Correo = ?";
+        conexion = cbd.abrirConexion();
+
+        if (txtNombreUsuario.getText().isEmpty() || txtApellidoUsuario.getText().isEmpty() || txtTelefonoUsuario.getText().isEmpty() ||
+                txtCorreoUsuario.getText().isEmpty() || txtPassWordUsuario.getText().isEmpty()) {
+            mostrarAlerta("Error", "Rellena los campos", Alert.AlertType.ERROR);
+        } else {
+            Alert alertaEliminar = new Alert(Alert.AlertType.CONFIRMATION);
+            alertaEliminar.setTitle("Confirmar eliminación");
+            alertaEliminar.setContentText("¿Estás seguro que quieres eliminar al usuario?");
+            Optional<ButtonType> opcion = alertaEliminar.showAndWait();
+
+            if (opcion.get() == ButtonType.OK) {
+                try {
+                    sentencia = conexion.prepareStatement(sql);
+                    sentencia.setString(1, txtCorreoUsuario.getText());
+                    sentencia.executeUpdate();
+                    mostrarAlerta("Eliminado con éxito", "El empleado ha sido eliminado con éxito", Alert.AlertType.INFORMATION);
+                    btnCleanUsuarios(event);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
     }
 
     @FXML
@@ -493,6 +517,64 @@ public class VentanaPrincipalControlador implements Initializable {
         txtTelefonoUsuario.setText("");
         txtCorreoUsuario.setText("");
         txtPassWordUsuario.setText("");
+    }
+
+    public ObservableList<Usuario> addUsuario() {
+
+        ObservableList<Usuario> listaUsuario = FXCollections.observableArrayList();
+        String sql = "SELECT * FROM datos_usuario";
+        conexion = cbd.abrirConexion();
+        try {
+            sentencia = conexion.prepareStatement(sql);
+            resultado = sentencia.executeQuery();
+            while (resultado.next()) {
+                usuario = new Usuario(
+                        resultado.getInt("id"),
+                        resultado.getString("Nombre"),
+                        resultado.getString("Apellido"),
+                        resultado.getString("Telefono"),
+                        resultado.getString("Correo"),
+                        resultado.getString("Contraseña"),
+                        resultado.getBoolean("Administrador"),
+                        resultado.getString("FechaAlta"));
+                listaUsuario.add(usuario);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return listaUsuario;
+    }
+
+    public void addUsuarioLista() {
+        addUsuarioLista = addUsuario();
+        columnIdUsuario.setCellValueFactory(new PropertyValueFactory<>(COLUMNIDUSUARIO));
+        columnNombreUsuario.setCellValueFactory(new PropertyValueFactory<>(COLUMNNOMBREUSUARIO));
+        columnApellidoUsuario.setCellValueFactory(new PropertyValueFactory<>(COLUMNAPELLIDOUSUARIO));
+        columnTelefonoUsuario.setCellValueFactory(new PropertyValueFactory<>(COLUMNTELEFONOUSUARIO));
+        columnCorreoUsuario.setCellValueFactory(new PropertyValueFactory<>(COLUMNCORREOUSUARIO));
+        columnPasswordUsuario.setCellValueFactory(new PropertyValueFactory<>(COLUMNCONTRASEÑAUSUARIO));
+        columnAdminUsuario.setCellValueFactory(new PropertyValueFactory<>(COLUMNADMINISTRADORUSUARIO));
+        columnFechaAltaUsuario.setCellValueFactory(new PropertyValueFactory<>(COLUMNFECHAALTAUSUARIO));
+        TableViewUsuario.setItems(addUsuarioLista);
+    }
+
+    public void mostrarUsuarioSeleccionado() {
+        try {
+            Usuario usuario = TableViewUsuario.getSelectionModel().getSelectedItem();
+            int indice = TableViewUsuario.getSelectionModel().getSelectedIndex();
+
+            if (indice < 0) {
+                return;
+            }
+            txtIdUsuario.setText(String.valueOf(usuario.getId()));
+            txtNombreUsuario.setText(usuario.getNombre());
+            txtApellidoUsuario.setText(usuario.getApellido());
+            txtTelefonoUsuario.setText(usuario.getTelefono());
+            txtCorreoUsuario.setText(usuario.getCorreo());
+            txtPassWordUsuario.setText(usuario.getContraseña());
+        } catch (NullPointerException e) {
+            System.err.println("ADVERTENCIA: No se ha seleccionado ningún empleado.");
+            }
     }
 
 
@@ -513,6 +595,8 @@ public class VentanaPrincipalControlador implements Initializable {
         contardorTotalVehiculos();
         contadorTotalGanaciasMensuales();
         cargarDatosGraficoUsuario();
+        addUsuarioLista();
+        mostrarUsuarioSeleccionado();
 
         // Sacar nombre usuario que ha iniciado sesion
         Usuario usuarioActual = Sesion.getUsuarioActual();
