@@ -6,6 +6,8 @@ import com.jorja.proyect.proyectogestoritvfinal.modelo.Usuario;
 import com.jorja.proyect.proyectogestoritvfinal.vista.Main;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -289,6 +291,7 @@ public class VentanaPrincipalControlador implements Initializable {
         contardorTotalVehiculos();
         contadorTotalGanaciasMensuales();
         cargarDatosGraficoUsuario();
+        buscarUsuarioTableView();
     }
 
     public void cerrarVentana(ActionEvent actionEvent) {
@@ -574,7 +577,42 @@ public class VentanaPrincipalControlador implements Initializable {
             txtPassWordUsuario.setText(usuario.getContraseña());
         } catch (NullPointerException e) {
             System.err.println("ADVERTENCIA: No se ha seleccionado ningún empleado.");
-            }
+        }
+    }
+
+    public void buscarUsuarioTableView() {
+        FilteredList<Usuario> filtroUsuario = new FilteredList<>(addUsuarioLista, u -> true);
+        txtBusquedaUsuario.textProperty().addListener((observable, oldValue, newValue) -> {
+            // Configurar el predicado para el filtrado
+            filtroUsuario.setPredicate(usuario -> {
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+                // Convertir el valor de búsqueda a minúsculas para la comparación sin distinción de mayúsculas
+                String lowerCaseFiltrer = newValue.toLowerCase();
+
+                // Verificar si el valor de búsqueda se encuentra en alguno de los atributos del empleado
+                if (usuario.getNombre().toLowerCase().indexOf(lowerCaseFiltrer) != -1) {
+                    return true;
+                } else if (usuario.getApellido().toLowerCase().indexOf(lowerCaseFiltrer) != -1) {
+                    return true;
+                } else if (usuario.getTelefono().toLowerCase().indexOf(lowerCaseFiltrer) != -1) {
+                    return true;
+                } else if (usuario.getCorreo().toLowerCase().indexOf(lowerCaseFiltrer) != -1) {
+                    return true;
+                } else if (usuario.getContraseña().toString().toLowerCase().indexOf(lowerCaseFiltrer) != -1) {
+                    return true;
+                } else if (usuario.getFechaAlta().toString().toLowerCase().indexOf(lowerCaseFiltrer) != -1) {
+                    return true;
+                } else {
+                    return false;
+                }
+            });
+        });
+
+        SortedList<Usuario> listaOrdenadorUsuario = new SortedList<>(filtroUsuario);
+        listaOrdenadorUsuario.comparatorProperty().bind(TableViewUsuario.comparatorProperty());
+        TableViewUsuario.setItems(listaOrdenadorUsuario);
     }
 
 
@@ -597,6 +635,7 @@ public class VentanaPrincipalControlador implements Initializable {
         cargarDatosGraficoUsuario();
         addUsuarioLista();
         mostrarUsuarioSeleccionado();
+        buscarUsuarioTableView();
 
         // Sacar nombre usuario que ha iniciado sesion
         Usuario usuarioActual = Sesion.getUsuarioActual();
