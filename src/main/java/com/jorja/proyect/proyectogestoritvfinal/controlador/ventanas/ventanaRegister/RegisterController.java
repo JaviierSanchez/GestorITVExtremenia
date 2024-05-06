@@ -13,6 +13,8 @@ import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
 import java.net.URL;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -103,6 +105,10 @@ public class RegisterController implements Initializable {
                     // El usuario ya existe
                     mostrarAlerta("Usuario Existente", "¡El usuario ya está registrado!", Alert.AlertType.ERROR);
                 } else {
+                    //Cifrar la contraseña mediante hash
+
+                    String hashedPassword = hashPassword(txtPassword.getText());
+
                     // El usuario no existe y se crea
                     String sqlInsert = "INSERT INTO datos_usuario(Nombre,Apellido,Telefono,Correo,Contraseña) VALUES (?,?,?,?,?)";
                     sentencia = conexion.prepareStatement(sqlInsert);
@@ -110,7 +116,7 @@ public class RegisterController implements Initializable {
                     sentencia.setString(2, txtApellido.getText());
                     sentencia.setString(3, txtTelefono.getText());
                     sentencia.setString(4, txtCorreo.getText());
-                    sentencia.setString(5, txtPassword.getText());
+                    sentencia.setString(5, hashedPassword);
                     int filas = sentencia.executeUpdate();
 
                     if (filas > 0) {
@@ -143,6 +149,26 @@ public class RegisterController implements Initializable {
 
 
     }
+    private String hashPassword(String password) {
+        try {
+            // Usamos SHA-256 para el hash
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(password.getBytes());
+            StringBuilder hexString = new StringBuilder();
+
+            // Convertir el hash a formato hexadecimal
+            for (byte b : hash) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipoAlerta) {
         Alert alert = new Alert(tipoAlerta);

@@ -160,6 +160,9 @@ public class VentanaPrincipalControlador implements Initializable {
     private TextField txtAdminUsuario;
 
     @FXML
+    private TextField txtIdUsuarioVehiculo;
+
+    @FXML
     private TextField txtAñoVehiculo;
 
     @FXML
@@ -294,6 +297,7 @@ public class VentanaPrincipalControlador implements Initializable {
         contadorTotalGanaciasMensuales();
         cargarDatosGraficoUsuario();
         buscarUsuarioTableView();
+        asignarDatosUsuarioSesion();
     }
 
     public void cerrarVentana(ActionEvent actionEvent) {
@@ -416,8 +420,8 @@ public class VentanaPrincipalControlador implements Initializable {
     @FXML
     void btnAddUsuario(ActionEvent event) {
 
-        Date fecha = new Date();
-        Date fechaActual = new Date(fecha.getTime());
+
+        String fechaAlta = obtenerFechaActual();
 
         String sql = """
                 INSERT INTO datos_usuario
@@ -454,15 +458,13 @@ public class VentanaPrincipalControlador implements Initializable {
                 if (resultado.next()) {
                     mostrarAlerta("Error", "El usuario ya existe", Alert.AlertType.ERROR);
                 } else {
-                    String fechaActual2 = new SimpleDateFormat("yyyy-MM-dd").format(fechaActual);
-
                     sentencia = conexion.prepareStatement(sql);
                     sentencia.setString(1, txtNombreUsuario.getText());
                     sentencia.setString(2, txtApellidoUsuario.getText());
                     sentencia.setString(3, txtTelefonoUsuario.getText());
                     sentencia.setString(4, txtCorreoUsuario.getText());
                     sentencia.setString(5, txtPassWordUsuario.getText());
-                    sentencia.setString(6, String.valueOf(fechaActual2));
+                    sentencia.setString(6, fechaAlta);
                     sentencia.executeUpdate();
                     mostrarAlerta("Añadido", "El usuario ha sido añadido", Alert.AlertType.INFORMATION);
                     btnCleanUsuarios(event);
@@ -483,8 +485,8 @@ public class VentanaPrincipalControlador implements Initializable {
     @FXML
     void btnUpdateUsuario(ActionEvent event) {
 
-      //String sql ="UPDATE datos_usuario du SET du.Nombre = ?, du.Apellido = ?, du.Telefono = ?, du.Correo = ?, du.Contraseña = ?, du.Administrador = ?, du.FechaAlta = ? WHERE du.id = ?";
-        String sql ="UPDATE datos_usuario du SET du.Nombre = ?, du.Apellido = ?, du.Telefono = ?, du.Correo = ?, du.Contraseña = ?, du.Administrador = ?, du.FechaAlta = ? WHERE du.id = ?";
+        //String sql ="UPDATE datos_usuario du SET du.Nombre = ?, du.Apellido = ?, du.Telefono = ?, du.Correo = ?, du.Contraseña = ?, du.Administrador = ?, du.FechaAlta = ? WHERE du.id = ?";
+        String sql = "UPDATE datos_usuario du SET du.Nombre = ?, du.Apellido = ?, du.Telefono = ?, du.Correo = ?, du.Contraseña = ?, du.Administrador = ?, du.FechaAlta = ? WHERE du.id = ?";
 
 
         conexion = cbd.abrirConexion();
@@ -514,26 +516,26 @@ public class VentanaPrincipalControlador implements Initializable {
 
             ButtonType opcion = alert.showAndWait().orElse(ButtonType.CANCEL);
 
-            if(opcion == ButtonType.OK){
+            if (opcion == ButtonType.OK) {
                 try {
                     sentencia = conexion.prepareStatement(sql);
 
-                    sentencia.setString(1,txtNombreUsuario.getText());
-                    sentencia.setString(2,txtApellidoUsuario.getText());
-                    sentencia.setString(3,txtTelefonoUsuario.getText());
-                    sentencia.setString(4,txtCorreoUsuario.getText());
-                    sentencia.setString(5,txtPassWordUsuario.getText());
+                    sentencia.setString(1, txtNombreUsuario.getText());
+                    sentencia.setString(2, txtApellidoUsuario.getText());
+                    sentencia.setString(3, txtTelefonoUsuario.getText());
+                    sentencia.setString(4, txtCorreoUsuario.getText());
+                    sentencia.setString(5, txtPassWordUsuario.getText());
                     sentencia.setInt(6, (txtAdminUsuario.getText().equalsIgnoreCase("true")) ? 1 : 0);
                     sentencia.setString(7, usuario.getFechaAlta());
-                    sentencia.setString(8,txtIdUsuario.getText());
+                    sentencia.setString(8, txtIdUsuario.getText());
                     sentencia.executeUpdate();
 
-                    mostrarAlerta("Usuario actualizado","El usuario ha sido actualizado", Alert.AlertType.INFORMATION);
+                    mostrarAlerta("Usuario actualizado", "El usuario ha sido actualizado", Alert.AlertType.INFORMATION);
                     addUsuarioLista();
                     btnCleanUsuarios(event);
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
-                }finally {
+                } finally {
                     try {
                         cbd.cerrarConexion();
                         conexion.close();
@@ -577,13 +579,17 @@ public class VentanaPrincipalControlador implements Initializable {
 
     @FXML
     public void btnCleanUsuarios(ActionEvent actionEvent) {
-        txtIdUsuario.setText("");
-        txtNombreUsuario.setText("");
-        txtApellidoUsuario.setText("");
-        txtTelefonoUsuario.setText("");
-        txtCorreoUsuario.setText("");
-        txtPassWordUsuario.setText("");
-        txtAdminUsuario.setText("");
+        txtIdUsuario.clear();
+        txtNombreUsuario.clear();
+        txtApellidoUsuario.clear();
+        txtTelefonoUsuario.clear();
+        txtCorreoUsuario.clear();
+        txtPassWordUsuario.clear();
+        txtAdminUsuario.clear();
+    }
+
+    private String obtenerFechaActual() {
+        return new SimpleDateFormat("yyyy-MM-dd").format(new Date());
     }
 
     // Medoto que crea un observableList de usuario que guarda todos los usuarios
@@ -682,6 +688,28 @@ public class VentanaPrincipalControlador implements Initializable {
     }
 
 
+
+    //Logica Ventana Principal Perfil
+
+    public void asignarDatosUsuarioSesion(){
+
+        Usuario usuario = Sesion.getUsuarioActual();
+        if(usuario != null){
+            txtNombrePerfil.setText(usuario.getNombre());
+            txtApellidoPerfil.setText(usuario.getApellido());
+            txtTelefonoPerfil.setText(usuario.getTelefono());
+            txtCorreoPerfil.setText(usuario.getCorreo());
+        }else{
+            txtNombrePerfil.setText("");
+            txtApellidoPerfil.setText("");
+            txtTelefonoPerfil.setText("");
+            txtCorreoPerfil.setText("");
+        }
+
+
+    }
+
+
     private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipoAlerta) {
         Alert alert = new Alert(tipoAlerta);
         alert.setHeaderText(null);
@@ -702,6 +730,7 @@ public class VentanaPrincipalControlador implements Initializable {
         addUsuarioLista();
         mostrarUsuarioSeleccionado();
         buscarUsuarioTableView();
+        asignarDatosUsuarioSesion();
 
         // Sacar nombre usuario que ha iniciado sesion
         Usuario usuarioActual = Sesion.getUsuarioActual();
