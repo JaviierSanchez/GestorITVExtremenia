@@ -166,7 +166,7 @@
    <center>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <AnchorPane fx:id="layoutInicio" prefHeight="748.0" prefWidth="991.0">
+            <AnchorPane fx:id="layoutInicio" prefHeight="748.0" prefWidth="991.0" visible="false">
                <children>
                   <VBox prefHeight="746.0" prefWidth="992.0">
                      <children>
@@ -311,7 +311,7 @@
                   </AnchorPane>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="layoutUsuarios" prefHeight="747.0" prefWidth="991.0" stylesheets="@../css/Ventana-Principal-Vehiculo.css" visible="false">
+            <AnchorPane fx:id="layoutUsuarios" prefHeight="747.0" prefWidth="991.0" stylesheets="@../css/Ventana-Principal-Vehiculo.css">
                <children>
                   <AnchorPane layoutX="14.0" layoutY="15.0" prefHeight="718.0" prefWidth="964.0" styleClass="fondo-principal">
                      <children>
@@ -345,6 +345,8 @@
                         <TextField fx:id="txtCorreoUsuario" layoutX="457.0" layoutY="507.0" styleClass="textfield" />
                         <Label layoutX="360.0" layoutY="555.0" styleClass="lbl-General" text="Contraseña:" />
                         <PasswordField fx:id="txtPassWordUsuario" layoutX="457.0" layoutY="551.0" styleClass="textfield" />
+                        <Label layoutX="624.0" layoutY="472.0" styleClass="lbl-General" text="Administrador:" />
+                        <TextField fx:id="txtAdminUsuario" layoutX="730.0" layoutY="469.0" styleClass="textfield" />
                      </children>
                   </AnchorPane>
                </children>

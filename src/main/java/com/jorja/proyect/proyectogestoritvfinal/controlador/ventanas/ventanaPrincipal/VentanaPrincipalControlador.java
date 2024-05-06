@@ -156,6 +156,8 @@ public class VentanaPrincipalControlador implements Initializable {
 
     @FXML
     private TextField txtApellidoUsuario;
+    @FXML
+    private TextField txtAdminUsuario;
 
     @FXML
     private TextField txtAñoVehiculo;
@@ -481,6 +483,67 @@ public class VentanaPrincipalControlador implements Initializable {
     @FXML
     void btnUpdateUsuario(ActionEvent event) {
 
+      //String sql ="UPDATE datos_usuario du SET du.Nombre = ?, du.Apellido = ?, du.Telefono = ?, du.Correo = ?, du.Contraseña = ?, du.Administrador = ?, du.FechaAlta = ? WHERE du.id = ?";
+        String sql ="UPDATE datos_usuario du SET du.Nombre = ?, du.Apellido = ?, du.Telefono = ?, du.Correo = ?, du.Contraseña = ?, du.Administrador = ?, du.FechaAlta = ? WHERE du.id = ?";
+
+
+        conexion = cbd.abrirConexion();
+
+        // Comprobaciones de campos, si esta vacio muestra alerta error, sino compprueba que los datos se han introducido con formato correcto
+        if (txtNombreUsuario.getText().isEmpty() || txtApellidoUsuario.getText().isEmpty() || txtTelefonoUsuario.getText().isEmpty() ||
+                txtCorreoUsuario.getText().isEmpty() || txtPassWordUsuario.getText().isEmpty()) {
+            mostrarAlerta("Error", "Rellena los campos", Alert.AlertType.ERROR);
+        } else {
+
+            if (!txtTelefonoUsuario.getText().matches(TELEFONOREGEX)) {
+                mostrarAlerta("Error", "Teléfono no válido. Debe tener 9 dígitos. \n Ejemplo: 123456789", Alert.AlertType.ERROR);
+                return;
+            }
+            if (!txtCorreoUsuario.getText().matches(CORREOREGEX)) {
+                mostrarAlerta("Error", "El correo electrónico ingresado no es válido.", Alert.AlertType.ERROR);
+                return;
+            }
+            if (!txtPassWordUsuario.getText().matches(PASSWORDREGEX)) {
+                mostrarAlerta("Error", "La contraseña debe tener al menos 8 caracteres y contener al menos una letra y un número.", Alert.AlertType.ERROR);
+                return;
+            }
+
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Actualizar empleado");
+            alert.setContentText("¿Estás seguro que quieres actualizar los cambios?");
+
+            ButtonType opcion = alert.showAndWait().orElse(ButtonType.CANCEL);
+
+            if(opcion == ButtonType.OK){
+                try {
+                    sentencia = conexion.prepareStatement(sql);
+
+                    sentencia.setString(1,txtNombreUsuario.getText());
+                    sentencia.setString(2,txtApellidoUsuario.getText());
+                    sentencia.setString(3,txtTelefonoUsuario.getText());
+                    sentencia.setString(4,txtCorreoUsuario.getText());
+                    sentencia.setString(5,txtPassWordUsuario.getText());
+                    sentencia.setInt(6, (txtAdminUsuario.getText().equalsIgnoreCase("true")) ? 1 : 0);
+                    sentencia.setString(7, usuario.getFechaAlta());
+                    sentencia.setString(8,txtIdUsuario.getText());
+                    sentencia.executeUpdate();
+
+                    mostrarAlerta("Usuario actualizado","El usuario ha sido actualizado", Alert.AlertType.INFORMATION);
+                    addUsuarioLista();
+                    btnCleanUsuarios(event);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }finally {
+                    try {
+                        cbd.cerrarConexion();
+                        conexion.close();
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+
+        }
     }
 
     @FXML
@@ -520,8 +583,10 @@ public class VentanaPrincipalControlador implements Initializable {
         txtTelefonoUsuario.setText("");
         txtCorreoUsuario.setText("");
         txtPassWordUsuario.setText("");
+        txtAdminUsuario.setText("");
     }
 
+    // Medoto que crea un observableList de usuario que guarda todos los usuarios
     public ObservableList<Usuario> addUsuario() {
 
         ObservableList<Usuario> listaUsuario = FXCollections.observableArrayList();
@@ -575,6 +640,7 @@ public class VentanaPrincipalControlador implements Initializable {
             txtTelefonoUsuario.setText(usuario.getTelefono());
             txtCorreoUsuario.setText(usuario.getCorreo());
             txtPassWordUsuario.setText(usuario.getContraseña());
+            txtAdminUsuario.setText(String.valueOf(usuario.isAdministrador()));
         } catch (NullPointerException e) {
             System.err.println("ADVERTENCIA: No se ha seleccionado ningún empleado.");
         }
