@@ -637,9 +637,8 @@ public class VentanaPrincipalControlador implements Initializable {
             Usuario usuario = TableViewUsuario.getSelectionModel().getSelectedItem();
             int indice = TableViewUsuario.getSelectionModel().getSelectedIndex();
 
-            if (indice < 0) {
-                return;
-            }
+            if (indice < 0) return;
+
             txtIdUsuario.setText(String.valueOf(usuario.getId()));
             txtNombreUsuario.setText(usuario.getNombre());
             txtApellidoUsuario.setText(usuario.getApellido());
@@ -688,7 +687,6 @@ public class VentanaPrincipalControlador implements Initializable {
     }
 
 
-
     //Logica Ventana Principal Perfil
 
     public void asignarDatosUsuarioSesion(){
@@ -700,13 +698,11 @@ public class VentanaPrincipalControlador implements Initializable {
             txtTelefonoPerfil.setText(usuario.getTelefono());
             txtCorreoPerfil.setText(usuario.getCorreo());
         }else{
-            txtNombrePerfil.setText("");
-            txtApellidoPerfil.setText("");
-            txtTelefonoPerfil.setText("");
-            txtCorreoPerfil.setText("");
+            txtNombrePerfil.clear();
+            txtApellidoPerfil.clear();
+            txtTelefonoPerfil.clear();
+            txtCorreoPerfil.clear();
         }
-
-
     }
 
 
@@ -721,7 +717,6 @@ public class VentanaPrincipalControlador implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        // Tarjetas Contador
         contadorTotalUsuarios();
         contadorTotalCitas();
         contardorTotalVehiculos();
@@ -741,6 +736,4 @@ public class VentanaPrincipalControlador implements Initializable {
         }
 
     }
-
-
 }

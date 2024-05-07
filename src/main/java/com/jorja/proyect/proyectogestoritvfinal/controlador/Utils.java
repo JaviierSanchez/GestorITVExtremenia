@@ -6,6 +6,7 @@ public class Utils {
     public static final String VENTANALOGIN = "/com/jorja/proyect/proyectogestoritvfinal/vista/VentanaLogueo.fxml";
     public static final String VENTANAPRINCIPAL = "/com/jorja/proyect/proyectogestoritvfinal/vista/VentanaPrincipal.fxml";
     public static final String VENTANAREGISTER = "/com/jorja/proyect/proyectogestoritvfinal/vista/VentanaRegister.fxml";
+    public static final String VENTANACAMBIARPASSWORD = "/com/jorja/proyect/proyectogestoritvfinal/vista/VentanaCambiarPassworduser.fxml";
 
     // Comprobaciones textos
     public static final String TELEFONOREGEX = "\\d{9}";
@@ -13,7 +14,6 @@ public class Utils {
     public static final String PASSWORDREGEX = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$";
 
     // Columnas USuario
-
     public static final String COLUMNIDUSUARIO = "id";
     public static final String COLUMNNOMBREUSUARIO = "nombre";
     public static final String COLUMNAPELLIDOUSUARIO = "apellido";

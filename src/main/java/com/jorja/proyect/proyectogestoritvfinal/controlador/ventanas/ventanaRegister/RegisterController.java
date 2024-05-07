@@ -146,9 +146,8 @@ public class RegisterController implements Initializable {
                 }
             }
         }
-
-
     }
+
     private String hashPassword(String password) {
         try {
             // Usamos SHA-256 para el hash
