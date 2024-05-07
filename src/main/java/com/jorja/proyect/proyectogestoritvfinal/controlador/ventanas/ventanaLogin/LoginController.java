@@ -13,24 +13,21 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
-
 import java.net.URL;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+import static com.jorja.proyect.proyectogestoritvfinal.controlador.Utils.*;
+
 public class LoginController implements Initializable {
 
     @FXML
     private TextField txtEmail;
-
     @FXML
     private PasswordField txtPassword;
-
     private Connection conexion;
     private PreparedStatement sentencia;
     private ResultSet resultado;
@@ -109,45 +106,9 @@ public class LoginController implements Initializable {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            if (conexion != null) {
-                try {
-                    cbd.cerrarConexion();
-                    conexion.close();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-            }
+        cerrarConexion(cbd);
         }
     }
-
-    private String hashPassword(String password) {
-        try {
-            // Usamos SHA-256 para el hash
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hash = digest.digest(password.getBytes());
-            StringBuilder hexString = new StringBuilder();
-
-            // Convertir el hash a formato hexadecimal
-            for (byte b : hash) {
-                String hex = Integer.toHexString(0xff & b);
-                if (hex.length() == 1) hexString.append('0');
-                hexString.append(hex);
-            }
-
-            return hexString.toString();
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipoAlerta) {
-        Alert alert = new Alert(tipoAlerta);
-        alert.setHeaderText(null);
-        alert.setTitle(titulo);
-        alert.setContentText(mensaje);
-        alert.showAndWait();
-    }
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         txtPassword.setOnKeyPressed(e -> {

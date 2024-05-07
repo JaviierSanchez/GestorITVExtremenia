@@ -1,5 +1,6 @@
 package com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaRegister;
 
+import com.jorja.proyect.proyectogestoritvfinal.controlador.Utils;
 import com.jorja.proyect.proyectogestoritvfinal.controlador.bbdd.CONEXIONBD;
 import com.jorja.proyect.proyectogestoritvfinal.vista.Main;
 import javafx.event.ActionEvent;
@@ -13,13 +14,13 @@ import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
 import java.net.URL;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+
+import static com.jorja.proyect.proyectogestoritvfinal.controlador.Utils.*;
 
 public class RegisterController implements Initializable {
 
@@ -52,12 +53,10 @@ public class RegisterController implements Initializable {
     private ResultSet resultado;
     private CONEXIONBD cbd;
 
-
     @FXML
     void btnRegister(ActionEvent event) {
         registrarUsuario();
     }
-
 
     @FXML
     void btnCancelar(ActionEvent event) {
@@ -68,7 +67,6 @@ public class RegisterController implements Initializable {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
     }
 
     @FXML
@@ -79,7 +77,7 @@ public class RegisterController implements Initializable {
     /***
      *  Metodo para registar el usuario:
      *
-     *  1. Se comprueba que los datos del usuario no existen ya en la BBDD
+     *  *  1. Se comprueba que los datos del usuario no existen ya en la BBDD
      *  2. Se comprueba que los campos estan rellenos y que los campos de contraseña coinciden
      *  3. Si todo esta correcto se crea el usuario
      */
@@ -100,6 +98,8 @@ public class RegisterController implements Initializable {
                 lblPasswordError1.setVisible(true);
                 lblPasswordError2.setVisible(true);
 
+            } else if (!validarTelefono(txtTelefono) || !validarCorreo(txtCorreo) || !validarPassword(txtPassword)) {
+                return;
             } else {
                 if (resultado.next()) {
                     // El usuario ya existe
@@ -146,35 +146,6 @@ public class RegisterController implements Initializable {
                 }
             }
         }
-    }
-
-    private String hashPassword(String password) {
-        try {
-            // Usamos SHA-256 para el hash
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hash = digest.digest(password.getBytes());
-            StringBuilder hexString = new StringBuilder();
-
-            // Convertir el hash a formato hexadecimal
-            for (byte b : hash) {
-                String hex = Integer.toHexString(0xff & b);
-                if (hex.length() == 1) hexString.append('0');
-                hexString.append(hex);
-            }
-
-            return hexString.toString();
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-
-    private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipoAlerta) {
-        Alert alert = new Alert(tipoAlerta);
-        alert.setHeaderText(null);
-        alert.setTitle(titulo);
-        alert.setContentText(mensaje);
-        alert.showAndWait();
     }
 
     @Override

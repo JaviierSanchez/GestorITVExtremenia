@@ -166,7 +166,7 @@
    <center>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <AnchorPane fx:id="layoutInicio" prefHeight="748.0" prefWidth="991.0" visible="false">
+            <AnchorPane fx:id="layoutInicio" prefHeight="748.0" prefWidth="991.0">
                <children>
                   <VBox prefHeight="746.0" prefWidth="992.0">
                      <children>
@@ -319,10 +319,10 @@
                            <columns>
                               <TableColumn fx:id="columnIdUsuario" prefWidth="33.0" text="ID" />
                               <TableColumn fx:id="columnNombreUsuario" prefWidth="98.0" text="Nombre" />
-                              <TableColumn fx:id="columnApellidoUsuario" prefWidth="140.0" text="Apellido" />
-                              <TableColumn fx:id="columnTelefonoUsuario" prefWidth="98.0" text="Telefono" />
-                              <TableColumn fx:id="columnCorreoUsuario" prefWidth="185.0" text="Correo" />
-                              <TableColumn fx:id="columnPasswordUsuario" prefWidth="173.0" text="Contraseña" />
+                              <TableColumn fx:id="columnApellidoUsuario" prefWidth="151.0" text="Apellido" />
+                              <TableColumn fx:id="columnTelefonoUsuario" prefWidth="122.0" text="Telefono" />
+                              <TableColumn fx:id="columnCorreoUsuario" prefWidth="214.0" text="Correo" />
+                              <TableColumn fx:id="columnPasswordUsuario" prefWidth="109.0" text="Contraseña" />
                               <TableColumn fx:id="columnFechaAltaUsuario" prefWidth="118.0" text="Fecha Alta" />
                               <TableColumn fx:id="columnAdminUsuario" prefWidth="90.0" text="Admin" />
                            </columns>
@@ -351,7 +351,7 @@
                   </AnchorPane>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="layoutVehiculo" prefHeight="748.0" prefWidth="992.0" stylesheets="@../css/Ventana-Principal-Vehiculo.css">
+            <AnchorPane fx:id="layoutVehiculo" prefHeight="748.0" prefWidth="992.0" stylesheets="@../css/Ventana-Principal-Vehiculo.css" visible="false">
                <children>
                   <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="718.0" prefWidth="964.0" styleClass="fondo-principal">
                      <children>

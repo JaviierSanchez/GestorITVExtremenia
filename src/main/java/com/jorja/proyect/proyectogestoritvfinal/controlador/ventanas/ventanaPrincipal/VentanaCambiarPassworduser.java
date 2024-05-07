@@ -1,13 +1,21 @@
 package com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaPrincipal;
 
 import com.jorja.proyect.proyectogestoritvfinal.controlador.bbdd.CONEXIONBD;
+import com.jorja.proyect.proyectogestoritvfinal.modelo.Sesion;
+import com.jorja.proyect.proyectogestoritvfinal.modelo.Usuario;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import static com.jorja.proyect.proyectogestoritvfinal.controlador.Utils.*;
 
 public class VentanaCambiarPassworduser {
 
@@ -15,6 +23,11 @@ public class VentanaCambiarPassworduser {
     private PreparedStatement sentencia;
     private ResultSet resultado;
     private CONEXIONBD cbd;
+    @FXML
+    private Label labelErrorPassword;
+
+    @FXML
+    private Label labelErrorPassword2;
     @FXML
     private TextField txtPasswordAntigua;
 
@@ -27,14 +40,77 @@ public class VentanaCambiarPassworduser {
     @FXML
     void btnActualizar(ActionEvent event) {
 
-        String sql = "UPDATE datos_usuario du SET du.Contraseaña = ? WHERE du.id = ? ";
+        Usuario usuario = Sesion.getUsuarioActual();
 
+        // Consulta SQL para actualizar la contraseña del usuario
+        String sql = "UPDATE datos_usuario SET Contraseña = ? WHERE id = ?";
+        cbd = new CONEXIONBD();
+        conexion = cbd.abrirConexion();
 
+        // Verificar que los campos de contraseña no estén vacíos
+        if (txtPasswordAntigua.getText().isEmpty() || txtPasswordNueva.getText().isEmpty() || txtPasswordNueva2.getText().isEmpty()) {
+            mostrarAlerta("Error", "Rellena los campos", Alert.AlertType.ERROR);
+        } else if (!txtPasswordNueva.getText().equals(txtPasswordNueva2.getText())) {
+            labelErrorPassword.setVisible(true);
+            labelErrorPassword2.setVisible(true);
+        } else if (!validarPassword(txtPasswordNueva)) { // Validar la nueva contraseña
+            return;
+        } else {
+            try {
+                // Verificar la contraseña antigua del usuario
+                String sqlVerificar = "SELECT Contraseña FROM datos_usuario WHERE id = ?";
+                sentencia = conexion.prepareStatement(sqlVerificar);
+                sentencia.setInt(1, usuario.getId());
+                resultado = sentencia.executeQuery();
+
+                if (resultado.next()) {
+                    String passwordUsuario = resultado.getString("Contraseña");
+                    if (!passwordUsuario.equals(hashPassword(txtPasswordAntigua.getText()))) {
+                        mostrarAlerta("Error", "La contraseña antigua es incorrecta", Alert.AlertType.ERROR);
+                        return;
+                    }
+                }
+
+                // Confirmar la actualización de la contraseña con una alerta
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Actualizar contraseña");
+                alert.setContentText("¿Estás seguro que quieres actualizar la contraseña?");
+                ButtonType opcion = alert.showAndWait().orElse(ButtonType.CANCEL);
+
+                if (opcion == ButtonType.OK) {
+                    // Hash de la nueva contraseña
+                    String hashedPassword = hashPassword(txtPasswordNueva.getText());
+
+                    // Preparar la sentencia SQL para actualizar la contraseña
+                    sentencia = conexion.prepareStatement(sql);
+                    sentencia.setString(1, hashedPassword);
+                    sentencia.setInt(2, usuario.getId());
+
+                    // Ejecutar la actualización de la contraseña
+                    int filas = this.sentencia.executeUpdate();
+
+                    if (filas > 0) {
+                        mostrarAlerta("Contraseña actualizada", "La contraseña ha sido actualizada exitosamente", Alert.AlertType.INFORMATION);
+                        txtPasswordAntigua.getScene().getWindow().hide();
+                    } else {
+                        mostrarAlerta("Error", "No se pudo actualizar la contraseña", Alert.AlertType.ERROR);
+                    }
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            } finally {
+                // Cerrar la conexión a la base de datos
+                if (conexion != null) {
+                    cbd.cerrarConexion();
+                }
+            }
+        }
     }
+
 
     @FXML
     void btnCancelar(ActionEvent event) {
-        System.exit(0);
+        txtPasswordAntigua.getScene().getWindow().hide();
 
     }
 

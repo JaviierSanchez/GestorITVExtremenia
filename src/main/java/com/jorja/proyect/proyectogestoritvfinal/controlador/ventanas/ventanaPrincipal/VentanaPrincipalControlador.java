@@ -1,9 +1,11 @@
 package com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaPrincipal;
 
+import com.jorja.proyect.proyectogestoritvfinal.controlador.Utils;
 import com.jorja.proyect.proyectogestoritvfinal.controlador.bbdd.CONEXIONBD;
 import com.jorja.proyect.proyectogestoritvfinal.modelo.Sesion;
 import com.jorja.proyect.proyectogestoritvfinal.modelo.Usuario;
 import com.jorja.proyect.proyectogestoritvfinal.vista.Main;
+import com.jorja.proyect.proyectogestoritvfinal.vista.VentanaCambiarPassword;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -19,6 +21,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -26,8 +29,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormatSymbols;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -229,7 +230,6 @@ public class VentanaPrincipalControlador implements Initializable {
 
     }
 
-
     @FXML
     void btnAddVehiculo(ActionEvent event) {
 
@@ -239,7 +239,6 @@ public class VentanaPrincipalControlador implements Initializable {
     void btnCleanCita(ActionEvent event) {
 
     }
-
 
     @FXML
     void btnCleanVehiculo(ActionEvent event) {
@@ -251,14 +250,8 @@ public class VentanaPrincipalControlador implements Initializable {
 
     }
 
-
     @FXML
     void btnDeleteVehiculo(ActionEvent event) {
-
-    }
-
-    @FXML
-    void btnModificarPasswordPerfil(ActionEvent event) {
 
     }
 
@@ -266,7 +259,6 @@ public class VentanaPrincipalControlador implements Initializable {
     void btnUpdateCita(ActionEvent event) {
 
     }
-
 
     @FXML
     void btnUpdateVehiculo(ActionEvent event) {
@@ -298,6 +290,12 @@ public class VentanaPrincipalControlador implements Initializable {
         cargarDatosGraficoUsuario();
         buscarUsuarioTableView();
         asignarDatosUsuarioSesion();
+        limpiarCamposBusqueda();
+    }
+
+    private void limpiarCamposBusqueda() {
+        txtBusquedaUsuario.clear();
+        txtBusquedaVehiculo.clear();
     }
 
     public void cerrarVentana(ActionEvent actionEvent) {
@@ -344,7 +342,6 @@ public class VentanaPrincipalControlador implements Initializable {
 
     public void contadorTotalCitas() {
         String sqlCitas = "SELECT COUNT(c.id) as total FROM cita C";
-
         VentanaPrincipalInicioControlador.contadorTarjetas(sqlCitas, lblCountDate, cbd);
     }
 
@@ -360,8 +357,6 @@ public class VentanaPrincipalControlador implements Initializable {
                     YEAR(c.Fecha) = YEAR(CURDATE()) AND MONTH(c.Fecha) = MONTH(CURDATE());
                                 
                 """;
-
-
         VentanaPrincipalInicioControlador.contadorTarjetas(sqlGanancias, lblCountMoney, cbd);
     }
 
@@ -391,35 +386,19 @@ public class VentanaPrincipalControlador implements Initializable {
                 String nombreMes = obtenerNombreMes(mesNumero); // Obtener el nombre del mes
                 chart.getData().add(new XYChart.Data(nombreMes, resultado.getInt(2)));
             }
-
             graficoUsuarios.getData().add(chart);
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-
-            try {
-                cbd.cerrarConexion();
-                conexion.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+            cerrarConexion(cbd);
         }
     }
-
-    // Método para obtener el nombre del mes a partir del número del mes
-    private String obtenerNombreMes(int numeroMes) {
-        DateFormatSymbols dfs = new DateFormatSymbols();
-        String[] nombresMeses = dfs.getMonths();
-        return nombresMeses[numeroMes - 1];
-    }
-
 
     // Logica Ventana Principal Usuario
 
     @FXML
     void btnAddUsuario(ActionEvent event) {
-
 
         String fechaAlta = obtenerFechaActual();
 
@@ -436,18 +415,9 @@ public class VentanaPrincipalControlador implements Initializable {
             mostrarAlerta("Error", "Rellena los campos", Alert.AlertType.ERROR);
         } else {
 
-            if (!txtTelefonoUsuario.getText().matches(TELEFONOREGEX)) {
-                mostrarAlerta("Error", "Teléfono no válido. Debe tener 9 dígitos. \n Ejemplo: 123456789", Alert.AlertType.ERROR);
+            if (!validarTelefono(txtTelefonoUsuario) | !validarCorreo(txtCorreoUsuario) || !validarPassword(txtPassWordUsuario))
                 return;
-            }
-            if (!txtCorreoUsuario.getText().matches(CORREOREGEX)) {
-                mostrarAlerta("Error", "El correo electrónico ingresado no es válido.", Alert.AlertType.ERROR);
-                return;
-            }
-            if (!txtPassWordUsuario.getText().matches(PASSWORDREGEX)) {
-                mostrarAlerta("Error", "La contraseña debe tener al menos 8 caracteres y contener al menos una letra y un número.", Alert.AlertType.ERROR);
-                return;
-            }
+
             // Comprobar que el usuario no se encuentra en la BBDD
             String comprobarUsuariosql = "SELECT du.Correo FROM datos_usuario du where du.Correo = ?";
             try {
@@ -458,12 +428,14 @@ public class VentanaPrincipalControlador implements Initializable {
                 if (resultado.next()) {
                     mostrarAlerta("Error", "El usuario ya existe", Alert.AlertType.ERROR);
                 } else {
+                    String hashedPassword = Utils.hashPassword(txtPassWordUsuario.getText());
+
                     sentencia = conexion.prepareStatement(sql);
                     sentencia.setString(1, txtNombreUsuario.getText());
                     sentencia.setString(2, txtApellidoUsuario.getText());
                     sentencia.setString(3, txtTelefonoUsuario.getText());
                     sentencia.setString(4, txtCorreoUsuario.getText());
-                    sentencia.setString(5, txtPassWordUsuario.getText());
+                    sentencia.setString(5, hashedPassword);
                     sentencia.setString(6, fechaAlta);
                     sentencia.executeUpdate();
                     mostrarAlerta("Añadido", "El usuario ha sido añadido", Alert.AlertType.INFORMATION);
@@ -472,12 +444,7 @@ public class VentanaPrincipalControlador implements Initializable {
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             } finally {
-                try {
-                    cbd.cerrarConexion();
-                    conexion.close();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
+                cerrarConexion(cbd);
             }
         }
     }
@@ -485,9 +452,7 @@ public class VentanaPrincipalControlador implements Initializable {
     @FXML
     void btnUpdateUsuario(ActionEvent event) {
 
-        //String sql ="UPDATE datos_usuario du SET du.Nombre = ?, du.Apellido = ?, du.Telefono = ?, du.Correo = ?, du.Contraseña = ?, du.Administrador = ?, du.FechaAlta = ? WHERE du.id = ?";
         String sql = "UPDATE datos_usuario du SET du.Nombre = ?, du.Apellido = ?, du.Telefono = ?, du.Correo = ?, du.Contraseña = ?, du.Administrador = ?, du.FechaAlta = ? WHERE du.id = ?";
-
 
         conexion = cbd.abrirConexion();
 
@@ -497,18 +462,8 @@ public class VentanaPrincipalControlador implements Initializable {
             mostrarAlerta("Error", "Rellena los campos", Alert.AlertType.ERROR);
         } else {
 
-            if (!txtTelefonoUsuario.getText().matches(TELEFONOREGEX)) {
-                mostrarAlerta("Error", "Teléfono no válido. Debe tener 9 dígitos. \n Ejemplo: 123456789", Alert.AlertType.ERROR);
+            if (!validarTelefono(txtTelefonoUsuario) | !validarCorreo(txtCorreoUsuario) || !validarPassword(txtPassWordUsuario))
                 return;
-            }
-            if (!txtCorreoUsuario.getText().matches(CORREOREGEX)) {
-                mostrarAlerta("Error", "El correo electrónico ingresado no es válido.", Alert.AlertType.ERROR);
-                return;
-            }
-            if (!txtPassWordUsuario.getText().matches(PASSWORDREGEX)) {
-                mostrarAlerta("Error", "La contraseña debe tener al menos 8 caracteres y contener al menos una letra y un número.", Alert.AlertType.ERROR);
-                return;
-            }
 
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Actualizar empleado");
@@ -518,13 +473,13 @@ public class VentanaPrincipalControlador implements Initializable {
 
             if (opcion == ButtonType.OK) {
                 try {
+                    String hashedPassword = hashPassword(txtPassWordUsuario.getText());
                     sentencia = conexion.prepareStatement(sql);
-
                     sentencia.setString(1, txtNombreUsuario.getText());
                     sentencia.setString(2, txtApellidoUsuario.getText());
                     sentencia.setString(3, txtTelefonoUsuario.getText());
                     sentencia.setString(4, txtCorreoUsuario.getText());
-                    sentencia.setString(5, txtPassWordUsuario.getText());
+                    sentencia.setString(5, hashedPassword);
                     sentencia.setInt(6, (txtAdminUsuario.getText().equalsIgnoreCase("true")) ? 1 : 0);
                     sentencia.setString(7, usuario.getFechaAlta());
                     sentencia.setString(8, txtIdUsuario.getText());
@@ -536,12 +491,7 @@ public class VentanaPrincipalControlador implements Initializable {
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 } finally {
-                    try {
-                        cbd.cerrarConexion();
-                        conexion.close();
-                    } catch (SQLException e) {
-                        throw new RuntimeException(e);
-                    }
+                    cerrarConexion(cbd);
                 }
             }
 
@@ -572,6 +522,8 @@ public class VentanaPrincipalControlador implements Initializable {
                     btnCleanUsuarios(event);
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
+                }finally {
+                    cerrarConexion(cbd);
                 }
             }
         }
@@ -586,10 +538,6 @@ public class VentanaPrincipalControlador implements Initializable {
         txtCorreoUsuario.clear();
         txtPassWordUsuario.clear();
         txtAdminUsuario.clear();
-    }
-
-    private String obtenerFechaActual() {
-        return new SimpleDateFormat("yyyy-MM-dd").format(new Date());
     }
 
     // Medoto que crea un observableList de usuario que guarda todos los usuarios
@@ -686,18 +634,17 @@ public class VentanaPrincipalControlador implements Initializable {
         TableViewUsuario.setItems(listaOrdenadorUsuario);
     }
 
-
     //Logica Ventana Principal Perfil
 
-    public void asignarDatosUsuarioSesion(){
+    public void asignarDatosUsuarioSesion() {
 
         Usuario usuario = Sesion.getUsuarioActual();
-        if(usuario != null){
+        if (usuario != null) {
             txtNombrePerfil.setText(usuario.getNombre());
             txtApellidoPerfil.setText(usuario.getApellido());
             txtTelefonoPerfil.setText(usuario.getTelefono());
             txtCorreoPerfil.setText(usuario.getCorreo());
-        }else{
+        } else {
             txtNombrePerfil.clear();
             txtApellidoPerfil.clear();
             txtTelefonoPerfil.clear();
@@ -705,13 +652,20 @@ public class VentanaPrincipalControlador implements Initializable {
         }
     }
 
+    @FXML
+    void btnModificarPasswordPerfil(ActionEvent event) {
 
-    private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipoAlerta) {
-        Alert alert = new Alert(tipoAlerta);
-        alert.setHeaderText(null);
-        alert.setTitle(titulo);
-        alert.setContentText(mensaje);
-        alert.showAndWait();
+        Stage stage = (Stage) txtNombrePerfil.getScene().getWindow();
+        VentanaCambiarPassworduser vcp = new VentanaCambiarPassworduser();
+        Stage modal = new Stage();
+        modal.initModality(Modality.WINDOW_MODAL);
+        modal.initOwner(stage);
+
+        try {
+            new VentanaCambiarPassword().start(modal);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -734,6 +688,5 @@ public class VentanaPrincipalControlador implements Initializable {
         } else {
             lblNombreUsuario.setText("Usuario desconodido");
         }
-
     }
 }
