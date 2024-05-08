@@ -415,7 +415,7 @@ public class VentanaPrincipalControlador implements Initializable {
             mostrarAlerta("Error", "Rellena los campos", Alert.AlertType.ERROR);
         } else {
 
-            if (!validarTelefono(txtTelefonoUsuario) | !validarCorreo(txtCorreoUsuario) || !validarPassword(txtPassWordUsuario))
+            if (!validarTelefono(txtTelefonoUsuario) || !validarCorreo(txtCorreoUsuario) || !validarPassword(txtPassWordUsuario))
                 return;
 
             // Comprobar que el usuario no se encuentra en la BBDD
