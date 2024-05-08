@@ -166,7 +166,7 @@
    <center>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <AnchorPane fx:id="layoutInicio" prefHeight="748.0" prefWidth="991.0">
+            <AnchorPane fx:id="layoutInicio" prefHeight="748.0" prefWidth="991.0" visible="true">
                <children>
                   <VBox prefHeight="746.0" prefWidth="992.0">
                      <children>
@@ -351,17 +351,18 @@
                   </AnchorPane>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="layoutVehiculo" prefHeight="748.0" prefWidth="992.0" stylesheets="@../css/Ventana-Principal-Vehiculo.css" visible="false">
+            <AnchorPane fx:id="layoutVehiculo" prefHeight="748.0" prefWidth="992.0" stylesheets="@../css/Ventana-Principal-Vehiculo.css">
                <children>
                   <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="718.0" prefWidth="964.0" styleClass="fondo-principal">
                      <children>
-                        <TableView layoutX="14.0" layoutY="51.0" prefHeight="376.0" prefWidth="936.0">
+                        <TableView fx:id="TableViewVehiculo" layoutX="14.0" layoutY="51.0" prefHeight="376.0" prefWidth="936.0">
                           <columns>
                             <TableColumn fx:id="columnMatriculaVehiculo" prefWidth="153.0" text="Matrícula" />
                             <TableColumn fx:id="columnMarcaVehiculo" prefWidth="155.0" text="Marca" />
                               <TableColumn fx:id="columnModeloVehiculo" prefWidth="203.0" text="Modelo" />
                               <TableColumn fx:id="columnAñoVehiculo" prefWidth="135.0" text="Año" />
-                              <TableColumn fx:id="columTipoVehiculoVehiculo" prefWidth="289.0" text="Tipo Vehículo" />
+                              <TableColumn fx:id="columTipoVehiculoVehiculo" prefWidth="156.0" text="Tipo Vehículo" />
+                              <TableColumn fx:id="columPropietarioVehiculo" prefWidth="133.0" text="Propietario" />
                           </columns>
                         </TableView>
                         <TextField fx:id="txtBusquedaVehiculo" layoutX="22.0" layoutY="14.0" prefHeight="25.0" prefWidth="180.0" promptText="Búsqueda" styleClass="textfiedl-busqueda" />

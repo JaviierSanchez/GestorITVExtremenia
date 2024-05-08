@@ -102,6 +102,8 @@ public class LoginController implements Initializable {
                 } else {
                     mostrarAlerta("Error de Credenciales", "¡Error de credenciales! Por favor, verifica tus datos e inténtalo nuevamente.", Alert.AlertType.ERROR);
                 }
+            } else {
+                mostrarAlerta("Error de Credenciales", "¡Error de credenciales! Por favor, verifica tus datos e inténtalo nuevamente.", Alert.AlertType.ERROR);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

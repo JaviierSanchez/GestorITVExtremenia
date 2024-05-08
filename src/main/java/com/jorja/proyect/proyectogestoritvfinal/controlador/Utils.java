@@ -32,7 +32,7 @@ public class Utils {
     public static final String CORREOREGEX = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,}$";
     public static final String PASSWORDREGEX = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$";
 
-    // Columnas USuario
+    // Columnas Usuario
     public static final String COLUMNIDUSUARIO = "id";
     public static final String COLUMNNOMBREUSUARIO = "nombre";
     public static final String COLUMNAPELLIDOUSUARIO = "apellido";
@@ -41,6 +41,16 @@ public class Utils {
     public static final String COLUMNCONTRASEÑAUSUARIO = "contraseña";
     public static final String COLUMNADMINISTRADORUSUARIO = "administrador";
     public static final String COLUMNFECHAALTAUSUARIO = "FechaAlta";
+
+    // Columnas Vehiculo
+
+    public static final String COLUMNMATRICULAVEHICULO = "matricula";
+    public static final String COLUMNMARCAVEHICULO = "marca";
+    public static final String COLUMNMODELOVEHICULO = "modelo";
+    public static final String COLUMNAÑOVEHICULO = "year";
+    public static final String COLUMNTIPOVEHICULOVEHICULO = "tipoVehiculoId";
+    public static final String COLUMNPROPIETARIOVEHICULO = "usuarioId";
+
 
     // Obtener la fecha actual
     public static String obtenerFechaActual() {

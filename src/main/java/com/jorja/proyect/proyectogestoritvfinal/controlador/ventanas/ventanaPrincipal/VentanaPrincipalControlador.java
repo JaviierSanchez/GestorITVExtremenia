@@ -4,6 +4,7 @@ import com.jorja.proyect.proyectogestoritvfinal.controlador.Utils;
 import com.jorja.proyect.proyectogestoritvfinal.controlador.bbdd.CONEXIONBD;
 import com.jorja.proyect.proyectogestoritvfinal.modelo.Sesion;
 import com.jorja.proyect.proyectogestoritvfinal.modelo.Usuario;
+import com.jorja.proyect.proyectogestoritvfinal.modelo.Vehiculo;
 import com.jorja.proyect.proyectogestoritvfinal.vista.Main;
 import com.jorja.proyect.proyectogestoritvfinal.vista.VentanaCambiarPassword;
 import javafx.collections.FXCollections;
@@ -43,6 +44,7 @@ public class VentanaPrincipalControlador implements Initializable {
     private CONEXIONBD cbd;
     private Date fecha;
     private Usuario usuario;
+    private Vehiculo vehiculo;
 
     public VentanaPrincipalControlador() {
         cbd = new CONEXIONBD();
@@ -79,6 +81,7 @@ public class VentanaPrincipalControlador implements Initializable {
     @FXML
     private TableColumn<?, ?> columnHoraCita;
 
+    private ObservableList<Usuario> addUsuarioLista;
     @FXML
     private TableView<Usuario> TableViewUsuario;
     @FXML
@@ -99,21 +102,22 @@ public class VentanaPrincipalControlador implements Initializable {
     @FXML
     private TableColumn<Usuario, String> columnAdminUsuario;
 
-    private ObservableList<Usuario> addUsuarioLista;
-
+    // Elementos Vehiculo
+    private ObservableList<Vehiculo> addVehiculoLista;
     @FXML
-    private TableColumn<?, ?> columnAñoVehiculo;
-
+    private TableView<Vehiculo> TableViewVehiculo;
     @FXML
-    private TableColumn<?, ?> columnMarcaVehiculo;
-
-
+    private TableColumn<Vehiculo, String> columnMatriculaVehiculo;
     @FXML
-    private TableColumn<?, ?> columnMatriculaVehiculo;
+    private TableColumn<Vehiculo, String> columnMarcaVehiculo;
     @FXML
-    private TableColumn<?, ?> columTipoVehiculoVehiculo;
+    private TableColumn<Vehiculo, String> columnModeloVehiculo;
     @FXML
-    private TableColumn<?, ?> columnModeloVehiculo;
+    private TableColumn<Vehiculo, String> columnAñoVehiculo;
+    @FXML
+    private TableColumn<Vehiculo, String> columTipoVehiculoVehiculo;
+    @FXML
+    private TableColumn<Vehiculo, String> columPropietarioVehiculo;
 
 
     @FXML
@@ -415,7 +419,7 @@ public class VentanaPrincipalControlador implements Initializable {
             mostrarAlerta("Error", "Rellena los campos", Alert.AlertType.ERROR);
         } else {
 
-            if (!validarTelefono(txtTelefonoUsuario) | !validarCorreo(txtCorreoUsuario) || !validarPassword(txtPassWordUsuario))
+            if (!validarTelefono(txtTelefonoUsuario) || !validarCorreo(txtCorreoUsuario) || !validarPassword(txtPassWordUsuario))
                 return;
 
             // Comprobar que el usuario no se encuentra en la BBDD
@@ -462,7 +466,7 @@ public class VentanaPrincipalControlador implements Initializable {
             mostrarAlerta("Error", "Rellena los campos", Alert.AlertType.ERROR);
         } else {
 
-            if (!validarTelefono(txtTelefonoUsuario) | !validarCorreo(txtCorreoUsuario) || !validarPassword(txtPassWordUsuario))
+            if (!validarTelefono(txtTelefonoUsuario) || !validarCorreo(txtCorreoUsuario) || !validarPassword(txtPassWordUsuario))
                 return;
 
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -522,7 +526,7 @@ public class VentanaPrincipalControlador implements Initializable {
                     btnCleanUsuarios(event);
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
-                }finally {
+                } finally {
                     cerrarConexion(cbd);
                 }
             }
@@ -634,6 +638,51 @@ public class VentanaPrincipalControlador implements Initializable {
         TableViewUsuario.setItems(listaOrdenadorUsuario);
     }
 
+    // Logica Ventana Principal Vehiculo
+
+    public ObservableList<Vehiculo> addVehiculo() {
+
+        ObservableList<Vehiculo> listaVehiculo = FXCollections.observableArrayList();
+        String sql = "SELECT * FROM vehiculo";
+        conexion = cbd.abrirConexion();
+        try {
+            sentencia = conexion.prepareStatement(sql);
+            resultado = sentencia.executeQuery();
+            while (resultado.next()) {
+                vehiculo = new Vehiculo(
+                        resultado.getString("Matricula"),
+                        resultado.getString("Marca"),
+                        resultado.getString("Modelo"),
+                        resultado.getString("Año"),
+                        resultado.getInt("Usuario_id"),
+                        resultado.getInt("Tipo_Vehiculo_id")
+                        );
+                listaVehiculo.add(vehiculo);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return listaVehiculo;
+    }
+
+    public void addVehiculoLista() {
+        addVehiculoLista = addVehiculo();
+        columnMatriculaVehiculo.setCellValueFactory(new PropertyValueFactory<>(COLUMNMATRICULAVEHICULO));
+
+        columnMarcaVehiculo.setCellValueFactory(new PropertyValueFactory<>(COLUMNMARCAVEHICULO));
+
+        columnModeloVehiculo.setCellValueFactory(new PropertyValueFactory<>(COLUMNMODELOVEHICULO));
+
+        columnAñoVehiculo.setCellValueFactory(new PropertyValueFactory<>(COLUMNAÑOVEHICULO));
+
+        columTipoVehiculoVehiculo.setCellValueFactory(new PropertyValueFactory<>(COLUMNTIPOVEHICULOVEHICULO));
+
+        columPropietarioVehiculo.setCellValueFactory(new PropertyValueFactory<>(COLUMNPROPIETARIOVEHICULO));
+
+        TableViewVehiculo.setItems(addVehiculoLista);
+    }
+
+
     //Logica Ventana Principal Perfil
 
     public void asignarDatosUsuarioSesion() {
@@ -677,6 +726,7 @@ public class VentanaPrincipalControlador implements Initializable {
         contadorTotalGanaciasMensuales();
         cargarDatosGraficoUsuario();
         addUsuarioLista();
+        addVehiculoLista();
         mostrarUsuarioSeleccionado();
         buscarUsuarioTableView();
         asignarDatosUsuarioSesion();
