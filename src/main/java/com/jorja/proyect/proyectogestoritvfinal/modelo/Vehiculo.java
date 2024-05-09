@@ -6,16 +6,16 @@ public class Vehiculo {
     private String marca;
     private String modelo;
     private String year;
-    private int tipoVehiculoId;
-    private int usuarioId;
+    private String correoUsuario;
+    private String tipoVehiculo;
 
-    public Vehiculo(String matricula, String marca, String modelo, String year, int tipoVehiculoId, int usuarioId) {
+    public Vehiculo(String matricula, String marca, String modelo, String year, String correoUsuario, String tipoVehiculo) {
         this.matricula = matricula;
         this.marca = marca;
         this.modelo = modelo;
         this.year = year;
-        this.tipoVehiculoId = tipoVehiculoId;
-        this.usuarioId = usuarioId;
+        this.correoUsuario = correoUsuario;
+        this.tipoVehiculo = tipoVehiculo;
     }
 
     public String getMatricula() {
@@ -50,19 +50,19 @@ public class Vehiculo {
         this.year = year;
     }
 
-    public int getTipoVehiculoId() {
-        return tipoVehiculoId;
+    public String getCorreoUsuario() {
+        return correoUsuario;
     }
 
-    public void setTipoVehiculoId(int tipoVehiculoId) {
-        this.tipoVehiculoId = tipoVehiculoId;
+    public void setCorreoUsuario(String correoUsuario) {
+        this.correoUsuario = correoUsuario;
     }
 
-    public int getUsuarioId() {
-        return usuarioId;
+    public String getTipoVehiculo() {
+        return tipoVehiculo;
     }
 
-    public void setUsuarioId(int usuarioId) {
-        this.usuarioId = usuarioId;
+    public void setTipoVehiculo(String tipoVehiculo) {
+        this.tipoVehiculo = tipoVehiculo;
     }
 }

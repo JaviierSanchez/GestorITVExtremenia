@@ -3,6 +3,7 @@ package com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaPri
 import com.jorja.proyect.proyectogestoritvfinal.controlador.Utils;
 import com.jorja.proyect.proyectogestoritvfinal.controlador.bbdd.CONEXIONBD;
 import com.jorja.proyect.proyectogestoritvfinal.modelo.Sesion;
+import com.jorja.proyect.proyectogestoritvfinal.modelo.TipoVehiculo;
 import com.jorja.proyect.proyectogestoritvfinal.modelo.Usuario;
 import com.jorja.proyect.proyectogestoritvfinal.modelo.Vehiculo;
 import com.jorja.proyect.proyectogestoritvfinal.vista.Main;
@@ -24,6 +25,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 
 import java.net.URL;
 import java.sql.Connection;
@@ -96,7 +98,6 @@ public class VentanaPrincipalControlador implements Initializable {
     private TableColumn<Usuario, String> columnCorreoUsuario;
     @FXML
     private TableColumn<Usuario, String> columnPasswordUsuario;
-
     @FXML
     private TableColumn<Usuario, String> columnFechaAltaUsuario;
     @FXML
@@ -118,38 +119,26 @@ public class VentanaPrincipalControlador implements Initializable {
     private TableColumn<Vehiculo, String> columTipoVehiculoVehiculo;
     @FXML
     private TableColumn<Vehiculo, String> columPropietarioVehiculo;
-
-
     @FXML
     private BarChart<?, ?> graficoUsuarios;
-
     @FXML
     private AnchorPane layoutInicio;
-
     @FXML
     private BorderPane layoutPadre;
-
     @FXML
     private AnchorPane layoutPedirCita;
-
     @FXML
     private AnchorPane layoutPerfil;
-
     @FXML
     private AnchorPane layoutUsuarios;
-
     @FXML
     private AnchorPane layoutVehiculo;
-
     @FXML
     private Label lblCountDate;
-
     @FXML
     private Label lblCountMoney;
-
     @FXML
     private Label lblCountUser;
-
     @FXML
     private Label lblCountvehicle;
 
@@ -227,15 +216,10 @@ public class VentanaPrincipalControlador implements Initializable {
     private ComboBox<?> txtTipoVehiculoCita;
 
     @FXML
-    private ComboBox<?> txtTipoVehiculoVehiculo;
+    private ComboBox<TipoVehiculo> txtTipoVehiculoVehiculo;
 
     @FXML
     void btnAddCita(ActionEvent event) {
-
-    }
-
-    @FXML
-    void btnAddVehiculo(ActionEvent event) {
 
     }
 
@@ -245,27 +229,12 @@ public class VentanaPrincipalControlador implements Initializable {
     }
 
     @FXML
-    void btnCleanVehiculo(ActionEvent event) {
-
-    }
-
-    @FXML
     void btnDeleteCita(ActionEvent event) {
 
     }
 
     @FXML
-    void btnDeleteVehiculo(ActionEvent event) {
-
-    }
-
-    @FXML
     void btnUpdateCita(ActionEvent event) {
-
-    }
-
-    @FXML
-    void btnUpdateVehiculo(ActionEvent event) {
 
     }
 
@@ -367,7 +336,6 @@ public class VentanaPrincipalControlador implements Initializable {
     public void cargarDatosGraficoUsuario() {
 
         graficoUsuarios.getData().clear();
-
         String sqlGrafico = """
                 SELECT
                      MONTH(FechaAlta) AS Mes,
@@ -376,8 +344,6 @@ public class VentanaPrincipalControlador implements Initializable {
                              GROUP BY MONTH(FechaAlta)
                                  ORDER BY Mes
                 """;
-
-
         conexion = cbd.abrirConexion();
 
         XYChart.Series chart = new XYChart.Series();
@@ -444,6 +410,7 @@ public class VentanaPrincipalControlador implements Initializable {
                     sentencia.executeUpdate();
                     mostrarAlerta("Añadido", "El usuario ha sido añadido", Alert.AlertType.INFORMATION);
                     btnCleanUsuarios(event);
+                    addUsuarioLista();
                 }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
@@ -544,11 +511,10 @@ public class VentanaPrincipalControlador implements Initializable {
         txtAdminUsuario.clear();
     }
 
-    // Medoto que crea un observableList de usuario que guarda todos los usuarios
     public ObservableList<Usuario> addUsuario() {
 
         ObservableList<Usuario> listaUsuario = FXCollections.observableArrayList();
-        String sql = "SELECT * FROM datos_usuario";
+        String sql = "SELECT * FROM datos_usuario ORDER BY id";
         conexion = cbd.abrirConexion();
         try {
             sentencia = conexion.prepareStatement(sql);
@@ -638,12 +604,163 @@ public class VentanaPrincipalControlador implements Initializable {
         TableViewUsuario.setItems(listaOrdenadorUsuario);
     }
 
+
     // Logica Ventana Principal Vehiculo
+
+    @FXML
+    void btnAddVehiculo(ActionEvent event) {
+
+        String sql = "INSERT INTO vehiculo (Matricula, Marca, Modelo, Año, Usuario_id, Tipo_Vehiculo_id) VALUES (?, ?, ?, ?, ?, ?)";
+        conexion = cbd.abrirConexion();
+
+        // Comprobar que los campos no estan vacios
+        if (!txtMatriculaVehicula.getText().isEmpty() || !txtModeloVehiculo.getText().isEmpty() || !txtMarcaVehiculo.getText().isEmpty() ||
+                !txtAñoVehiculo.getText().isEmpty() || !txtIdUsuarioVehiculo.getText().isEmpty() || txtTipoVehiculoVehiculo.getValue() == null) {
+            // Comprobar validaciones de campos
+            if (!validarMatricula(txtMatriculaVehicula) || !validarAño(txtAñoVehiculo)) return;
+
+            // Consulta para comprobar que el vehiculo no se encuentra en la bbdd
+            String sqlComprobacion = "SELECT * from vehiculo v WHERE v.Matricula = ?";
+
+            try {
+                // Comprobación de duplicados
+                sentencia = conexion.prepareStatement(sqlComprobacion);
+                sentencia.setString(1, txtMatriculaVehicula.getText());
+                resultado = sentencia.executeQuery();
+
+                if (!resultado.next()) {
+                    // Insertar nuevo vehículo
+                    sentencia = conexion.prepareStatement(sql);
+                    sentencia.setString(1, txtMatriculaVehicula.getText());
+                    sentencia.setString(2, txtMarcaVehiculo.getText());
+                    sentencia.setString(3, txtModeloVehiculo.getText());
+                    sentencia.setString(4, txtAñoVehiculo.getText());
+                    sentencia.setString(5, txtIdUsuarioVehiculo.getText());
+                    // Obtener el ID del tipo de vehículo seleccionado
+                    TipoVehiculo tipoVehiculoSeleccionado = txtTipoVehiculoVehiculo.getValue();
+                    int idTipoVehiculo = tipoVehiculoSeleccionado.getId();
+
+                    sentencia.setInt(6, idTipoVehiculo);
+
+                    // Ejecutar la inserción
+                    int filasInsertadas = sentencia.executeUpdate();
+
+                    // Verificar si se insertó correctamente
+                    if (filasInsertadas > 0) {
+                        mostrarAlerta("Añadido", "El vehiculo ha sido añadido", Alert.AlertType.INFORMATION);
+                        btnCleanUsuarios(event);
+                        addVehiculoLista();
+                    } else {
+                        mostrarAlerta("Error", "No se pudo añadir el vehiculo", Alert.AlertType.ERROR);
+                    }
+                } else {
+                    mostrarAlerta("Error", "El vehiculo ya existe", Alert.AlertType.ERROR);
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            } finally {
+                cerrarConexion(cbd);
+            }
+        } else {
+            mostrarAlerta("Error", "Rellena los campos", Alert.AlertType.ERROR);
+        }
+    }
+
+    @FXML
+    void btnUpdateVehiculo(ActionEvent event) {
+
+    }
+
+    @FXML
+    void btnDeleteVehiculo(ActionEvent event) {
+
+        String sql = "DELETE FROM vehiculo WHERE Matricula = ?";
+        conexion = cbd.abrirConexion();
+
+        if (!txtMatriculaVehicula.getText().isEmpty() || !txtMarcaVehiculo.getText().isEmpty() || !txtModeloVehiculo.getText().isEmpty() ||
+                txtAñoVehiculo.getText().isEmpty() || !txtTipoVehiculoVehiculo.getSelectionModel().isEmpty() || txtIdUsuarioVehiculo.getText().isEmpty()) {
+
+            Alert alertaEliminar = new Alert(Alert.AlertType.CONFIRMATION);
+            alertaEliminar.setTitle("Confirmar eliminación");
+            alertaEliminar.setContentText("¿Estás seguro que quieres eliminar al usuario?");
+            Optional<ButtonType> opcion = alertaEliminar.showAndWait();
+
+            if (opcion.get() == ButtonType.OK) {
+                try {
+                    sentencia = conexion.prepareStatement(sql);
+                    sentencia.setString(1, txtMatriculaVehicula.getText());
+                    sentencia.executeUpdate();
+                    mostrarAlerta("Eliminado con éxito", "El empleado ha sido eliminado con éxito", Alert.AlertType.INFORMATION);
+                    btnCleanVehiculo(event);
+                    addVehiculoLista();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                } finally {
+                    cerrarConexion(cbd);
+                }
+            }
+        } else {
+            mostrarAlerta("Error", "Rellena los campos", Alert.AlertType.ERROR);
+        }
+    }
+
+    @FXML
+    void btnCleanVehiculo(ActionEvent event) {
+
+        txtMatriculaVehicula.clear();
+        txtMarcaVehiculo.clear();
+        txtModeloVehiculo.clear();
+        txtAñoVehiculo.clear();
+        txtTipoVehiculoVehiculo.getSelectionModel().clearSelection();
+        txtIdUsuarioVehiculo.clear();
+    }
+
+    public void cargarDatosTipoVehiculo() {
+        ObservableList<TipoVehiculo> listaTipoVehiculo = FXCollections.observableArrayList();
+        String sql = "SELECT t.id, t.Nombre FROM tipo_vehiculo t"; // Asegúrate de seleccionar también el ID
+        conexion = cbd.abrirConexion();
+        try {
+            sentencia = conexion.prepareStatement(sql);
+            resultado = sentencia.executeQuery();
+
+            while (resultado.next()) {
+                int idTipoVehiculo = resultado.getInt("id");
+                String nombreTipoVehiculo = resultado.getString("Nombre");
+                TipoVehiculo tipoVehiculo = new TipoVehiculo(idTipoVehiculo, nombreTipoVehiculo);
+                listaTipoVehiculo.add(tipoVehiculo);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        // Configurar el ComboBox para mostrar solo el nombre del tipo de vehículo
+        txtTipoVehiculoVehiculo.setItems(listaTipoVehiculo);
+        txtTipoVehiculoVehiculo.setConverter(new StringConverter<TipoVehiculo>() {
+            @Override
+            public String toString(TipoVehiculo tipoVehiculo) {
+                return tipoVehiculo.getNombre();
+            }
+
+            @Override
+            public TipoVehiculo fromString(String string) {
+                return null;
+            }
+
+
+        });
+    }
 
     public ObservableList<Vehiculo> addVehiculo() {
 
         ObservableList<Vehiculo> listaVehiculo = FXCollections.observableArrayList();
-        String sql = "SELECT * FROM vehiculo";
+        String sql = """
+                SELECT v.Matricula as Matricula,v.Marca as Marca,
+                    v.Modelo as Modelo ,v.Año as Año,du.Correo as correoUsuario,tv.Nombre as tipoVehiculo
+                    FROM vehiculo v
+                                INNER JOIN datos_usuario du ON du.id = v.Usuario_id
+                                INNER JOIN tipo_vehiculo tv ON tv.id = v.Tipo_Vehiculo_id
+                    """;
         conexion = cbd.abrirConexion();
         try {
             sentencia = conexion.prepareStatement(sql);
@@ -654,9 +771,9 @@ public class VentanaPrincipalControlador implements Initializable {
                         resultado.getString("Marca"),
                         resultado.getString("Modelo"),
                         resultado.getString("Año"),
-                        resultado.getInt("Usuario_id"),
-                        resultado.getInt("Tipo_Vehiculo_id")
-                        );
+                        resultado.getString("correoUsuario"),
+                        resultado.getString("tipoVehiculo")
+                );
                 listaVehiculo.add(vehiculo);
             }
         } catch (SQLException e) {
@@ -668,18 +785,26 @@ public class VentanaPrincipalControlador implements Initializable {
     public void addVehiculoLista() {
         addVehiculoLista = addVehiculo();
         columnMatriculaVehiculo.setCellValueFactory(new PropertyValueFactory<>(COLUMNMATRICULAVEHICULO));
-
         columnMarcaVehiculo.setCellValueFactory(new PropertyValueFactory<>(COLUMNMARCAVEHICULO));
-
         columnModeloVehiculo.setCellValueFactory(new PropertyValueFactory<>(COLUMNMODELOVEHICULO));
-
         columnAñoVehiculo.setCellValueFactory(new PropertyValueFactory<>(COLUMNAÑOVEHICULO));
-
         columTipoVehiculoVehiculo.setCellValueFactory(new PropertyValueFactory<>(COLUMNTIPOVEHICULOVEHICULO));
-
         columPropietarioVehiculo.setCellValueFactory(new PropertyValueFactory<>(COLUMNPROPIETARIOVEHICULO));
-
         TableViewVehiculo.setItems(addVehiculoLista);
+    }
+
+    public void mostrarVehiculoSeleccionado() {
+        Vehiculo vehiculo = TableViewVehiculo.getSelectionModel().getSelectedItem();
+        int indice = TableViewVehiculo.getSelectionModel().getSelectedIndex();
+        if (indice < 0) return;
+
+        txtMatriculaVehicula.setText(vehiculo.getMatricula());
+        txtMarcaVehiculo.setText(vehiculo.getMarca());
+        txtModeloVehiculo.setText(vehiculo.getModelo());
+        txtAñoVehiculo.setText(vehiculo.getYear());
+        //txtIdUsuarioVehiculo.setText();
+        //txtTipoVehiculoVehiculo.setValue();
+
     }
 
 
@@ -688,6 +813,7 @@ public class VentanaPrincipalControlador implements Initializable {
     public void asignarDatosUsuarioSesion() {
 
         Usuario usuario = Sesion.getUsuarioActual();
+        txtIdUsuarioVehiculo.setText(String.valueOf(usuario.getId()));
         if (usuario != null) {
             txtNombrePerfil.setText(usuario.getNombre());
             txtApellidoPerfil.setText(usuario.getApellido());
@@ -728,8 +854,10 @@ public class VentanaPrincipalControlador implements Initializable {
         addUsuarioLista();
         addVehiculoLista();
         mostrarUsuarioSeleccionado();
+        mostrarVehiculoSeleccionado();
         buscarUsuarioTableView();
         asignarDatosUsuarioSesion();
+        cargarDatosTipoVehiculo();
 
         // Sacar nombre usuario que ha iniciado sesion
         Usuario usuarioActual = Sesion.getUsuarioActual();

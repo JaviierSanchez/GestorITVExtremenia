@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class Utils {
@@ -48,8 +49,11 @@ public class Utils {
     public static final String COLUMNMARCAVEHICULO = "marca";
     public static final String COLUMNMODELOVEHICULO = "modelo";
     public static final String COLUMNAÑOVEHICULO = "year";
-    public static final String COLUMNTIPOVEHICULOVEHICULO = "tipoVehiculoId";
-    public static final String COLUMNPROPIETARIOVEHICULO = "usuarioId";
+    public static final String COLUMNTIPOVEHICULOVEHICULO = "tipoVehiculo";
+    public static final String COLUMNPROPIETARIOVEHICULO = "correoUsuario";
+    public static final String MATRICULAREGEX = "(?i)^(\\d{4}?[ -]*[A-Z]{3}|[A-Z]{1,2}[ -]*\\d{4}?[ -]*[A-Z]{1,2})$";
+
+
 
 
     // Obtener la fecha actual
@@ -85,6 +89,34 @@ public class Utils {
             return false;
         }
         return true;
+    }
+
+    // Metodo para validar Matricula
+    public static boolean validarMatricula(TextField textField){
+        if(!textField.getText().matches(MATRICULAREGEX)){
+            mostrarAlerta("Error","La matricula no cumple el formato. \n Ejemplo: 1234 ABC", Alert.AlertType.ERROR);
+            return false;
+        }
+        return true;
+    }
+    public static boolean validarAño(TextField textField) {
+
+        int añoActual = Calendar.getInstance().get(Calendar.YEAR);
+
+        String añoTexto = textField.getText();
+
+        try {
+            int añoInt = Integer.parseInt(añoTexto);
+            if (añoInt >= 1900 && añoInt <= añoActual) {
+                return true;
+            } else {
+                mostrarAlerta("Error", "El año debe estar entre 1900 y el año actual.", Alert.AlertType.ERROR);
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            mostrarAlerta("Error", "Formato de año inválido.", Alert.AlertType.ERROR);
+            return false;
+        }
     }
 
     // Mostrar alertas

@@ -118,5 +118,10 @@ public class LoginController implements Initializable {
                 iniciarSesion();
             }
         });
+        txtEmail.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.ENTER) {
+                iniciarSesion();
+            }
+        });
     }
 }

@@ -355,7 +355,7 @@
                <children>
                   <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="718.0" prefWidth="964.0" styleClass="fondo-principal">
                      <children>
-                        <TableView fx:id="TableViewVehiculo" layoutX="14.0" layoutY="51.0" prefHeight="376.0" prefWidth="936.0">
+                        <TableView fx:id="TableViewVehiculo" layoutX="14.0" layoutY="51.0" onMouseClicked="#mostrarVehiculoSeleccionado" prefHeight="376.0" prefWidth="936.0">
                           <columns>
                             <TableColumn fx:id="columnMatriculaVehiculo" prefWidth="153.0" text="Matrícula" />
                             <TableColumn fx:id="columnMarcaVehiculo" prefWidth="155.0" text="Marca" />
