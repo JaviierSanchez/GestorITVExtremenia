@@ -10,6 +10,10 @@ public class Usuario {
     private boolean administrador;
     private String FechaAlta;
 
+    public Usuario(String correo) {
+        this.correo = correo;
+    }
+
     public Usuario(int id, String nombre, String apellido, String telefono, String correo, String contraseña, boolean administrador, String fechaAlta) {
         this.id = id;
         this.nombre = nombre;

@@ -2,10 +2,7 @@ package com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaPri
 
 import com.jorja.proyect.proyectogestoritvfinal.controlador.Utils;
 import com.jorja.proyect.proyectogestoritvfinal.controlador.bbdd.CONEXIONBD;
-import com.jorja.proyect.proyectogestoritvfinal.modelo.Sesion;
-import com.jorja.proyect.proyectogestoritvfinal.modelo.TipoVehiculo;
-import com.jorja.proyect.proyectogestoritvfinal.modelo.Usuario;
-import com.jorja.proyect.proyectogestoritvfinal.modelo.Vehiculo;
+import com.jorja.proyect.proyectogestoritvfinal.modelo.*;
 import com.jorja.proyect.proyectogestoritvfinal.vista.Main;
 import com.jorja.proyect.proyectogestoritvfinal.vista.VentanaCambiarPassword;
 import javafx.collections.FXCollections;
@@ -181,9 +178,6 @@ public class VentanaPrincipalControlador implements Initializable {
     private TextField txtIdUsuario;
 
     @FXML
-    private TextField txtMarcaVehiculo;
-
-    @FXML
     private TextField txtMatriculaCita;
 
     @FXML
@@ -208,6 +202,8 @@ public class VentanaPrincipalControlador implements Initializable {
 
     @FXML
     private TextField txtTelefonoUsuario;
+    @FXML
+    private ComboBox<MarcaVehiculo> txtMarcaVehiculo;
 
     @FXML
     private ComboBox<?> txtTipoInspeccionCita;
@@ -218,25 +214,6 @@ public class VentanaPrincipalControlador implements Initializable {
     @FXML
     private ComboBox<TipoVehiculo> txtTipoVehiculoVehiculo;
 
-    @FXML
-    void btnAddCita(ActionEvent event) {
-
-    }
-
-    @FXML
-    void btnCleanCita(ActionEvent event) {
-
-    }
-
-    @FXML
-    void btnDeleteCita(ActionEvent event) {
-
-    }
-
-    @FXML
-    void btnUpdateCita(ActionEvent event) {
-
-    }
 
     @FXML
     void btnMinimizar(ActionEvent event) {
@@ -262,6 +239,7 @@ public class VentanaPrincipalControlador implements Initializable {
         contadorTotalGanaciasMensuales();
         cargarDatosGraficoUsuario();
         buscarUsuarioTableView();
+        buscarVehiculoTableView();
         asignarDatosUsuarioSesion();
         limpiarCamposBusqueda();
     }
@@ -364,6 +342,28 @@ public class VentanaPrincipalControlador implements Initializable {
             cerrarConexion(cbd);
         }
     }
+
+    // Logica Ventana Principal Cita
+    @FXML
+    void btnAddCita(ActionEvent event) {
+
+    }
+
+    @FXML
+    void btnCleanCita(ActionEvent event) {
+
+    }
+
+    @FXML
+    void btnDeleteCita(ActionEvent event) {
+
+    }
+
+    @FXML
+    void btnUpdateCita(ActionEvent event) {
+
+    }
+
 
     // Logica Ventana Principal Usuario
 
@@ -491,6 +491,7 @@ public class VentanaPrincipalControlador implements Initializable {
                     sentencia.executeUpdate();
                     mostrarAlerta("Eliminado con éxito", "El empleado ha sido eliminado con éxito", Alert.AlertType.INFORMATION);
                     btnCleanUsuarios(event);
+                    addUsuarioLista();
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 } finally {
@@ -610,11 +611,11 @@ public class VentanaPrincipalControlador implements Initializable {
     @FXML
     void btnAddVehiculo(ActionEvent event) {
 
-        String sql = "INSERT INTO vehiculo (Matricula, Marca, Modelo, Año, Usuario_id, Tipo_Vehiculo_id) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO vehiculo (Matricula, Marca_id, Modelo, Año, Usuario_id, Tipo_Vehiculo_id) VALUES (?, ?, ?, ?, ?, ?)";
         conexion = cbd.abrirConexion();
 
         // Comprobar que los campos no estan vacios
-        if (!txtMatriculaVehicula.getText().isEmpty() || !txtModeloVehiculo.getText().isEmpty() || !txtMarcaVehiculo.getText().isEmpty() ||
+        if (!txtMatriculaVehicula.getText().isEmpty() || !txtModeloVehiculo.getText().isEmpty() || txtMarcaVehiculo.getValue() == null ||
                 !txtAñoVehiculo.getText().isEmpty() || !txtIdUsuarioVehiculo.getText().isEmpty() || txtTipoVehiculoVehiculo.getValue() == null) {
             // Comprobar validaciones de campos
             if (!validarMatricula(txtMatriculaVehicula) || !validarAño(txtAñoVehiculo)) return;
@@ -631,15 +632,20 @@ public class VentanaPrincipalControlador implements Initializable {
                 if (!resultado.next()) {
                     // Insertar nuevo vehículo
                     sentencia = conexion.prepareStatement(sql);
-                    sentencia.setString(1, txtMatriculaVehicula.getText());
-                    sentencia.setString(2, txtMarcaVehiculo.getText());
-                    sentencia.setString(3, txtModeloVehiculo.getText());
-                    sentencia.setString(4, txtAñoVehiculo.getText());
-                    sentencia.setString(5, txtIdUsuarioVehiculo.getText());
+
+                    // Obtener el ID de la marca del vehículo seleccionado
+                    MarcaVehiculo marcaVehiculo = txtMarcaVehiculo.getValue();
+                    int idMarcaVehiculo = marcaVehiculo.getId();
+
                     // Obtener el ID del tipo de vehículo seleccionado
                     TipoVehiculo tipoVehiculoSeleccionado = txtTipoVehiculoVehiculo.getValue();
                     int idTipoVehiculo = tipoVehiculoSeleccionado.getId();
 
+                    sentencia.setString(1, txtMatriculaVehicula.getText());
+                    sentencia.setInt(2, idMarcaVehiculo);
+                    sentencia.setString(3, txtModeloVehiculo.getText());
+                    sentencia.setString(4, txtAñoVehiculo.getText());
+                    sentencia.setString(5, txtIdUsuarioVehiculo.getText());
                     sentencia.setInt(6, idTipoVehiculo);
 
                     // Ejecutar la inserción
@@ -669,6 +675,7 @@ public class VentanaPrincipalControlador implements Initializable {
     @FXML
     void btnUpdateVehiculo(ActionEvent event) {
 
+
     }
 
     @FXML
@@ -677,7 +684,7 @@ public class VentanaPrincipalControlador implements Initializable {
         String sql = "DELETE FROM vehiculo WHERE Matricula = ?";
         conexion = cbd.abrirConexion();
 
-        if (!txtMatriculaVehicula.getText().isEmpty() || !txtMarcaVehiculo.getText().isEmpty() || !txtModeloVehiculo.getText().isEmpty() ||
+        if (!txtMatriculaVehicula.getText().isEmpty() || !txtMarcaVehiculo.getSelectionModel().isEmpty() || !txtModeloVehiculo.getText().isEmpty() ||
                 txtAñoVehiculo.getText().isEmpty() || !txtTipoVehiculoVehiculo.getSelectionModel().isEmpty() || txtIdUsuarioVehiculo.getText().isEmpty()) {
 
             Alert alertaEliminar = new Alert(Alert.AlertType.CONFIRMATION);
@@ -708,16 +715,48 @@ public class VentanaPrincipalControlador implements Initializable {
     void btnCleanVehiculo(ActionEvent event) {
 
         txtMatriculaVehicula.clear();
-        txtMarcaVehiculo.clear();
+        txtMarcaVehiculo.setValue(null);
         txtModeloVehiculo.clear();
         txtAñoVehiculo.clear();
-        txtTipoVehiculoVehiculo.getSelectionModel().clearSelection();
+        txtTipoVehiculoVehiculo.setValue(null);
         txtIdUsuarioVehiculo.clear();
+    }
+
+    public void cargarDatosMarcaVehiculo() {
+        ObservableList<MarcaVehiculo> listaMarcaVehiculo = FXCollections.observableArrayList();
+        String sql = "SELECT m.id, m.Nombre FROM marcavehiculo m ORDER BY m.Nombre ASC";
+        conexion = cbd.abrirConexion();
+        try {
+            sentencia = conexion.prepareStatement(sql);
+            resultado = sentencia.executeQuery();
+
+            while (resultado.next()) {
+                int idMarcaVehiculo = resultado.getInt("id");
+                String nombreMarcaVehiculo = resultado.getString("Nombre");
+                MarcaVehiculo marcaVehiculo = new MarcaVehiculo(idMarcaVehiculo, nombreMarcaVehiculo);
+                listaMarcaVehiculo.add(marcaVehiculo);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        txtMarcaVehiculo.setItems(listaMarcaVehiculo);
+        txtMarcaVehiculo.setConverter(new StringConverter<MarcaVehiculo>() {
+            @Override
+            public String toString(MarcaVehiculo marcaVehiculo) {
+                return marcaVehiculo.getNombre();
+            }
+
+            @Override
+            public MarcaVehiculo fromString(String string) {
+                return null;
+            }
+        });
+
     }
 
     public void cargarDatosTipoVehiculo() {
         ObservableList<TipoVehiculo> listaTipoVehiculo = FXCollections.observableArrayList();
-        String sql = "SELECT t.id, t.Nombre FROM tipo_vehiculo t"; // Asegúrate de seleccionar también el ID
+        String sql = "SELECT t.id, t.Nombre FROM tipo_vehiculo t";
         conexion = cbd.abrirConexion();
         try {
             sentencia = conexion.prepareStatement(sql);
@@ -729,7 +768,6 @@ public class VentanaPrincipalControlador implements Initializable {
                 TipoVehiculo tipoVehiculo = new TipoVehiculo(idTipoVehiculo, nombreTipoVehiculo);
                 listaTipoVehiculo.add(tipoVehiculo);
             }
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -755,11 +793,12 @@ public class VentanaPrincipalControlador implements Initializable {
 
         ObservableList<Vehiculo> listaVehiculo = FXCollections.observableArrayList();
         String sql = """
-                SELECT v.Matricula as Matricula,v.Marca as Marca,
-                    v.Modelo as Modelo ,v.Año as Año,du.Correo as correoUsuario,tv.Nombre as tipoVehiculo
-                    FROM vehiculo v
-                                INNER JOIN datos_usuario du ON du.id = v.Usuario_id
-                                INNER JOIN tipo_vehiculo tv ON tv.id = v.Tipo_Vehiculo_id
+                SELECT v.Matricula as Matricula,m.Nombre as marca,
+                                    v.Modelo as Modelo ,v.Año as Año,du.Correo as correoUsuario,tv.Nombre as tipoVehiculo
+                                    FROM vehiculo v
+                                                INNER JOIN datos_usuario du ON du.id = v.Usuario_id
+                                                INNER JOIN tipo_vehiculo tv ON tv.id = v.Tipo_Vehiculo_id
+                                                INNER JOIN marcavehiculo m on m.id = v.Marca_id
                     """;
         conexion = cbd.abrirConexion();
         try {
@@ -768,7 +807,7 @@ public class VentanaPrincipalControlador implements Initializable {
             while (resultado.next()) {
                 vehiculo = new Vehiculo(
                         resultado.getString("Matricula"),
-                        resultado.getString("Marca"),
+                        resultado.getString("marca"),
                         resultado.getString("Modelo"),
                         resultado.getString("Año"),
                         resultado.getString("correoUsuario"),
@@ -798,13 +837,71 @@ public class VentanaPrincipalControlador implements Initializable {
         int indice = TableViewVehiculo.getSelectionModel().getSelectedIndex();
         if (indice < 0) return;
 
+        MarcaVehiculo marcaVehiculo = new MarcaVehiculo(vehiculo.getMarca());
+        TipoVehiculo tipoVehiculo = new TipoVehiculo(vehiculo.getTipoVehiculo());
+
+        // Aquí cargamos el usuario completo desde la base de datos usando su correo electrónico
+        Usuario idUsuario = cargarUsuarioPorCorreo(vehiculo.getCorreoUsuario());
+
         txtMatriculaVehicula.setText(vehiculo.getMatricula());
-        txtMarcaVehiculo.setText(vehiculo.getMarca());
+        txtMarcaVehiculo.setValue(marcaVehiculo);
         txtModeloVehiculo.setText(vehiculo.getModelo());
         txtAñoVehiculo.setText(vehiculo.getYear());
-        //txtIdUsuarioVehiculo.setText();
-        //txtTipoVehiculoVehiculo.setValue();
+        txtIdUsuarioVehiculo.setText(String.valueOf(idUsuario.getId()));
+        txtTipoVehiculoVehiculo.setValue(tipoVehiculo);
+    }
+    public Usuario cargarUsuarioPorCorreo(String correo) {
+        String sql = "SELECT * FROM datos_usuario WHERE correo = ?";
+        Usuario usuario = null;
+        try {
+            PreparedStatement statement = conexion.prepareStatement(sql);
+            statement.setString(1, correo);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String nombre = resultSet.getString("nombre");
+                String apellido = resultSet.getString("apellido");
+                String telefono = resultSet.getString("telefono");
+                String contraseña = resultSet.getString("contraseña");
+                boolean administrador = resultSet.getBoolean("administrador");
+                String fechaAlta = resultSet.getString("fechaAlta");
 
+                usuario = new Usuario(id, nombre, apellido, telefono, correo, contraseña, administrador, fechaAlta);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return usuario;
+    }
+
+    public void buscarVehiculoTableView() {
+        FilteredList<Vehiculo> filtroVehiculo = new FilteredList<>(addVehiculoLista, u -> true);
+        txtBusquedaVehiculo.textProperty().addListener((observable, oldValue, newValue) -> {
+            filtroVehiculo.setPredicate(vehiculo1 -> {
+                if (newValue == null || newValue.isEmpty()) return true;
+                String lowerCaseFiltrer = newValue.toLowerCase();
+
+                if (vehiculo1.getMatricula().toLowerCase().indexOf(lowerCaseFiltrer) != -1) {
+                    return true;
+                } else if (vehiculo1.getMarca().toLowerCase().indexOf(lowerCaseFiltrer) != -1) {
+                    return true;
+                } else if (vehiculo1.getModelo().toLowerCase().indexOf(lowerCaseFiltrer) != -1) {
+                    return true;
+                } else if (vehiculo1.getYear().toLowerCase().indexOf(lowerCaseFiltrer) != -1) {
+                    return true;
+                } else if (vehiculo1.getTipoVehiculo().toLowerCase().indexOf(lowerCaseFiltrer) != -1) {
+                    return true;
+                } else if (vehiculo1.getCorreoUsuario().toLowerCase().indexOf(lowerCaseFiltrer) != -1) {
+                    return true;
+                } else {
+                    return false;
+                }
+            });
+        });
+
+        SortedList<Vehiculo> listaOrdenadaVehiculo = new SortedList<>(filtroVehiculo);
+        listaOrdenadaVehiculo.comparatorProperty().bind(TableViewVehiculo.comparatorProperty());
+        TableViewVehiculo.setItems(listaOrdenadaVehiculo);
     }
 
 
@@ -856,8 +953,10 @@ public class VentanaPrincipalControlador implements Initializable {
         mostrarUsuarioSeleccionado();
         mostrarVehiculoSeleccionado();
         buscarUsuarioTableView();
+        buscarVehiculoTableView();
         asignarDatosUsuarioSesion();
         cargarDatosTipoVehiculo();
+        cargarDatosMarcaVehiculo();
 
         // Sacar nombre usuario que ha iniciado sesion
         Usuario usuarioActual = Sesion.getUsuarioActual();

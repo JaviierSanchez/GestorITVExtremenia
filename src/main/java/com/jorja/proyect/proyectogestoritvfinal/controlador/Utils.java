@@ -154,7 +154,7 @@ public class Utils {
     public static String hashPassword(String password) {
         try {
             // Usamos SHA-256 para el hash
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            MessageDigest digest = MessageDigest.getInstance("SHA-512");
             byte[] hash = digest.digest(password.getBytes());
             StringBuilder hexString = new StringBuilder();
 
