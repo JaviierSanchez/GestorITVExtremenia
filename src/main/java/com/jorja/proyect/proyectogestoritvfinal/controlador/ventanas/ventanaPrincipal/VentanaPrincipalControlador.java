@@ -242,6 +242,9 @@ public class VentanaPrincipalControlador implements Initializable {
         buscarVehiculoTableView();
         asignarDatosUsuarioSesion();
         limpiarCamposBusqueda();
+        btnCleanUsuarios(actionEvent);
+        btnCleanVehiculo(actionEvent);
+        btnCleanCita(actionEvent);
     }
 
     private void limpiarCamposBusqueda() {
@@ -683,6 +686,13 @@ public class VentanaPrincipalControlador implements Initializable {
             // Validar matrícula y año
             if (!validarMatricula(txtMatriculaVehicula) || !validarAño(txtAñoVehiculo)) return;
 
+            // Verificar si el ID de usuario existe en la base de datos
+            int idUsuario = Integer.parseInt(txtIdUsuarioVehiculo.getText());
+            if (!existeUsuario(idUsuario)) {
+                mostrarAlerta("Error", "El ID de usuario no existe en la base de datos.", Alert.AlertType.ERROR);
+                return;
+            }
+
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Actualizar vehiculo");
             alert.setContentText("¿Estás seguro que quieres actualizar los cambios?");
@@ -707,7 +717,7 @@ public class VentanaPrincipalControlador implements Initializable {
 
                     int resultado = sentencia.executeUpdate();
                     if (resultado > 0) {
-                        mostrarAlerta("Vehículo actualizado", "El vehículo ha sido actualizado correctamente.", Alert.AlertType.CONFIRMATION);
+                        mostrarAlerta("Vehículo actualizado", "El vehículo ha sido actualizado correctamente.", Alert.AlertType.INFORMATION);
                         addVehiculoLista();
                         btnCleanVehiculo(event);
                     } else {
@@ -756,6 +766,20 @@ public class VentanaPrincipalControlador implements Initializable {
             e.printStackTrace();
         }
         return idTipoVehiculo;
+    }
+
+    // Método para verificar si el ID de usuario existe en la base de datos
+    private boolean existeUsuario(int idUsuario) {
+        String sql = "SELECT id FROM datos_usuario WHERE id = ?";
+        try {
+            PreparedStatement statement = conexion.prepareStatement(sql);
+            statement.setInt(1, idUsuario);
+            ResultSet resultSet = statement.executeQuery();
+            return resultSet.next(); // Retorna true si el usuario existe, false si no
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
 
