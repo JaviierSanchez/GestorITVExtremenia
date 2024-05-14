@@ -18,7 +18,7 @@ ITV Extremeña es una herramienta de software desarrollada para simplificar y ag
   - Se recomienda disponer de al menos 8 GB de memoria RAM.
   - Se recomienda disponer de al menos 500 GB de espacio libre en disco duro o almacenamiento SSD.
   - Se recomienda un monitor con una resolución mínima de 1200x800 píxeles para una experiencia óptima con la aplicación.
-  - 
+    
 ## Instalación
 Para instalar la aplicación, sigue estos pasos:
 
