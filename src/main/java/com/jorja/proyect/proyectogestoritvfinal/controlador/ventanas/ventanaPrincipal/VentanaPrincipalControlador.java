@@ -674,9 +674,90 @@ public class VentanaPrincipalControlador implements Initializable {
 
     @FXML
     void btnUpdateVehiculo(ActionEvent event) {
+        String sql = "UPDATE vehiculo SET Matricula = ?, Marca_id = ?, Modelo = ?, Año = ?, Usuario_id = ?, Tipo_Vehiculo_id = ? WHERE Matricula = ?";
+        conexion = cbd.abrirConexion();
 
+        // Verificar que los campos no estén vacíos
+        if (!txtMatriculaVehicula.getText().isEmpty() && !txtModeloVehiculo.getText().isEmpty() && txtMarcaVehiculo.getValue() != null &&
+                !txtAñoVehiculo.getText().isEmpty() && !txtIdUsuarioVehiculo.getText().isEmpty() && txtTipoVehiculoVehiculo.getValue() != null) {
+            // Validar matrícula y año
+            if (!validarMatricula(txtMatriculaVehicula) || !validarAño(txtAñoVehiculo)) return;
 
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Actualizar vehiculo");
+            alert.setContentText("¿Estás seguro que quieres actualizar los cambios?");
+            ButtonType opcion = alert.showAndWait().orElse(ButtonType.CANCEL);
+
+            if (opcion == ButtonType.OK) {
+                try {
+                    // Obtener el ID de la marca del vehículo seleccionado
+                    int idMarcaVehiculo = obtenerIdMarca(txtMarcaVehiculo.getValue());
+
+                    // Obtener el ID del tipo de vehículo seleccionado
+                    int idTipoVehiculo = obtenerIdTipoVehiculo(txtTipoVehiculoVehiculo.getValue());
+
+                    sentencia = conexion.prepareStatement(sql);
+                    sentencia.setString(1, txtMatriculaVehicula.getText());
+                    sentencia.setInt(2, idMarcaVehiculo);
+                    sentencia.setString(3, txtModeloVehiculo.getText());
+                    sentencia.setString(4, txtAñoVehiculo.getText());
+                    sentencia.setInt(5, Integer.parseInt(txtIdUsuarioVehiculo.getText()));
+                    sentencia.setInt(6, idTipoVehiculo);
+                    sentencia.setString(7, txtMatriculaVehicula.getText());
+
+                    int resultado = sentencia.executeUpdate();
+                    if (resultado > 0) {
+                        mostrarAlerta("Vehículo actualizado", "El vehículo ha sido actualizado correctamente.", Alert.AlertType.CONFIRMATION);
+                        addVehiculoLista();
+                        btnCleanVehiculo(event);
+                    } else {
+                        mostrarAlerta("Error", "No se ha podido actualizar el vehículo.", Alert.AlertType.ERROR);
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } finally {
+                    cerrarConexion(cbd);
+                }
+            }
+        } else {
+            mostrarAlerta("Campos vacíos", "Por favor, complete todos los campos.", Alert.AlertType.WARNING);
+        }
     }
+
+    // Método para obtener el ID de la marca seleccionada
+    private int obtenerIdMarca(MarcaVehiculo marcaSeleccionada) {
+        int idMarca = 0;
+        String sql = "SELECT id FROM marcavehiculo WHERE Nombre = ?";
+        try {
+            PreparedStatement statement = conexion.prepareStatement(sql);
+            statement.setString(1, marcaSeleccionada.getNombre());
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                idMarca = resultSet.getInt("id");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return idMarca;
+    }
+
+    // Método para obtener el ID del tipo de vehículo seleccionado
+    private int obtenerIdTipoVehiculo(TipoVehiculo tipoVehiculoSeleccionado) {
+        int idTipoVehiculo = 0;
+        String sql = "SELECT id FROM tipo_vehiculo WHERE Nombre = ?";
+        try {
+            PreparedStatement statement = conexion.prepareStatement(sql);
+            statement.setString(1, tipoVehiculoSeleccionado.getNombre());
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                idTipoVehiculo = resultSet.getInt("id");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return idTipoVehiculo;
+    }
+
 
     @FXML
     void btnDeleteVehiculo(ActionEvent event) {
@@ -850,6 +931,7 @@ public class VentanaPrincipalControlador implements Initializable {
         txtIdUsuarioVehiculo.setText(String.valueOf(idUsuario.getId()));
         txtTipoVehiculoVehiculo.setValue(tipoVehiculo);
     }
+
     public Usuario cargarUsuarioPorCorreo(String correo) {
         String sql = "SELECT * FROM datos_usuario WHERE correo = ?";
         Usuario usuario = null;

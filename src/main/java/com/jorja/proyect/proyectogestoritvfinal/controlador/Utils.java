@@ -150,10 +150,10 @@ public class Utils {
 
 
 
-    // Metodo Cifrado de contraseña mediante SHA-256
+    // Metodo Cifrado de contraseña mediante SHA-512
     public static String hashPassword(String password) {
         try {
-            // Usamos SHA-256 para el hash
+            // Usamos SHA-512 para el hash
             MessageDigest digest = MessageDigest.getInstance("SHA-512");
             byte[] hash = digest.digest(password.getBytes());
             StringBuilder hexString = new StringBuilder();
@@ -164,7 +164,6 @@ public class Utils {
                 if (hex.length() == 1) hexString.append('0');
                 hexString.append(hex);
             }
-
             return hexString.toString();
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
