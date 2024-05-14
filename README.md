@@ -14,7 +14,7 @@ ITV Extremeña es una herramienta de software desarrollada para simplificar y ag
 - **Plataforma**: La aplicación está desarrollada en Java y es compatible con Windows
 
 ## Requisitos de hardware
-- Se recomienda un equipo con al menos un procesador Intel Core i5 de 2.5 GHz o equivalente.
+  - Se recomienda un equipo con al menos un procesador Intel Core i5 de 2.5 GHz o equivalente.
   - Se recomienda disponer de al menos 8 GB de memoria RAM.
   - Se recomienda disponer de al menos 500 GB de espacio libre en disco duro o almacenamiento SSD.
   - Se recomienda un monitor con una resolución mínima de 1200x800 píxeles para una experiencia óptima con la aplicación.
