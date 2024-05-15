@@ -11,7 +11,7 @@ ITV Extremeña es una herramienta de software desarrollada para simplificar y ag
 - **Acceso restringido**: Solo los administradores autorizados pueden acceder a la aplicación para garantizar la seguridad y la integridad de los datos.
 
 ## Requisitos del sistema
-- **Plataforma**: La aplicación está desarrollada en Java y es compatible con Windows
+- **Plataforma**: La aplicación está desarrollada en Java y es multiplataforma.
 
 ## Requisitos de hardware
   - Se recomienda un equipo con al menos un procesador Intel Core i5 de 2.5 GHz o equivalente.
@@ -29,7 +29,7 @@ Para instalar la aplicación, sigue estos pasos:
 Una vez instalada la aplicación, inicia sesión con tus credenciales de administrador para empezar a utilizarla. Explora las diferentes funciones disponibles y familiarízate con la interfaz de usuario.
 
 ## Soporte
-Si tienes alguna pregunta, problema o sugerencia relacionada con el ProyectoGestorITVFinal, no dudes en ponerte en contacto con nosotros a través de [correo electrónico, foro, etc.].
+Si tienes alguna pregunta, problema o sugerencia relacionada con el ProyectoGestorITVFinal, no dudes en ponerte en contacto con nosotros a través de *itvextremenia@gmail.com*.
 
 ## Licencia
 El ProyectoGestorITVFinal se distribuye bajo la licencia Creative Commons No Comercial Sin Obra Derivada ([CC BY-NC-ND](https://creativecommons.org/licenses/by-nc-nd/4.0/deed.es)).
