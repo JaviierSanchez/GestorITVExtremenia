@@ -1,6 +1,7 @@
 package com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaPrincipal;
 
 import com.jorja.proyect.proyectogestoritvfinal.controlador.bbdd.CONEXIONBD;
+import com.jorja.proyect.proyectogestoritvfinal.modelo.Cita;
 import com.jorja.proyect.proyectogestoritvfinal.modelo.TipoInspeccion;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,11 +14,48 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import static com.jorja.proyect.proyectogestoritvfinal.controlador.Utils.cerrarConexion;
+
 public class VentanaPrincipalCitaControlador {
 
     private static Connection conexion;
     private static PreparedStatement sentencia;
     private static ResultSet resultado;
+
+    public static ObservableList<Cita> obtenerListaCitaBD(CONEXIONBD cbd, Cita cita) {
+
+        ObservableList<Cita> listaCita = FXCollections.observableArrayList();
+        String sql = """
+                SELECT C.id AS Id,C.id_Vehiculo AS Matricula, C.Fecha AS Fecha,C.Hora AS Hora,
+                TV.Nombre AS TipoVehiculo, TI.Nombre AS TipoInspeccion, TI.Precio as Precio, C.Activa AS Activa
+                      FROM CITA C
+                           INNER JOIN TIPO_VEHICULO TV ON TV.id = C.Tipo_Vehiculo_id
+                           INNER JOIN TIPO_INSPECCION TI ON TI.id = C.Tipo_Inspeccion_id
+                    """;
+
+        try {
+            conexion = cbd.abrirConexion();
+            sentencia = conexion.prepareStatement(sql);
+            resultado = sentencia.executeQuery();
+            while (resultado.next()) {
+                cita = new Cita(
+                        resultado.getInt("Id"),
+                        resultado.getString("Matricula"),
+                        resultado.getString("Fecha"),
+                        resultado.getString("Hora"),
+                        resultado.getString("TipoVehiculo"),
+                        resultado.getString("TipoInspeccion"),
+                        resultado.getString("Precio"),
+                        resultado.getBoolean("Activa"));
+                listaCita.add(cita);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            cerrarConexion(cbd);
+        }
+        return listaCita;
+    }
 
     public static void cargarHorasComboBox(ComboBox<String> comboBox) {
 

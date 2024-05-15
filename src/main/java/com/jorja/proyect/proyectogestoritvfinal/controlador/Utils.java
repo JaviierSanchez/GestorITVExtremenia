@@ -2,7 +2,9 @@ package com.jorja.proyect.proyectogestoritvfinal.controlador;
 
 import com.jorja.proyect.proyectogestoritvfinal.controlador.bbdd.CONEXIONBD;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -67,6 +69,25 @@ public class Utils {
     // Obtener la fecha actual
     public static String obtenerFechaActual() {
         return new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+    }
+
+    /***
+     *  Metodo que segun el boton presionado se selecciona el layout que
+     *  se va a mostrar y se pone el estilo al boton seleccionado
+     * @param botonPresionado
+     * @param botones
+     * @param layouts
+     */
+    public static void cambiarVentanaBtn(Button botonPresionado, Button[] botones, Pane[] layouts) {
+        for (int i = 0; i < botones.length; i++) {
+            if (botonPresionado == botones[i]) {
+                layouts[i].setVisible(true);
+                botones[i].setStyle("-fx-background-color: #21666C; -fx-background-radius: 15px; -fx-cursor: hand;");
+            } else {
+                layouts[i].setVisible(false);
+                botones[i].setStyle("-fx-background-color: none; -fx-cursor: hand;");
+            }
+        }
     }
 
     // VALIDACIONES DATOS

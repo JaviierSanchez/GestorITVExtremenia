@@ -12,26 +12,6 @@ import java.sql.SQLException;
 
 public class VentanaPrincipalInicioControlador {
 
-
-    /***
-     *  Metodo que segun el boton presionado se selecciona el layout que
-     *  se va a mostrar y se pone el estilo al boton seleccionado
-     * @param botonPresionado
-     * @param botones
-     * @param layouts
-     */
-    public static void cambiarVentana(Button botonPresionado, Button[] botones, Pane[] layouts) {
-        for (int i = 0; i < botones.length; i++) {
-            if (botonPresionado == botones[i]) {
-                layouts[i].setVisible(true);
-                botones[i].setStyle("-fx-background-color: #21666C; -fx-background-radius: 15px; -fx-cursor: hand;");
-            } else {
-                layouts[i].setVisible(false);
-                botones[i].setStyle("-fx-background-color: none; -fx-cursor: hand;");
-            }
-        }
-    }
-
     /***
      * Metodo
      * @param sql

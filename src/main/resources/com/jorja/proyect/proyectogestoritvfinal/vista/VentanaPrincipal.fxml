@@ -357,7 +357,7 @@
                   </AnchorPane>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="layoutVehiculo" prefHeight="748.0" prefWidth="992.0" stylesheets="@../css/Ventana-Principal-Vehiculo.css">
+            <AnchorPane fx:id="layoutVehiculo" prefHeight="748.0" prefWidth="992.0" stylesheets="@../css/Ventana-Principal-Vehiculo.css" visible="false">
                <children>
                   <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="718.0" prefWidth="965.0" styleClass="fondo-principal">
                      <children>

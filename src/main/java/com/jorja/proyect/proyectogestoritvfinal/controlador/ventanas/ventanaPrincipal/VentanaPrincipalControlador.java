@@ -24,7 +24,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.StringConverter;
 
 import java.net.URL;
 import java.sql.Connection;
@@ -38,9 +37,8 @@ import java.util.ResourceBundle;
 
 import static com.jorja.proyect.proyectogestoritvfinal.controlador.Utils.*;
 import static com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaPrincipal.VentanaPrincipalCitaControlador.*;
-import static com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaPrincipal.VentanaPrincipalUsuarioControlador.sacarNombreUsuarioLogueado;
-import static com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaPrincipal.VentanaPrincipalVehiculoControlador.cargarDatosMarcaVehiculo;
-import static com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaPrincipal.VentanaPrincipalVehiculoControlador.cargarDatosTipoVehiculo;
+import static com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaPrincipal.VentanaPrincipalUsuarioControlador.*;
+import static com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaPrincipal.VentanaPrincipalVehiculoControlador.*;
 
 public class VentanaPrincipalControlador implements Initializable {
 
@@ -179,6 +177,8 @@ public class VentanaPrincipalControlador implements Initializable {
 
     @FXML
     private TextField txtCorreoUsuario;
+    @FXML
+    private TextField txtIdCita;
 
     @FXML
     private DatePicker txtFechaCita;
@@ -208,6 +208,9 @@ public class VentanaPrincipalControlador implements Initializable {
 
     @FXML
     private TextField txtPrecioCita;
+
+    @FXML
+    private TextField txtActivaCita;
 
     @FXML
     private TextField txtTelefonoPerfil;
@@ -243,7 +246,7 @@ public class VentanaPrincipalControlador implements Initializable {
         Button botonPresionado = (Button) actionEvent.getSource();
         Button[] botones = {btnLateralInicio, btnLateralUsuarios, btnLateralCita, btnLateralVehiculo, btnLateralPerfil};
         Pane[] layouts = {layoutInicio, layoutUsuarios, layoutPedirCita, layoutVehiculo, layoutPerfil};
-        VentanaPrincipalInicioControlador.cambiarVentana(botonPresionado, botones, layouts);
+        cambiarVentanaBtn(botonPresionado, botones, layouts);
 
         contadorTotalUsuarios();
         contadorTotalCitas();
@@ -367,6 +370,14 @@ public class VentanaPrincipalControlador implements Initializable {
 
     @FXML
     void btnCleanCita(ActionEvent event) {
+       txtIdCita.clear();
+        txtMatriculaCita.clear();
+        txtFechaCita.setValue(null);
+        txtHoraCita.setValue(null);
+        txtTipoVehiculoCita.setValue(null);
+        txtTipoInspeccionCita.setValue(null);
+        txtPrecioCita.clear();
+        txtActivaCita.clear();
 
     }
 
@@ -380,44 +391,8 @@ public class VentanaPrincipalControlador implements Initializable {
 
     }
 
-    public ObservableList<Cita> obtenerListaCitaBD() {
-
-        ObservableList<Cita> listaCita = FXCollections.observableArrayList();
-        String sql = """
-                SELECT C.id AS Id,C.id_Vehiculo AS Matricula, C.Fecha AS Fecha,C.Hora AS Hora,
-                TV.Nombre AS TipoVehiculo, TI.Nombre AS TipoInspeccion, TI.Precio as Precio, C.Activa AS Activa
-                      FROM CITA C
-                           INNER JOIN TIPO_VEHICULO TV ON TV.id = C.Tipo_Vehiculo_id
-                           INNER JOIN TIPO_INSPECCION TI ON TI.id = C.Tipo_Inspeccion_id
-                    """;
-
-        try {
-            conexion = cbd.abrirConexion();
-            sentencia = conexion.prepareStatement(sql);
-            resultado = sentencia.executeQuery();
-            while (resultado.next()) {
-                cita = new Cita(
-                        resultado.getInt("Id"),
-                        resultado.getString("Matricula"),
-                        resultado.getString("Fecha"),
-                        resultado.getString("Hora"),
-                        resultado.getString("TipoVehiculo"),
-                        resultado.getString("TipoInspeccion"),
-                        resultado.getString("Precio"),
-                        resultado.getBoolean("Activa"));
-                listaCita.add(cita);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-            cerrarConexion(cbd);
-        }
-        return listaCita;
-    }
-
-
     public void agregarCitaLista() {
-        addCitaLista = obtenerListaCitaBD();
+        addCitaLista = obtenerListaCitaBD(cbd,cita);
         columnIdCita.setCellValueFactory(new PropertyValueFactory<>(COLUMNIDCITA));
         columnMatriculaCita.setCellValueFactory(new PropertyValueFactory<>(COLUMNMATRICULAVEHICULOCITA));
         columnFechaCita.setCellValueFactory(new PropertyValueFactory<>(COLUMNFECHACITA));
@@ -583,35 +558,8 @@ public class VentanaPrincipalControlador implements Initializable {
         txtPassWordUsuario.clear();
         txtAdminUsuario.clear();
     }
-
-    public ObservableList<Usuario> addUsuario() {
-
-        ObservableList<Usuario> listaUsuario = FXCollections.observableArrayList();
-        String sql = "SELECT * FROM datos_usuario ORDER BY id";
-        conexion = cbd.abrirConexion();
-        try {
-            sentencia = conexion.prepareStatement(sql);
-            resultado = sentencia.executeQuery();
-            while (resultado.next()) {
-                usuario = new Usuario(
-                        resultado.getInt("id"),
-                        resultado.getString("Nombre"),
-                        resultado.getString("Apellido"),
-                        resultado.getString("Telefono"),
-                        resultado.getString("Correo"),
-                        resultado.getString("Contraseña"),
-                        resultado.getBoolean("Administrador"),
-                        resultado.getString("FechaAlta"));
-                listaUsuario.add(usuario);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return listaUsuario;
-    }
-
     public void agregarUsuarioLista() {
-        addUsuarioLista = addUsuario();
+        addUsuarioLista = addUsuario(cbd,usuario);
         columnIdUsuario.setCellValueFactory(new PropertyValueFactory<>(COLUMNIDUSUARIO));
         columnNombreUsuario.setCellValueFactory(new PropertyValueFactory<>(COLUMNNOMBREUSUARIO));
         columnApellidoUsuario.setCellValueFactory(new PropertyValueFactory<>(COLUMNAPELLIDOUSUARIO));
@@ -713,9 +661,9 @@ public class VentanaPrincipalControlador implements Initializable {
                     TipoVehiculo tipoVehiculoSeleccionado = txtTipoVehiculoVehiculo.getValue();
                     int idTipoVehiculo = tipoVehiculoSeleccionado.getId();
 
-                    sentencia.setString(1, txtMatriculaVehicula.getText());
+                    sentencia.setString(1, txtMatriculaVehicula.getText().toUpperCase());
                     sentencia.setInt(2, idMarcaVehiculo);
-                    sentencia.setString(3, txtModeloVehiculo.getText());
+                    sentencia.setString(3, txtModeloVehiculo.getText().toUpperCase());
                     sentencia.setString(4, txtAñoVehiculo.getText());
                     sentencia.setString(5, txtIdUsuarioVehiculo.getText());
                     sentencia.setInt(6, idTipoVehiculo);
@@ -776,9 +724,9 @@ public class VentanaPrincipalControlador implements Initializable {
                     int idTipoVehiculo = obtenerIdTipoVehiculo(txtTipoVehiculoVehiculo.getValue());
 
                     sentencia = conexion.prepareStatement(sql);
-                    sentencia.setString(1, txtMatriculaVehicula.getText());
+                    sentencia.setString(1, txtMatriculaVehicula.getText().toUpperCase());
                     sentencia.setInt(2, idMarcaVehiculo);
-                    sentencia.setString(3, txtModeloVehiculo.getText());
+                    sentencia.setString(3, txtModeloVehiculo.getText().toUpperCase());
                     sentencia.setString(4, txtAñoVehiculo.getText());
                     sentencia.setInt(5, Integer.parseInt(txtIdUsuarioVehiculo.getText()));
                     sentencia.setInt(6, idTipoVehiculo);
@@ -802,55 +750,6 @@ public class VentanaPrincipalControlador implements Initializable {
             mostrarAlerta("Campos vacíos", "Por favor, complete todos los campos.", Alert.AlertType.WARNING);
         }
     }
-
-    // Método para obtener el ID de la marca seleccionada
-    private int obtenerIdMarca(MarcaVehiculo marcaSeleccionada) {
-        int idMarca = 0;
-        String sql = "SELECT id FROM marcavehiculo WHERE Nombre = ?";
-        try {
-            PreparedStatement statement = conexion.prepareStatement(sql);
-            statement.setString(1, marcaSeleccionada.getNombre());
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                idMarca = resultSet.getInt("id");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return idMarca;
-    }
-
-    // Método para obtener el ID del tipo de vehículo seleccionado
-    private int obtenerIdTipoVehiculo(TipoVehiculo tipoVehiculoSeleccionado) {
-        int idTipoVehiculo = 0;
-        String sql = "SELECT id FROM tipo_vehiculo WHERE Nombre = ?";
-        try {
-            PreparedStatement statement = conexion.prepareStatement(sql);
-            statement.setString(1, tipoVehiculoSeleccionado.getNombre());
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                idTipoVehiculo = resultSet.getInt("id");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return idTipoVehiculo;
-    }
-
-    // Método para verificar si el ID de usuario existe en la base de datos
-    private boolean existeUsuario(int idUsuario) {
-        String sql = "SELECT id FROM datos_usuario WHERE id = ?";
-        try {
-            PreparedStatement statement = conexion.prepareStatement(sql);
-            statement.setInt(1, idUsuario);
-            ResultSet resultSet = statement.executeQuery();
-            return resultSet.next(); // Retorna true si el usuario existe, false si no
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
 
     @FXML
     void btnDeleteVehiculo(ActionEvent event) {
@@ -958,30 +857,6 @@ public class VentanaPrincipalControlador implements Initializable {
         txtTipoVehiculoVehiculo.setValue(tipoVehiculo);
     }
 
-    public Usuario cargarUsuarioPorCorreo(String correo) {
-        String sql = "SELECT * FROM datos_usuario WHERE correo = ?";
-        Usuario usuario = null;
-        try {
-            PreparedStatement statement = conexion.prepareStatement(sql);
-            statement.setString(1, correo);
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                String nombre = resultSet.getString("nombre");
-                String apellido = resultSet.getString("apellido");
-                String telefono = resultSet.getString("telefono");
-                String contraseña = resultSet.getString("contraseña");
-                boolean administrador = resultSet.getBoolean("administrador");
-                String fechaAlta = resultSet.getString("fechaAlta");
-
-                usuario = new Usuario(id, nombre, apellido, telefono, correo, contraseña, administrador, fechaAlta);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return usuario;
-    }
-
     public void buscarVehiculoTableView() {
         FilteredList<Vehiculo> filtroVehiculo = new FilteredList<>(addVehiculoLista, u -> true);
         txtBusquedaVehiculo.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -1070,6 +945,7 @@ public class VentanaPrincipalControlador implements Initializable {
         cargarDatosMarcaVehiculo(txtMarcaVehiculo, cbd);
         cargarHorasCitas();
         cargarDatosTipoInspeccion(txtTipoInspeccionCita, cbd);
+        comprobarFechaIsSelected(txtFechaCita,txtHoraCita);
 
         // Escuchador para comprobar que la fecha esta seleccionada
         txtFechaCita.valueProperty().addListener(new ChangeListener<>() {
@@ -1078,6 +954,5 @@ public class VentanaPrincipalControlador implements Initializable {
                 comprobarFechaIsSelected(txtFechaCita,txtHoraCita);
             }
         });
-        comprobarFechaIsSelected(txtFechaCita,txtHoraCita);
     }
 }

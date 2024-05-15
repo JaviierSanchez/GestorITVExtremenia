@@ -59,7 +59,7 @@ public class VentanaPrincipalVehiculoControlador {
     }
     public static void cargarDatosMarcaVehiculo(ComboBox<MarcaVehiculo> comboBox, CONEXIONBD cbd) {
         ObservableList<MarcaVehiculo> listaMarcaVehiculo = FXCollections.observableArrayList();
-        String sql = "SELECT m.id, m.Nombre FROM marcavehiculo m ORDER BY m.Nombre ASC";
+        String sql = "SELECT m.id, UPPER(m.Nombre) as Nombre FROM marcavehiculo m ORDER BY m.Nombre ASC";
         conexion = cbd.abrirConexion();
         try {
             sentencia = conexion.prepareStatement(sql);
@@ -88,5 +88,41 @@ public class VentanaPrincipalVehiculoControlador {
         });
 
     }
+
+    // Método para obtener el ID de la marca seleccionada
+    public static int obtenerIdMarca(MarcaVehiculo marcaSeleccionada) {
+        int idMarca = 0;
+        String sql = "SELECT id FROM marcavehiculo WHERE Nombre = ?";
+        try {
+            sentencia = conexion.prepareStatement(sql);
+            sentencia.setString(1, marcaSeleccionada.getNombre());
+            resultado = sentencia.executeQuery();
+            if (resultado.next()) {
+                idMarca = resultado.getInt("id");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return idMarca;
+    }
+
+    // Método para obtener el ID del tipo de vehículo seleccionado
+    public static int obtenerIdTipoVehiculo(TipoVehiculo tipoVehiculoSeleccionado) {
+        int idTipoVehiculo = 0;
+        String sql = "SELECT id FROM tipo_vehiculo WHERE Nombre = ?";
+        try {
+            sentencia = conexion.prepareStatement(sql);
+            sentencia.setString(1, tipoVehiculoSeleccionado.getNombre());
+            resultado = sentencia.executeQuery();
+            if (resultado.next()) {
+                idTipoVehiculo = resultado.getInt("id");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return idTipoVehiculo;
+    }
+
+
 }
 
