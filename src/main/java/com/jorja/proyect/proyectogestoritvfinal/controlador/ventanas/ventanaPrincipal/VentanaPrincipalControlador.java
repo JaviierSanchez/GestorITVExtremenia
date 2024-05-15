@@ -5,6 +5,8 @@ import com.jorja.proyect.proyectogestoritvfinal.controlador.bbdd.CONEXIONBD;
 import com.jorja.proyect.proyectogestoritvfinal.modelo.*;
 import com.jorja.proyect.proyectogestoritvfinal.vista.Main;
 import com.jorja.proyect.proyectogestoritvfinal.vista.VentanaCambiarPassword;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -29,11 +31,16 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 import static com.jorja.proyect.proyectogestoritvfinal.controlador.Utils.*;
+import static com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaPrincipal.VentanaPrincipalCitaControlador.*;
+import static com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaPrincipal.VentanaPrincipalUsuarioControlador.sacarNombreUsuarioLogueado;
+import static com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaPrincipal.VentanaPrincipalVehiculoControlador.cargarDatosMarcaVehiculo;
+import static com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaPrincipal.VentanaPrincipalVehiculoControlador.cargarDatosTipoVehiculo;
 
 public class VentanaPrincipalControlador implements Initializable {
 
@@ -44,6 +51,7 @@ public class VentanaPrincipalControlador implements Initializable {
     private Date fecha;
     private Usuario usuario;
     private Vehiculo vehiculo;
+    private Cita cita;
 
     public VentanaPrincipalControlador() {
         cbd = new CONEXIONBD();
@@ -65,20 +73,24 @@ public class VentanaPrincipalControlador implements Initializable {
     private Button btnLateralVehiculo;
 
     @FXML
+    private TableView<Cita> TableViewCita;
+    private ObservableList<Cita> addCitaLista;
+    @FXML
+    private TableColumn<?, ?> columnIdCita;
+    @FXML
     private TableColumn<?, ?> columnMatriculaCita;
     @FXML
     private TableColumn<?, ?> columnPrecioCita;
     @FXML
     private TableColumn<?, ?> columnTipoInspeccionCita;
-
     @FXML
     private TableColumn<?, ?> columnTipoVehiculoCita;
-
     @FXML
     private TableColumn<?, ?> columnFechaCita;
-
     @FXML
     private TableColumn<?, ?> columnHoraCita;
+    @FXML
+    private TableColumn<?, ?> columnActivaCita;
 
     private ObservableList<Usuario> addUsuarioLista;
     @FXML
@@ -172,7 +184,7 @@ public class VentanaPrincipalControlador implements Initializable {
     private DatePicker txtFechaCita;
 
     @FXML
-    private ComboBox<?> txtHoraCita;
+    private ComboBox<String> txtHoraCita;
 
     @FXML
     private TextField txtIdUsuario;
@@ -206,10 +218,10 @@ public class VentanaPrincipalControlador implements Initializable {
     private ComboBox<MarcaVehiculo> txtMarcaVehiculo;
 
     @FXML
-    private ComboBox<?> txtTipoInspeccionCita;
+    private ComboBox<TipoInspeccion> txtTipoInspeccionCita;
 
     @FXML
-    private ComboBox<?> txtTipoVehiculoCita;
+    private ComboBox<TipoVehiculo> txtTipoVehiculoCita;
 
     @FXML
     private ComboBox<TipoVehiculo> txtTipoVehiculoVehiculo;
@@ -247,6 +259,7 @@ public class VentanaPrincipalControlador implements Initializable {
         btnCleanCita(actionEvent);
     }
 
+    // Metodo para limpiar la barra de busqueda cuando cambias de ventana
     private void limpiarCamposBusqueda() {
         txtBusquedaUsuario.clear();
         txtBusquedaVehiculo.clear();
@@ -367,6 +380,62 @@ public class VentanaPrincipalControlador implements Initializable {
 
     }
 
+    public ObservableList<Cita> obtenerListaCitaBD() {
+
+        ObservableList<Cita> listaCita = FXCollections.observableArrayList();
+        String sql = """
+                SELECT C.id AS Id,C.id_Vehiculo AS Matricula, C.Fecha AS Fecha,C.Hora AS Hora,
+                TV.Nombre AS TipoVehiculo, TI.Nombre AS TipoInspeccion, TI.Precio as Precio, C.Activa AS Activa
+                      FROM CITA C
+                           INNER JOIN TIPO_VEHICULO TV ON TV.id = C.Tipo_Vehiculo_id
+                           INNER JOIN TIPO_INSPECCION TI ON TI.id = C.Tipo_Inspeccion_id
+                    """;
+
+        try {
+            conexion = cbd.abrirConexion();
+            sentencia = conexion.prepareStatement(sql);
+            resultado = sentencia.executeQuery();
+            while (resultado.next()) {
+                cita = new Cita(
+                        resultado.getInt("Id"),
+                        resultado.getString("Matricula"),
+                        resultado.getString("Fecha"),
+                        resultado.getString("Hora"),
+                        resultado.getString("TipoVehiculo"),
+                        resultado.getString("TipoInspeccion"),
+                        resultado.getString("Precio"),
+                        resultado.getBoolean("Activa"));
+                listaCita.add(cita);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            cerrarConexion(cbd);
+        }
+        return listaCita;
+    }
+
+
+    public void agregarCitaLista() {
+        addCitaLista = obtenerListaCitaBD();
+        columnIdCita.setCellValueFactory(new PropertyValueFactory<>(COLUMNIDCITA));
+        columnMatriculaCita.setCellValueFactory(new PropertyValueFactory<>(COLUMNMATRICULAVEHICULOCITA));
+        columnFechaCita.setCellValueFactory(new PropertyValueFactory<>(COLUMNFECHACITA));
+        columnHoraCita.setCellValueFactory(new PropertyValueFactory<>(COLUMNHORACITA));
+        columnTipoVehiculoCita.setCellValueFactory(new PropertyValueFactory<>(COLUMNTIPOVEHICULOIDCITA));
+        columnTipoInspeccionCita.setCellValueFactory(new PropertyValueFactory<>(COLUMNTIPOINSPECCIONIDCITA));
+        columnPrecioCita.setCellValueFactory(new PropertyValueFactory<>(COLUMNPRECIOCITA));
+        columnActivaCita.setCellValueFactory(new PropertyValueFactory<>(COLUMNACTIVACITA));
+        TableViewCita.setItems(addCitaLista);
+    }
+
+    //Cargar horas en el combobox
+
+    public void cargarHorasCitas() {
+        cargarHorasComboBox(txtHoraCita);
+    }
+
+
 
     // Logica Ventana Principal Usuario
 
@@ -413,7 +482,7 @@ public class VentanaPrincipalControlador implements Initializable {
                     sentencia.executeUpdate();
                     mostrarAlerta("Añadido", "El usuario ha sido añadido", Alert.AlertType.INFORMATION);
                     btnCleanUsuarios(event);
-                    addUsuarioLista();
+                    agregarUsuarioLista();
                 }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
@@ -460,7 +529,7 @@ public class VentanaPrincipalControlador implements Initializable {
                     sentencia.executeUpdate();
 
                     mostrarAlerta("Usuario actualizado", "El usuario ha sido actualizado", Alert.AlertType.INFORMATION);
-                    addUsuarioLista();
+                    agregarUsuarioLista();
                     btnCleanUsuarios(event);
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
@@ -494,7 +563,7 @@ public class VentanaPrincipalControlador implements Initializable {
                     sentencia.executeUpdate();
                     mostrarAlerta("Eliminado con éxito", "El empleado ha sido eliminado con éxito", Alert.AlertType.INFORMATION);
                     btnCleanUsuarios(event);
-                    addUsuarioLista();
+                    agregarUsuarioLista();
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 } finally {
@@ -541,7 +610,7 @@ public class VentanaPrincipalControlador implements Initializable {
         return listaUsuario;
     }
 
-    public void addUsuarioLista() {
+    public void agregarUsuarioLista() {
         addUsuarioLista = addUsuario();
         columnIdUsuario.setCellValueFactory(new PropertyValueFactory<>(COLUMNIDUSUARIO));
         columnNombreUsuario.setCellValueFactory(new PropertyValueFactory<>(COLUMNNOMBREUSUARIO));
@@ -658,7 +727,7 @@ public class VentanaPrincipalControlador implements Initializable {
                     if (filasInsertadas > 0) {
                         mostrarAlerta("Añadido", "El vehiculo ha sido añadido", Alert.AlertType.INFORMATION);
                         btnCleanUsuarios(event);
-                        addVehiculoLista();
+                        agregarVehiculoLista();
                     } else {
                         mostrarAlerta("Error", "No se pudo añadir el vehiculo", Alert.AlertType.ERROR);
                     }
@@ -718,7 +787,7 @@ public class VentanaPrincipalControlador implements Initializable {
                     int resultado = sentencia.executeUpdate();
                     if (resultado > 0) {
                         mostrarAlerta("Vehículo actualizado", "El vehículo ha sido actualizado correctamente.", Alert.AlertType.INFORMATION);
-                        addVehiculoLista();
+                        agregarVehiculoLista();
                         btnCleanVehiculo(event);
                     } else {
                         mostrarAlerta("Error", "No se ha podido actualizar el vehículo.", Alert.AlertType.ERROR);
@@ -804,7 +873,7 @@ public class VentanaPrincipalControlador implements Initializable {
                     sentencia.executeUpdate();
                     mostrarAlerta("Eliminado con éxito", "El empleado ha sido eliminado con éxito", Alert.AlertType.INFORMATION);
                     btnCleanVehiculo(event);
-                    addVehiculoLista();
+                    agregarVehiculoLista();
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 } finally {
@@ -825,73 +894,6 @@ public class VentanaPrincipalControlador implements Initializable {
         txtAñoVehiculo.clear();
         txtTipoVehiculoVehiculo.setValue(null);
         txtIdUsuarioVehiculo.clear();
-    }
-
-    public void cargarDatosMarcaVehiculo() {
-        ObservableList<MarcaVehiculo> listaMarcaVehiculo = FXCollections.observableArrayList();
-        String sql = "SELECT m.id, m.Nombre FROM marcavehiculo m ORDER BY m.Nombre ASC";
-        conexion = cbd.abrirConexion();
-        try {
-            sentencia = conexion.prepareStatement(sql);
-            resultado = sentencia.executeQuery();
-
-            while (resultado.next()) {
-                int idMarcaVehiculo = resultado.getInt("id");
-                String nombreMarcaVehiculo = resultado.getString("Nombre");
-                MarcaVehiculo marcaVehiculo = new MarcaVehiculo(idMarcaVehiculo, nombreMarcaVehiculo);
-                listaMarcaVehiculo.add(marcaVehiculo);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        txtMarcaVehiculo.setItems(listaMarcaVehiculo);
-        txtMarcaVehiculo.setConverter(new StringConverter<MarcaVehiculo>() {
-            @Override
-            public String toString(MarcaVehiculo marcaVehiculo) {
-                return marcaVehiculo.getNombre();
-            }
-
-            @Override
-            public MarcaVehiculo fromString(String string) {
-                return null;
-            }
-        });
-
-    }
-
-    public void cargarDatosTipoVehiculo() {
-        ObservableList<TipoVehiculo> listaTipoVehiculo = FXCollections.observableArrayList();
-        String sql = "SELECT t.id, t.Nombre FROM tipo_vehiculo t";
-        conexion = cbd.abrirConexion();
-        try {
-            sentencia = conexion.prepareStatement(sql);
-            resultado = sentencia.executeQuery();
-
-            while (resultado.next()) {
-                int idTipoVehiculo = resultado.getInt("id");
-                String nombreTipoVehiculo = resultado.getString("Nombre");
-                TipoVehiculo tipoVehiculo = new TipoVehiculo(idTipoVehiculo, nombreTipoVehiculo);
-                listaTipoVehiculo.add(tipoVehiculo);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-        // Configurar el ComboBox para mostrar solo el nombre del tipo de vehículo
-        txtTipoVehiculoVehiculo.setItems(listaTipoVehiculo);
-        txtTipoVehiculoVehiculo.setConverter(new StringConverter<TipoVehiculo>() {
-            @Override
-            public String toString(TipoVehiculo tipoVehiculo) {
-                return tipoVehiculo.getNombre();
-            }
-
-            @Override
-            public TipoVehiculo fromString(String string) {
-                return null;
-            }
-
-
-        });
     }
 
     public ObservableList<Vehiculo> addVehiculo() {
@@ -926,7 +928,7 @@ public class VentanaPrincipalControlador implements Initializable {
         return listaVehiculo;
     }
 
-    public void addVehiculoLista() {
+    public void agregarVehiculoLista() {
         addVehiculoLista = addVehiculo();
         columnMatriculaVehiculo.setCellValueFactory(new PropertyValueFactory<>(COLUMNMATRICULAVEHICULO));
         columnMarcaVehiculo.setCellValueFactory(new PropertyValueFactory<>(COLUMNMARCAVEHICULO));
@@ -1054,22 +1056,28 @@ public class VentanaPrincipalControlador implements Initializable {
         contardorTotalVehiculos();
         contadorTotalGanaciasMensuales();
         cargarDatosGraficoUsuario();
-        addUsuarioLista();
-        addVehiculoLista();
+        agregarUsuarioLista();
+        agregarVehiculoLista();
+        agregarCitaLista();
         mostrarUsuarioSeleccionado();
         mostrarVehiculoSeleccionado();
         buscarUsuarioTableView();
         buscarVehiculoTableView();
         asignarDatosUsuarioSesion();
-        cargarDatosTipoVehiculo();
-        cargarDatosMarcaVehiculo();
+        sacarNombreUsuarioLogueado(lblNombreUsuario);
+        cargarDatosTipoVehiculo(txtTipoVehiculoVehiculo, cbd);
+        cargarDatosTipoVehiculo(txtTipoVehiculoCita, cbd);
+        cargarDatosMarcaVehiculo(txtMarcaVehiculo, cbd);
+        cargarHorasCitas();
+        cargarDatosTipoInspeccion(txtTipoInspeccionCita, cbd);
 
-        // Sacar nombre usuario que ha iniciado sesion
-        Usuario usuarioActual = Sesion.getUsuarioActual();
-        if (usuarioActual != null) {
-            lblNombreUsuario.setText(usuarioActual.getNombre());
-        } else {
-            lblNombreUsuario.setText("Usuario desconodido");
-        }
+        // Escuchador para comprobar que la fecha esta seleccionada
+        txtFechaCita.valueProperty().addListener(new ChangeListener<>() {
+            @Override
+            public void changed(ObservableValue<? extends LocalDate> observable, LocalDate oldValue, LocalDate newValue) {
+                comprobarFechaIsSelected(txtFechaCita,txtHoraCita);
+            }
+        });
+        comprobarFechaIsSelected(txtFechaCita,txtHoraCita);
     }
 }

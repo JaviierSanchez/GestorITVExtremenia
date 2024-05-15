@@ -21,7 +21,6 @@ public class Utils {
     private static PreparedStatement sentencia;
     private static ResultSet resultado;
 
-
     // Ruta archivos fxml
     public static final String VENTANALOGIN = "/com/jorja/proyect/proyectogestoritvfinal/vista/VentanaLogueo.fxml";
     public static final String VENTANAPRINCIPAL = "/com/jorja/proyect/proyectogestoritvfinal/vista/VentanaPrincipal.fxml";
@@ -32,6 +31,7 @@ public class Utils {
     public static final String TELEFONOREGEX = "\\d{9}";
     public static final String CORREOREGEX = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,}$";
     public static final String PASSWORDREGEX = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$";
+    public static final String MATRICULAREGEX = "(?i)^(\\d{4}?[ -]*[A-Z]{3}|[A-Z]{1,2}[ -]*\\d{4}?[ -]*[A-Z]{1,2})$";
 
     // Columnas Usuario
     public static final String COLUMNIDUSUARIO = "id";
@@ -51,9 +51,17 @@ public class Utils {
     public static final String COLUMNAÑOVEHICULO = "year";
     public static final String COLUMNTIPOVEHICULOVEHICULO = "tipoVehiculo";
     public static final String COLUMNPROPIETARIOVEHICULO = "correoUsuario";
-    public static final String MATRICULAREGEX = "(?i)^(\\d{4}?[ -]*[A-Z]{3}|[A-Z]{1,2}[ -]*\\d{4}?[ -]*[A-Z]{1,2})$";
 
 
+    // Columnas Cita
+    public static final String COLUMNIDCITA = "id";
+    public static final String COLUMNMATRICULAVEHICULOCITA = "matriculaVehiculo";
+    public static final String COLUMNFECHACITA = "Fecha";
+    public static final String COLUMNHORACITA = "Hora";
+    public static final String COLUMNTIPOINSPECCIONIDCITA = "TipoInspeccionId";
+    public static final String COLUMNTIPOVEHICULOIDCITA = "TipoVehiculoId";
+    public static final String COLUMNPRECIOCITA = "precio";
+    public static final String COLUMNACTIVACITA = "activa";
 
 
     // Obtener la fecha actual

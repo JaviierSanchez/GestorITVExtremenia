@@ -166,7 +166,7 @@
    <center>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <AnchorPane fx:id="layoutInicio" prefHeight="748.0" prefWidth="991.0" visible="true">
+            <AnchorPane fx:id="layoutInicio" prefHeight="748.0" prefWidth="991.0">
                <children>
                   <VBox prefHeight="746.0" prefWidth="992.0">
                      <children>
@@ -269,18 +269,20 @@
             </AnchorPane>
             <AnchorPane fx:id="layoutPedirCita" prefHeight="748.0" prefWidth="993.0" stylesheets="@../css/Ventana-Principal-Cita.css" visible="false">
                <children>
-                  <AnchorPane layoutX="10.0" layoutY="20.0" prefHeight="709.0" prefWidth="973.0" styleClass="fondo-principal">
+                  <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="718.0" prefWidth="965.0" styleClass="fondo-principal">
                      <children>
                         <TextField layoutX="21.0" layoutY="13.0" prefHeight="25.0" prefWidth="181.0" promptText="Búsqueda" styleClass="textfiedl-busqueda" />
-                        <FontAwesomeIconView glyphName="SEARCH" layoutX="26.0" layoutY="31.0" size="14" />
-                        <TableView layoutX="17.0" layoutY="47.0" prefHeight="375.0" prefWidth="940.0">
+                        <FontAwesomeIconView glyphName="SEARCH" layoutX="26.0" layoutY="30.0" size="14" />
+                        <TableView fx:id="TableViewCita" layoutX="12.0" layoutY="47.0" prefHeight="375.0" prefWidth="940.0">
                           <columns>
-                            <TableColumn fx:id="columnMatriculaCita" prefWidth="119.0" text="Matricula" />
-                            <TableColumn fx:id="columnFechaCita" prefWidth="112.0" text="Fecha" />
-                              <TableColumn fx:id="columnHoraCita" prefWidth="115.0" text="Hora" />
-                              <TableColumn fx:id="columnTipoVehiculoCita" prefWidth="236.0" text="Tipo Vehículo" />
-                              <TableColumn fx:id="columnTipoInspeccionCita" prefWidth="204.0" text="Tipo Inspección" />
-                              <TableColumn fx:id="columnPrecioCita" prefWidth="153.0" text="Precio" />
+                              <TableColumn fx:id="columnIdCita" prefWidth="44.0" text="ID" />
+                            <TableColumn fx:id="columnMatriculaCita" prefWidth="127.0" text="Matrícula" />
+                            <TableColumn fx:id="columnFechaCita" prefWidth="81.0" text="Fecha" />
+                              <TableColumn fx:id="columnHoraCita" prefWidth="117.0" text="Hora" />
+                              <TableColumn fx:id="columnTipoVehiculoCita" prefWidth="121.0" text="Tipo Vehículo" />
+                              <TableColumn fx:id="columnTipoInspeccionCita" prefWidth="188.0" text="Tipo Inspección" />
+                              <TableColumn fx:id="columnPrecioCita" prefWidth="171.0" text="Precio" />
+                              <TableColumn fx:id="columnActivaCita" prefWidth="89.0" text="Activa" />
                           </columns>
                         </TableView>
                         <TextField fx:id="txtMatriculaCita" layoutX="109.0" layoutY="445.0" prefHeight="35.0" prefWidth="170.0" promptText="Introduzca la matrícula" styleClass="textfield">
@@ -307,28 +309,32 @@
                         <Label alignment="CENTER_RIGHT" layoutX="309.0" layoutY="547.0" prefHeight="20.0" prefWidth="115.0" styleClass="lbl-General" text="Precio:" />
                         <Label alignment="CENTER_RIGHT" layoutX="-17.0" layoutY="546.0" prefHeight="20.0" prefWidth="115.0" styleClass="lbl-General" text="Hora:" />
                         <ComboBox fx:id="txtHoraCita" layoutX="109.0" layoutY="539.0" prefHeight="35.0" prefWidth="170.0" promptText="Seleccione la hora" styleClass="textfield" />
+                        <Label layoutX="690.0" layoutY="456.0" text="ID:" />
+                        <TextField fx:id="txtIdCita" editable="false" layoutX="730.0" layoutY="452.0" promptText="ID Cita" styleClass="textfield" />
+                        <Label layoutX="684.0" layoutY="485.0" text="Activa:" />
+                        <TextField fx:id="txtActivaCita" layoutX="731.0" layoutY="490.0" promptText="¿Activa?" styleClass="textfield" />
                      </children>
                   </AnchorPane>
                </children>
             </AnchorPane>
             <AnchorPane fx:id="layoutUsuarios" prefHeight="747.0" prefWidth="991.0" stylesheets="@../css/Ventana-Principal-Vehiculo.css" visible="false">
                <children>
-                  <AnchorPane layoutX="14.0" layoutY="15.0" prefHeight="718.0" prefWidth="964.0" styleClass="fondo-principal">
+                  <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="718.0" prefWidth="965.0" styleClass="fondo-principal">
                      <children>
-                        <TableView fx:id="TableViewUsuario" layoutX="14.0" layoutY="51.0" onMouseClicked="#mostrarUsuarioSeleccionado" prefHeight="376.0" prefWidth="936.0">
+                        <TableView fx:id="TableViewUsuario" layoutX="12.0" layoutY="47.0" onMouseClicked="#mostrarUsuarioSeleccionado" prefHeight="375.0" prefWidth="940.0">
                            <columns>
                               <TableColumn fx:id="columnIdUsuario" prefWidth="33.0" text="ID" />
                               <TableColumn fx:id="columnNombreUsuario" prefWidth="98.0" text="Nombre" />
                               <TableColumn fx:id="columnApellidoUsuario" prefWidth="151.0" text="Apellido" />
-                              <TableColumn fx:id="columnTelefonoUsuario" prefWidth="122.0" text="Telefono" />
+                              <TableColumn fx:id="columnTelefonoUsuario" prefWidth="122.0" text="Teléfono" />
                               <TableColumn fx:id="columnCorreoUsuario" prefWidth="214.0" text="Correo" />
                               <TableColumn fx:id="columnPasswordUsuario" prefWidth="109.0" text="Contraseña" />
                               <TableColumn fx:id="columnFechaAltaUsuario" prefWidth="118.0" text="Fecha Alta" />
                               <TableColumn fx:id="columnAdminUsuario" prefWidth="90.0" text="Admin" />
                            </columns>
                         </TableView>
-                        <TextField fx:id="txtBusquedaUsuario" layoutX="22.0" layoutY="14.0" prefHeight="25.0" prefWidth="180.0" promptText="Búsqueda" styleClass="textfiedl-busqueda" />
-                        <FontAwesomeIconView glyphName="SEARCH" layoutX="29.0" layoutY="31.0" />
+                        <TextField fx:id="txtBusquedaUsuario" layoutX="21.0" layoutY="13.0" prefHeight="25.0" prefWidth="180.0" promptText="Búsqueda" styleClass="textfiedl-busqueda" />
+                        <FontAwesomeIconView glyphName="SEARCH" layoutX="26.0" layoutY="30.0" size="14" />
                         <Button layoutX="215.0" layoutY="621.0" mnemonicParsing="false" onAction="#btnAddUsuario" prefHeight="40.0" prefWidth="95.0" styleClass="btn-add" text="Añadir" />
                         <Button layoutX="334.0" layoutY="621.0" mnemonicParsing="false" onAction="#btnUpdateUsuario" prefHeight="40.0" prefWidth="95.0" styleClass="btn-update" text="Actualizar" />
                         <Button layoutX="451.0" layoutY="621.0" mnemonicParsing="false" onAction="#btnDeleteUsuario" prefHeight="40.0" prefWidth="95.0" styleClass="btn-delete" text="Borrar" />
@@ -337,11 +343,11 @@
                         <Label alignment="CENTER_RIGHT" layoutX="35.0" layoutY="470.0" prefHeight="20.0" prefWidth="100.0" styleClass="lbl-General" text="ID:" />
                         <Label alignment="CENTER_RIGHT" layoutX="35.0" layoutY="509.0" prefHeight="20.0" prefWidth="100.0" styleClass="lbl-General" text="Nombre:" />
                         <Label alignment="CENTER_RIGHT" layoutX="35.0" layoutY="553.0" prefHeight="20.0" prefWidth="100.0" styleClass="lbl-General" text="Apellido:" />
-                        <Label alignment="CENTER_RIGHT" layoutX="340.0" layoutY="470.0" prefHeight="20.0" prefWidth="100.0" styleClass="lbl-General" text="Telefono:" />
+                        <Label alignment="CENTER_RIGHT" layoutX="340.0" layoutY="470.0" prefHeight="20.0" prefWidth="100.0" styleClass="lbl-General" text="Teléfono:" />
                         <Label alignment="CENTER_RIGHT" layoutX="340.0" layoutY="509.0" prefHeight="20.0" prefWidth="100.0" styleClass="lbl-General" text="Correo:" />
                         <TextField fx:id="txtNombreUsuario" layoutX="149.0" layoutY="505.0" promptText="Introduzca el nombre" styleClass="textfield" />
                         <TextField fx:id="txtApellidoUsuario" layoutX="149.0" layoutY="550.0" promptText="Introduzca el apellidos" styleClass="textfield" />
-                        <TextField fx:id="txtTelefonoUsuario" layoutX="456.0" layoutY="467.0" promptText="Introduzca el telefono" styleClass="textfield" />
+                        <TextField fx:id="txtTelefonoUsuario" layoutX="456.0" layoutY="467.0" promptText="Introduzca el teléfono" styleClass="textfield" />
                         <TextField fx:id="txtCorreoUsuario" layoutX="457.0" layoutY="507.0" promptText="Introduzca el nombre" styleClass="textfield" />
                         <Label layoutX="360.0" layoutY="555.0" styleClass="lbl-General" text="Contraseña:" />
                         <PasswordField fx:id="txtPassWordUsuario" layoutX="457.0" layoutY="551.0" promptText="Introduzca la contraseña" styleClass="textfield" />
@@ -351,28 +357,28 @@
                   </AnchorPane>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="layoutVehiculo" prefHeight="748.0" prefWidth="992.0" stylesheets="@../css/Ventana-Principal-Vehiculo.css" visible="false">
+            <AnchorPane fx:id="layoutVehiculo" prefHeight="748.0" prefWidth="992.0" stylesheets="@../css/Ventana-Principal-Vehiculo.css">
                <children>
-                  <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="718.0" prefWidth="964.0" styleClass="fondo-principal">
+                  <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="718.0" prefWidth="965.0" styleClass="fondo-principal">
                      <children>
-                        <TableView fx:id="TableViewVehiculo" layoutX="14.0" layoutY="51.0" onMouseClicked="#mostrarVehiculoSeleccionado" prefHeight="376.0" prefWidth="936.0">
+                        <TableView fx:id="TableViewVehiculo" layoutX="12.0" layoutY="47.0" onMouseClicked="#mostrarVehiculoSeleccionado" prefHeight="375.0" prefWidth="940.0">
                           <columns>
                             <TableColumn fx:id="columnMatriculaVehiculo" prefWidth="153.0" text="Matrícula" />
                             <TableColumn fx:id="columnMarcaVehiculo" prefWidth="155.0" text="Marca" />
                               <TableColumn fx:id="columnModeloVehiculo" prefWidth="203.0" text="Modelo" />
                               <TableColumn fx:id="columnAñoVehiculo" prefWidth="98.0" text="Año" />
                               <TableColumn fx:id="columTipoVehiculoVehiculo" prefWidth="144.0" text="Tipo Vehículo" />
-                              <TableColumn fx:id="columPropietarioVehiculo" prefWidth="182.0" text="Propietario" />
+                              <TableColumn fx:id="columPropietarioVehiculo" prefWidth="184.0" resizable="false" text="Propietario" />
                           </columns>
                         </TableView>
-                        <TextField fx:id="txtBusquedaVehiculo" layoutX="22.0" layoutY="14.0" prefHeight="25.0" prefWidth="180.0" promptText="Búsqueda" styleClass="textfiedl-busqueda" />
-                        <FontAwesomeIconView glyphName="SEARCH" layoutX="29.0" layoutY="31.0" />
+                        <TextField fx:id="txtBusquedaVehiculo" layoutX="21.0" layoutY="13.0" prefHeight="25.0" prefWidth="180.0" promptText="Búsqueda" styleClass="textfiedl-busqueda" />
+                        <FontAwesomeIconView glyphName="SEARCH" layoutX="26.0" layoutY="30.0" size="14" />
                         <Button layoutX="215.0" layoutY="621.0" mnemonicParsing="false" onAction="#btnAddVehiculo" prefHeight="40.0" prefWidth="95.0" styleClass="btn-add" text="Añadir" />
                         <Button layoutX="334.0" layoutY="621.0" mnemonicParsing="false" onAction="#btnUpdateVehiculo" prefHeight="40.0" prefWidth="95.0" styleClass="btn-update" text="Actualizar" />
                         <Button layoutX="451.0" layoutY="621.0" mnemonicParsing="false" onAction="#btnDeleteVehiculo" prefHeight="40.0" prefWidth="95.0" styleClass="btn-delete" text="Borrar" />
                         <Button layoutX="570.0" layoutY="621.0" mnemonicParsing="false" onAction="#btnCleanVehiculo" prefHeight="40.0" prefWidth="95.0" styleClass="btn-clear" text="Limpiar" />
-                        <TextField fx:id="txtMatriculaVehicula" layoutX="149.0" layoutY="467.0" prefHeight="27.0" prefWidth="200.0" promptText="Introduzca la matricula" styleClass="textfield" />
-                        <Label alignment="CENTER_RIGHT" layoutX="35.0" layoutY="470.0" prefHeight="20.0" prefWidth="100.0" styleClass="lbl-General" text="Matricula:" />
+                        <TextField fx:id="txtMatriculaVehicula" layoutX="149.0" layoutY="467.0" prefHeight="27.0" prefWidth="200.0" promptText="Introduzca la matrícula" styleClass="textfield" />
+                        <Label alignment="CENTER_RIGHT" layoutX="35.0" layoutY="470.0" prefHeight="20.0" prefWidth="100.0" styleClass="lbl-General" text="Matrícula:" />
                         <Label alignment="CENTER_RIGHT" layoutX="35.0" layoutY="509.0" prefHeight="20.0" prefWidth="100.0" styleClass="lbl-General" text="Marca:" />
                         <Label alignment="CENTER_RIGHT" layoutX="35.0" layoutY="553.0" prefHeight="20.0" prefWidth="100.0" styleClass="lbl-General" text="Modelo:" />
                         <Label alignment="CENTER_RIGHT" layoutX="382.0" layoutY="467.0" prefHeight="20.0" prefWidth="100.0" styleClass="lbl-General" text="Año:" />
@@ -389,17 +395,17 @@
             </AnchorPane>
             <AnchorPane fx:id="layoutPerfil" prefHeight="748.0" prefWidth="992.0" visible="false">
                <children>
-                  <AnchorPane layoutX="14.0" layoutY="15.0" prefHeight="718.0" prefWidth="964.0" styleClass="fondo-principal" stylesheets="@../css/Ventana-Principal-Vehiculo.css">
+                  <AnchorPane layoutX="14.0" layoutY="15.0" prefHeight="718.0" prefWidth="965.0" styleClass="fondo-principal" stylesheets="@../css/Ventana-Principal-Vehiculo.css">
                      <children>
                         <Label layoutX="31.0" layoutY="26.0" styleClass="lbl-Titulos" text="Datos Usuario" />
                         <TextField fx:id="txtNombrePerfil" editable="false" layoutX="92.0" layoutY="98.0" promptText="Nombre Usuario" styleClass="textfield" />
                         <TextField fx:id="txtApellidoPerfil" editable="false" layoutX="348.0" layoutY="98.0" promptText="Apellidos Usuario" styleClass="textfield" />
-                        <TextField fx:id="txtTelefonoPerfil" editable="false" layoutX="590.0" layoutY="98.0" promptText="Telefono Usuario" styleClass="textfield" />
+                        <TextField fx:id="txtTelefonoPerfil" editable="false" layoutX="590.0" layoutY="98.0" promptText="Teléfono Usuario" styleClass="textfield" />
                         <TextField fx:id="txtCorreoPerfil" editable="false" layoutX="92.0" layoutY="161.0" promptText="Correo Usuario" styleClass="textfield" />
                         <Label layoutX="31.0" layoutY="102.0" styleClass="lbl-General" text="Nombre" />
                         <Label layoutX="281.0" layoutY="102.0" styleClass="lbl-General" text="Apellido" />
                         <Label layoutX="31.0" layoutY="165.0" styleClass="lbl-General" text="Correo" />
-                        <Label layoutX="514.0" layoutY="102.0" styleClass="lbl-General" text="Telefono" />
+                        <Label layoutX="514.0" layoutY="102.0" styleClass="lbl-General" text="Teléfono" />
                         <TableView layoutX="28.0" layoutY="306.0" prefHeight="364.0" prefWidth="506.0">
                           <columns>
                             <TableColumn prefWidth="104.0" text="Matrícula" />
