@@ -36,7 +36,9 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 import static com.jorja.proyect.proyectogestoritvfinal.controlador.Utils.*;
+import static com.jorja.proyect.proyectogestoritvfinal.controlador.bbdd.CONEXIONBD.comprobarConexion;
 import static com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaPrincipal.VentanaPrincipalCitaControlador.*;
+import static com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaPrincipal.VentanaPrincipalInicioControlador.obtenerNombreMes;
 import static com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaPrincipal.VentanaPrincipalUsuarioControlador.*;
 import static com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaPrincipal.VentanaPrincipalVehiculoControlador.*;
 
@@ -317,15 +319,11 @@ public class VentanaPrincipalControlador implements Initializable {
 
     public void contadorTotalGanaciasMensuales() {
         String sqlGanancias = """
-                SELECT
-                    SUM(ti.Precio) AS total
-                FROM
-                    cita c
-                        INNER JOIN
-                    tipo_inspeccion ti ON c.Tipo_Inspeccion_id = ti.id
-                WHERE
-                    YEAR(c.Fecha) = YEAR(CURDATE()) AND MONTH(c.Fecha) = MONTH(CURDATE());
-                                
+                SELECT SUM(ti.Precio) AS total
+                FROM cita c
+                        INNER JOIN tipo_inspeccion ti ON c.Tipo_Inspeccion_id = ti.id
+                                WHERE YEAR(c.Fecha) = YEAR(CURDATE()) 
+                                        AND MONTH(c.Fecha) = MONTH(CURDATE());                          
                 """;
         VentanaPrincipalInicioControlador.contadorTarjetas(sqlGanancias, lblCountMoney, cbd);
     }
@@ -425,6 +423,7 @@ public class VentanaPrincipalControlador implements Initializable {
                   VALUES (?, ?, ?, ?, ?, ?)
                 """;
         conexion = cbd.abrirConexion();
+        comprobarConexion(conexion);
 
         // Comprobaciones de campos, si esta vacio muestra alerta error, sino compprueba que los datos se han introducido con formato correcto
         if (txtNombreUsuario.getText().isEmpty() || txtApellidoUsuario.getText().isEmpty() || txtTelefonoUsuario.getText().isEmpty() ||
@@ -473,6 +472,7 @@ public class VentanaPrincipalControlador implements Initializable {
         String sql = "UPDATE datos_usuario du SET du.Nombre = ?, du.Apellido = ?, du.Telefono = ?, du.Correo = ?, du.Contraseña = ?, du.Administrador = ?, du.FechaAlta = ? WHERE du.id = ?";
 
         conexion = cbd.abrirConexion();
+        comprobarConexion(conexion);
 
         // Comprobaciones de campos, si esta vacio muestra alerta error, sino compprueba que los datos se han introducido con formato correcto
         if (txtNombreUsuario.getText().isEmpty() || txtApellidoUsuario.getText().isEmpty() || txtTelefonoUsuario.getText().isEmpty() ||
@@ -521,6 +521,7 @@ public class VentanaPrincipalControlador implements Initializable {
 
         String sql = "DELETE from datos_usuario WHERE Correo = ?";
         conexion = cbd.abrirConexion();
+        comprobarConexion(conexion);
 
         if (txtNombreUsuario.getText().isEmpty() || txtApellidoUsuario.getText().isEmpty() || txtTelefonoUsuario.getText().isEmpty() ||
                 txtCorreoUsuario.getText().isEmpty() || txtPassWordUsuario.getText().isEmpty()) {
@@ -633,6 +634,7 @@ public class VentanaPrincipalControlador implements Initializable {
 
         String sql = "INSERT INTO vehiculo (Matricula, Marca_id, Modelo, Año, Usuario_id, Tipo_Vehiculo_id) VALUES (?, ?, ?, ?, ?, ?)";
         conexion = cbd.abrirConexion();
+        comprobarConexion(conexion);
 
         // Comprobar que los campos no estan vacios
         if (!txtMatriculaVehicula.getText().isEmpty() || !txtModeloVehiculo.getText().isEmpty() || txtMarcaVehiculo.getValue() == null ||
@@ -696,6 +698,7 @@ public class VentanaPrincipalControlador implements Initializable {
     void btnUpdateVehiculo(ActionEvent event) {
         String sql = "UPDATE vehiculo SET Matricula = ?, Marca_id = ?, Modelo = ?, Año = ?, Usuario_id = ?, Tipo_Vehiculo_id = ? WHERE Matricula = ?";
         conexion = cbd.abrirConexion();
+        comprobarConexion(conexion);
 
         // Verificar que los campos no estén vacíos
         if (!txtMatriculaVehicula.getText().isEmpty() && !txtModeloVehiculo.getText().isEmpty() && txtMarcaVehiculo.getValue() != null &&
@@ -756,6 +759,7 @@ public class VentanaPrincipalControlador implements Initializable {
 
         String sql = "DELETE FROM vehiculo WHERE Matricula = ?";
         conexion = cbd.abrirConexion();
+        comprobarConexion(conexion);
 
         if (!txtMatriculaVehicula.getText().isEmpty() || !txtMarcaVehiculo.getSelectionModel().isEmpty() || !txtModeloVehiculo.getText().isEmpty() ||
                 txtAñoVehiculo.getText().isEmpty() || !txtTipoVehiculoVehiculo.getSelectionModel().isEmpty() || txtIdUsuarioVehiculo.getText().isEmpty()) {
@@ -807,6 +811,7 @@ public class VentanaPrincipalControlador implements Initializable {
                                                 INNER JOIN marcavehiculo m on m.id = v.Marca_id
                     """;
         conexion = cbd.abrirConexion();
+
         try {
             sentencia = conexion.prepareStatement(sql);
             resultado = sentencia.executeQuery();
@@ -944,8 +949,10 @@ public class VentanaPrincipalControlador implements Initializable {
         cargarDatosTipoVehiculo(txtTipoVehiculoCita, cbd);
         cargarDatosMarcaVehiculo(txtMarcaVehiculo, cbd);
         cargarHorasCitas();
+        deshabilitarFinDeSemana(txtFechaCita);
         cargarDatosTipoInspeccion(txtTipoInspeccionCita, cbd);
         comprobarFechaIsSelected(txtFechaCita,txtHoraCita);
+
 
         // Escuchador para comprobar que la fecha esta seleccionada
         txtFechaCita.valueProperty().addListener(new ChangeListener<>() {

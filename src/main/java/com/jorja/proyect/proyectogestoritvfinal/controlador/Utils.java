@@ -12,7 +12,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -170,14 +169,6 @@ public class Utils {
             throw new RuntimeException(e);
         }
     }
-    // Método para obtener el nombre del mes a partir del número del mes
-    public static String obtenerNombreMes(int numeroMes) {
-        DateFormatSymbols dfs = new DateFormatSymbols();
-        String[] nombresMeses = dfs.getMonths();
-        return nombresMeses[numeroMes - 1];
-    }
-
-
 
     // Metodo Cifrado de contraseña mediante SHA-512
     public static String hashPassword(String password) {

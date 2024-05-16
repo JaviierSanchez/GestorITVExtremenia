@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormatSymbols;
 
 public class VentanaPrincipalInicioControlador {
 
@@ -30,5 +31,12 @@ public class VentanaPrincipalInicioControlador {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    // Método para obtener el nombre del mes a partir del número del mes
+    public static String obtenerNombreMes(int numeroMes) {
+        DateFormatSymbols dfs = new DateFormatSymbols();
+        String[] nombresMeses = dfs.getMonths();
+        return nombresMeses[numeroMes - 1];
     }
 }

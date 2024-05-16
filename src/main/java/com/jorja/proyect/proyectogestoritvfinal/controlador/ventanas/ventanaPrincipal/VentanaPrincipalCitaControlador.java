@@ -6,13 +6,17 @@ import com.jorja.proyect.proyectogestoritvfinal.modelo.TipoInspeccion;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
+import javafx.util.Callback;
 import javafx.util.StringConverter;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 
 import static com.jorja.proyect.proyectogestoritvfinal.controlador.Utils.cerrarConexion;
 
@@ -95,6 +99,7 @@ public class VentanaPrincipalCitaControlador {
             public String toString(TipoInspeccion tipoInspeccion) {
                 return tipoInspeccion.getNombre();
             }
+
             @Override
             public TipoInspeccion fromString(String string) {
                 return null;
@@ -103,12 +108,39 @@ public class VentanaPrincipalCitaControlador {
     }
 
     public static void comprobarFechaIsSelected(DatePicker datePicker, ComboBox<String> comboBox) {
+        // Comprobar que el datepicker tiene valor
         if (datePicker.getValue() == null) {
             comboBox.setDisable(true);
         } else {
             comboBox.setDisable(false);
         }
     }
+
+    public static void deshabilitarFinDeSemana(DatePicker datePicker) {
+        // Definimos un Callback que será usado para personalizar las celdas del DatePicker
+        Callback<DatePicker, DateCell> dayCellFactory = new Callback<>() {
+            @Override
+            public DateCell call(final DatePicker datePicker) {
+                // Retornamos una nueva DateCell para cada día en el DatePicker
+                return new DateCell() {
+                    @Override
+                    public void updateItem(LocalDate item, boolean empty) {
+                        // Llamamos al método de la superclase para actualizar el item
+                        super.updateItem(item, empty);
+                        // Deshabilitamos todos los sábados y domingos
+                        if (item != null && (item.getDayOfWeek() == DayOfWeek.SATURDAY || item.getDayOfWeek() == DayOfWeek.SUNDAY)) {
+                            setDisable(true); // Deshabilitamos la celda
+                            setStyle("-fx-background-color: #ffc0cb;"); // Cambiamos el fondo de la celda a color rosa
+                        }
+                    }
+                };
+            }
+        };
+
+        // Establecemos el dayCellFactory personalizado en el DatePicker
+        datePicker.setDayCellFactory(dayCellFactory);
+    }
+
 
 
 }

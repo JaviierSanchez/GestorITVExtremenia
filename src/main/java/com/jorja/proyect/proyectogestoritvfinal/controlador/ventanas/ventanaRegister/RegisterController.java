@@ -21,6 +21,7 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 import static com.jorja.proyect.proyectogestoritvfinal.controlador.Utils.*;
+import static com.jorja.proyect.proyectogestoritvfinal.controlador.bbdd.CONEXIONBD.comprobarConexion;
 
 public class RegisterController implements Initializable {
 
@@ -85,7 +86,9 @@ public class RegisterController implements Initializable {
 
         String sqlComprobarUsuario = "SELECT * FROM datos_usuario du WHERE du.correo = ?";
         cbd = new CONEXIONBD();
+
         conexion = cbd.abrirConexion();
+        comprobarConexion(conexion);
 
         try {
             sentencia = conexion.prepareStatement(sqlComprobarUsuario);

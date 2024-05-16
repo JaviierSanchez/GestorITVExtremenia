@@ -21,6 +21,7 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 import static com.jorja.proyect.proyectogestoritvfinal.controlador.Utils.*;
+import static com.jorja.proyect.proyectogestoritvfinal.controlador.bbdd.CONEXIONBD.comprobarConexion;
 
 public class LoginController implements Initializable {
 
@@ -61,6 +62,7 @@ public class LoginController implements Initializable {
         String sql = "SELECT * FROM datos_usuario du WHERE du.Correo = ? AND du.Contraseña = ?";
         cbd = new CONEXIONBD();
         conexion = cbd.abrirConexion();
+        comprobarConexion(conexion);
 
         try {
             sentencia = conexion.prepareStatement(sql);
