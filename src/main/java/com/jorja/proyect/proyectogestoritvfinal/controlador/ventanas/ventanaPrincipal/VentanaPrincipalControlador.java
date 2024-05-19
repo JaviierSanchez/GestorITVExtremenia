@@ -1,6 +1,5 @@
 package com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaPrincipal;
 
-import com.jorja.proyect.proyectogestoritvfinal.controlador.Utils;
 import com.jorja.proyect.proyectogestoritvfinal.controlador.bbdd.CONEXIONBD;
 import com.jorja.proyect.proyectogestoritvfinal.modelo.*;
 import com.jorja.proyect.proyectogestoritvfinal.vista.Main;
@@ -32,6 +31,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -364,7 +364,72 @@ public class VentanaPrincipalControlador implements Initializable {
     @FXML
     void btnAddCita(ActionEvent event) {
 
+        String sql = "INSERT INTO cita ( Fecha, Hora, id_Vehiculo, Tipo_Inspeccion_id, Tipo_Vehiculo_id, Activa) VALUES ( ?, ?, ?, ?, ?, ?)";
+        conexion = cbd.abrirConexion();
+        comprobarConexion(conexion);
+
+        // Comprobar que los campos no están vacíos
+        if (!txtMatriculaVehicula.getText().isEmpty() || !txtModeloVehiculo.getText().isEmpty() || txtMarcaVehiculo.getValue() == null ||
+                !txtAñoVehiculo.getText().isEmpty() || !txtIdUsuarioVehiculo.getText().isEmpty() || txtTipoVehiculoVehiculo.getValue() == null) {
+
+            // Comprobar validaciones de campo
+            if (!validarMatricula(txtMatriculaCita) || !validarFechaCita(txtFechaCita)) return;
+
+            // Consulta para comprobar que esa cita no esté registrada
+            String sqlComprobacion = "SELECT * FROM CITA C WHERE  C.Fecha = ? AND C.Hora = ?";
+
+            try {
+                sentencia = conexion.prepareStatement(sqlComprobacion);
+                sentencia.setString(1, String.valueOf(txtFechaCita.getValue()));
+                sentencia.setString(2, txtHoraCita.getValue());
+                resultado = sentencia.executeQuery();
+
+                if (!resultado.next()) {
+                    sentencia = conexion.prepareStatement(sql);
+
+                    // Obtener el ID del tipo vehículo seleccionado
+                    TipoVehiculo tipoVehiculoSeleccionado = txtTipoVehiculoCita.getValue();
+                    int idTipoVehiculo = tipoVehiculoSeleccionado.getId();
+
+                    // Obtener el ID del tipo inspección seleccionado
+                    TipoInspeccion tipoInspeccionSeleccionado = txtTipoInspeccionCita.getValue();
+                    int idTipoInspeccion = tipoInspeccionSeleccionado.getId();
+
+                    sentencia.setString(1, String.valueOf(txtFechaCita.getValue()));
+                    sentencia.setString(2, txtHoraCita.getValue());
+                    sentencia.setString(3, txtMatriculaCita.getText().toUpperCase());
+                    sentencia.setInt(4, idTipoInspeccion);
+                    sentencia.setInt(5, idTipoVehiculo);
+                    sentencia.setBoolean(6, true);
+
+                    int filas = sentencia.executeUpdate();
+                    if (filas > 0) {
+                        mostrarAlerta("Añadida", "La cita ha sido añadida correctamente", Alert.AlertType.INFORMATION);
+                        btnCleanCita(event);
+                        agregarCitaLista();
+
+                        // Recargar las horas disponibles para la fecha seleccionada
+                        LocalDate fechaSeleccionada = txtFechaCita.getValue();
+                        List<String> horasOcupadas = obtenerHorasOcupadas(fechaSeleccionada, cbd);
+                        cargarHorasComboBox(txtHoraCita, horasOcupadas);
+
+                    } else {
+                        mostrarAlerta("Error", "No se pudo añadir la cita", Alert.AlertType.ERROR);
+                    }
+
+                } else {
+                    mostrarAlerta("Error", "La cita ya existe", Alert.AlertType.ERROR);
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            } finally {
+                cerrarConexion(cbd);
+            }
+        } else {
+            mostrarAlerta("Error", "Rellena los campos", Alert.AlertType.ERROR);
+        }
     }
+
 
     @FXML
     void btnCleanCita(ActionEvent event) {
@@ -382,6 +447,36 @@ public class VentanaPrincipalControlador implements Initializable {
     @FXML
     void btnDeleteCita(ActionEvent event) {
 
+        String sql = "DELETE FROM cita WHERE id = ?";
+        conexion = cbd.abrirConexion();
+
+        if (!txtMatriculaVehicula.getText().isEmpty() || !txtModeloVehiculo.getText().isEmpty() || txtMarcaVehiculo.getValue() == null ||
+                !txtAñoVehiculo.getText().isEmpty() || !txtIdUsuarioVehiculo.getText().isEmpty() || txtTipoVehiculoVehiculo.getValue() == null) {
+
+
+            Alert alertaEliminar = new Alert(Alert.AlertType.CONFIRMATION);
+            alertaEliminar.setTitle("Confirmar eliminación");
+            alertaEliminar.setContentText("¿Estás seguro que quieres eliminar la cita?");
+            Optional<ButtonType> opcion = alertaEliminar.showAndWait();
+
+            if(opcion.get() == ButtonType.OK){
+                try {
+                    sentencia = conexion.prepareStatement(sql);
+                    sentencia.setInt(1, Integer.parseInt(txtIdCita.getText()));
+                    sentencia.executeUpdate();
+                    mostrarAlerta("Eliminado con éxito","La cita ha sido eliminada con éxito", Alert.AlertType.INFORMATION);
+                    btnCleanCita(event);
+                    agregarCitaLista();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }finally {
+                    cerrarConexion(cbd);
+                }
+            }
+
+        }else {
+            mostrarAlerta("Error", "Rellena los campos", Alert.AlertType.ERROR);
+        }
     }
 
     @FXML
@@ -390,7 +485,7 @@ public class VentanaPrincipalControlador implements Initializable {
     }
 
     public void agregarCitaLista() {
-        addCitaLista = obtenerListaCitaBD(cbd,cita);
+        addCitaLista = obtenerListaCitaBD(cbd, cita);
         columnIdCita.setCellValueFactory(new PropertyValueFactory<>(COLUMNIDCITA));
         columnMatriculaCita.setCellValueFactory(new PropertyValueFactory<>(COLUMNMATRICULAVEHICULOCITA));
         columnFechaCita.setCellValueFactory(new PropertyValueFactory<>(COLUMNFECHACITA));
@@ -402,10 +497,37 @@ public class VentanaPrincipalControlador implements Initializable {
         TableViewCita.setItems(addCitaLista);
     }
 
-    //Cargar horas en el combobox
 
-    public void cargarHorasCitas() {
-        cargarHorasComboBox(txtHoraCita);
+
+    public void mostrarCitaSeleccionada(){
+        Cita cita = TableViewCita.getSelectionModel().getSelectedItem();
+        int indice = TableViewCita.getSelectionModel().getSelectedIndex();
+
+        if(indice<0)return;
+
+        TipoVehiculo tipoVehiculo = new TipoVehiculo(cita.getTipoVehiculoId());
+        TipoInspeccion tipoInspeccion = new TipoInspeccion(cita.getTipoInspeccionId());
+
+        txtIdCita.setText(String.valueOf(cita.getId()));
+        txtMatriculaCita.setText(cita.getMatriculaVehiculo());
+        txtFechaCita.setValue(LocalDate.parse(cita.getFecha()));
+        txtHoraCita.setValue(cita.getHora());
+        txtTipoVehiculoCita.setValue(tipoVehiculo);
+        txtTipoInspeccionCita.setValue(tipoInspeccion);
+        txtPrecioCita.setText(cita.getPrecio());
+        txtActivaCita.setText(String.valueOf(cita.isActiva()));
+
+    }
+
+    //Cargar horas en el combobox
+    public void cargarHorasCitas(DatePicker datePicker, ComboBox<String> comboBox, CONEXIONBD cbd) {
+        datePicker.setOnAction(event -> {
+            LocalDate fechaSeleccionada = datePicker.getValue();
+            if (fechaSeleccionada != null) {
+                List<String> horasOcupadas = obtenerHorasOcupadas(fechaSeleccionada, cbd);
+                cargarHorasComboBox(comboBox, horasOcupadas);
+            }
+        });
     }
 
 
@@ -444,7 +566,7 @@ public class VentanaPrincipalControlador implements Initializable {
                 if (resultado.next()) {
                     mostrarAlerta("Error", "El usuario ya existe", Alert.AlertType.ERROR);
                 } else {
-                    String hashedPassword = Utils.hashPassword(txtPassWordUsuario.getText());
+                    String hashedPassword = hashPassword(txtPassWordUsuario.getText());
 
                     sentencia = conexion.prepareStatement(sql);
                     sentencia.setString(1, txtNombreUsuario.getText());
@@ -941,6 +1063,7 @@ public class VentanaPrincipalControlador implements Initializable {
         agregarCitaLista();
         mostrarUsuarioSeleccionado();
         mostrarVehiculoSeleccionado();
+        mostrarCitaSeleccionada();
         buscarUsuarioTableView();
         buscarVehiculoTableView();
         asignarDatosUsuarioSesion();
@@ -948,8 +1071,8 @@ public class VentanaPrincipalControlador implements Initializable {
         cargarDatosTipoVehiculo(txtTipoVehiculoVehiculo, cbd);
         cargarDatosTipoVehiculo(txtTipoVehiculoCita, cbd);
         cargarDatosMarcaVehiculo(txtMarcaVehiculo, cbd);
-        cargarHorasCitas();
-        deshabilitarFinDeSemana(txtFechaCita);
+        cargarHorasCitas(txtFechaCita,txtHoraCita,cbd);
+        deshabilitarDiasNoValidos(txtFechaCita);
         cargarDatosTipoInspeccion(txtTipoInspeccionCita, cbd);
         comprobarFechaIsSelected(txtFechaCita,txtHoraCita);
 
@@ -959,6 +1082,18 @@ public class VentanaPrincipalControlador implements Initializable {
             @Override
             public void changed(ObservableValue<? extends LocalDate> observable, LocalDate oldValue, LocalDate newValue) {
                 comprobarFechaIsSelected(txtFechaCita,txtHoraCita);
+            }
+        });
+        txtFechaCita.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                List<String> horasOcupadas = obtenerHorasOcupadas(newValue, cbd);
+                cargarHorasComboBox(txtHoraCita, horasOcupadas);
+            }
+        });
+        // Agregar listener al ComboBox
+        txtTipoInspeccionCita.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                txtPrecioCita.setText(String.valueOf(newValue.getPrecio()));
             }
         });
     }

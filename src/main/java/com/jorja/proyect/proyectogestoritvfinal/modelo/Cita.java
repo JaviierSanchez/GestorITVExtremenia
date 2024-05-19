@@ -4,10 +4,10 @@ public class Cita {
 
     private int id;
     private String matriculaVehiculo;
-    private String Fecha;
-    private String Hora;
-    private String TipoInspeccionId;
-    private String TipoVehiculoId;
+    private String fecha;
+    private String hora;
+    private String tipoInspeccionId;
+    private String tipoVehiculoId;
     private String precio;
     private boolean activa;
 
@@ -15,14 +15,13 @@ public class Cita {
     public Cita(int id, String matriculaVehiculo, String fecha, String hora, String tipoInspeccionId, String tipoVehiculoId, String precio, boolean activa) {
         this.id = id;
         this.matriculaVehiculo = matriculaVehiculo;
-        Fecha = fecha;
-        Hora = hora;
-        TipoInspeccionId = tipoInspeccionId;
-        TipoVehiculoId = tipoVehiculoId;
+        this.fecha = fecha;
+        this.hora = hora;
+        this.tipoInspeccionId = tipoInspeccionId;
+        this.tipoVehiculoId = tipoVehiculoId;
         this.precio = precio;
         this.activa = activa;
     }
-
 
     public int getId() {
         return id;
@@ -45,44 +44,39 @@ public class Cita {
 
 
     public String getFecha() {
-        return Fecha;
+        return fecha;
     }
 
 
     public void setFecha(String fecha) {
-        Fecha = fecha;
+        this.fecha = fecha;
     }
 
 
     public String getHora() {
-        return Hora;
+        return hora;
     }
 
 
     public void setHora(String hora) {
-        Hora = hora;
+        this.hora = hora;
     }
-
 
     public String getTipoInspeccionId() {
-        return TipoInspeccionId;
+        return tipoInspeccionId;
     }
-
 
     public void setTipoInspeccionId(String tipoInspeccionId) {
-        TipoInspeccionId = tipoInspeccionId;
+        this.tipoInspeccionId = tipoInspeccionId;
     }
-
 
     public String getTipoVehiculoId() {
-        return TipoVehiculoId;
+        return tipoVehiculoId;
     }
-
 
     public void setTipoVehiculoId(String tipoVehiculoId) {
-        TipoVehiculoId = tipoVehiculoId;
+        this.tipoVehiculoId = tipoVehiculoId;
     }
-
 
     public String getPrecio() {
         return precio;

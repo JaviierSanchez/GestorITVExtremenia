@@ -17,6 +17,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.jorja.proyect.proyectogestoritvfinal.controlador.Utils.cerrarConexion;
 
@@ -47,8 +49,8 @@ public class VentanaPrincipalCitaControlador {
                         resultado.getString("Matricula"),
                         resultado.getString("Fecha"),
                         resultado.getString("Hora"),
-                        resultado.getString("TipoVehiculo"),
                         resultado.getString("TipoInspeccion"),
+                        resultado.getString("TipoVehiculo"),
                         resultado.getString("Precio"),
                         resultado.getBoolean("Activa"));
                 listaCita.add(cita);
@@ -61,8 +63,9 @@ public class VentanaPrincipalCitaControlador {
         return listaCita;
     }
 
-    public static void cargarHorasComboBox(ComboBox<String> comboBox) {
 
+
+    public static void cargarHorasComboBox(ComboBox<String> comboBox, List<String> horasOcupadas) {
         String[] horas = {
                 "9:00", "9:15", "9:30", "9:45", "10:00", "10:15", "10:30", "10:45",
                 "11:00", "11:15", "11:30", "11:45", "12:00", "12:15", "12:30", "12:45",
@@ -71,8 +74,35 @@ public class VentanaPrincipalCitaControlador {
                 "18:00", "18:15", "18:30", "18:45", "19:00", "19:15", "19:30", "19:45", "20:00"
         };
         comboBox.getItems().clear();
-        comboBox.getItems().addAll(horas);
+        for (String hora : horas) {
+            if (!horasOcupadas.contains(hora)) {
+                comboBox.getItems().add(hora);
+            }
+        }
     }
+
+
+    public static List<String> obtenerHorasOcupadas(LocalDate fecha, CONEXIONBD cbd) {
+        List<String> horasOcupadas = new ArrayList<>();
+        conexion = cbd.abrirConexion();
+        String sql = "SELECT c.Hora FROM cita c WHERE c.Fecha = ?";
+        try {
+            sentencia = conexion.prepareStatement(sql);
+            sentencia.setString(1, String.valueOf(fecha));
+            resultado = sentencia.executeQuery();
+
+            while (resultado.next()) {
+                horasOcupadas.add(resultado.getString("Hora"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            cerrarConexion(cbd);
+        }
+        return horasOcupadas;
+    }
+
+
 
     public static void cargarDatosTipoInspeccion(ComboBox<TipoInspeccion> comboBox, CONEXIONBD cbd) {
         ObservableList<TipoInspeccion> listaTipoInspeccion = FXCollections.observableArrayList();
@@ -92,9 +122,12 @@ public class VentanaPrincipalCitaControlador {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            cerrarConexion(cbd);
         }
+
         comboBox.setItems(listaTipoInspeccion);
-        comboBox.setConverter(new StringConverter<TipoInspeccion>() {
+        comboBox.setConverter(new StringConverter<>() {
             @Override
             public String toString(TipoInspeccion tipoInspeccion) {
                 return tipoInspeccion.getNombre();
@@ -102,10 +135,11 @@ public class VentanaPrincipalCitaControlador {
 
             @Override
             public TipoInspeccion fromString(String string) {
-                return null;
+                return null;  // No se necesita implementación para este método
             }
         });
     }
+
 
     public static void comprobarFechaIsSelected(DatePicker datePicker, ComboBox<String> comboBox) {
         // Comprobar que el datepicker tiene valor
@@ -116,7 +150,7 @@ public class VentanaPrincipalCitaControlador {
         }
     }
 
-    public static void deshabilitarFinDeSemana(DatePicker datePicker) {
+    public static void deshabilitarDiasNoValidos(DatePicker datePicker) {
         // Definimos un Callback que será usado para personalizar las celdas del DatePicker
         Callback<DatePicker, DateCell> dayCellFactory = new Callback<>() {
             @Override
@@ -127,8 +161,10 @@ public class VentanaPrincipalCitaControlador {
                     public void updateItem(LocalDate item, boolean empty) {
                         // Llamamos al método de la superclase para actualizar el item
                         super.updateItem(item, empty);
-                        // Deshabilitamos todos los sábados y domingos
-                        if (item != null && (item.getDayOfWeek() == DayOfWeek.SATURDAY || item.getDayOfWeek() == DayOfWeek.SUNDAY)) {
+                        // Obtenemos la fecha actual
+                        LocalDate today = LocalDate.now();
+                        // Deshabilitamos todos los sábados, domingos y los días anteriores a hoy
+                        if (item != null && (item.isBefore(today) || item.getDayOfWeek() == DayOfWeek.SATURDAY || item.getDayOfWeek() == DayOfWeek.SUNDAY)) {
                             setDisable(true); // Deshabilitamos la celda
                             setStyle("-fx-background-color: #ffc0cb;"); // Cambiamos el fondo de la celda a color rosa
                         }
@@ -140,6 +176,7 @@ public class VentanaPrincipalCitaControlador {
         // Establecemos el dayCellFactory personalizado en el DatePicker
         datePicker.setDayCellFactory(dayCellFactory);
     }
+
 
 
 

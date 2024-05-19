@@ -5,6 +5,11 @@ public class TipoInspeccion {
     private String Nombre;
     private float precio;
 
+
+    public TipoInspeccion(String nombre) {
+        Nombre = nombre;
+    }
+
     public TipoInspeccion(int id, String nombre, float precio) {
         this.id = id;
         Nombre = nombre;

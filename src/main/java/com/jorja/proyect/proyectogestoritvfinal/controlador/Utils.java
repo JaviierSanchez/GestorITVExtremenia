@@ -3,6 +3,7 @@ package com.jorja.proyect.proyectogestoritvfinal.controlador;
 import com.jorja.proyect.proyectogestoritvfinal.controlador.bbdd.CONEXIONBD;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 
@@ -13,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -57,12 +59,14 @@ public class Utils {
     // Columnas Cita
     public static final String COLUMNIDCITA = "id";
     public static final String COLUMNMATRICULAVEHICULOCITA = "matriculaVehiculo";
-    public static final String COLUMNFECHACITA = "Fecha";
-    public static final String COLUMNHORACITA = "Hora";
-    public static final String COLUMNTIPOINSPECCIONIDCITA = "TipoInspeccionId";
-    public static final String COLUMNTIPOVEHICULOIDCITA = "TipoVehiculoId";
+    public static final String COLUMNFECHACITA = "fecha";
+    public static final String COLUMNHORACITA = "hora";
+    public static final String COLUMNTIPOINSPECCIONIDCITA = "tipoInspeccionId";
+    public static final String COLUMNTIPOVEHICULOIDCITA = "tipoVehiculoId";
     public static final String COLUMNPRECIOCITA = "precio";
     public static final String COLUMNACTIVACITA = "activa";
+
+
 
 
     // Obtener la fecha actual
@@ -127,6 +131,23 @@ public class Utils {
         }
         return true;
     }
+
+    // Metoodo para validar que le fecha de la cita no sea más antigua que el día actual
+    public static boolean validarFechaCita(DatePicker datePicker){
+        LocalDate fechaActual = LocalDate.now();
+        LocalDate fechaSeleccionada = datePicker.getValue();
+
+        if(fechaSeleccionada == null){
+            mostrarAlerta("Error","Por favor, seleccione una fecha.", Alert.AlertType.ERROR);
+            return false;
+        }
+        if(fechaSeleccionada.isBefore(fechaActual)){
+            mostrarAlerta("Error","La fecha seleccionada no puede ser anterior a la fecha actual.", Alert.AlertType.ERROR);
+            return false;
+        }
+        return true;
+    }
+    // Metodo para validar que el año del vehiculo introducido se encuentre entre 1900 y el año actual
     public static boolean validarAño(TextField textField) {
 
         int añoActual = Calendar.getInstance().get(Calendar.YEAR);
@@ -147,7 +168,7 @@ public class Utils {
         }
     }
 
-    // Mostrar alertas
+    // Metodo mostrar alertas
     public static void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipoAlerta) {
         Alert alert = new Alert(tipoAlerta);
         alert.setHeaderText(null);
@@ -156,7 +177,7 @@ public class Utils {
         alert.showAndWait();
     }
 
-    //Cerrar conexiones
+    // Metodo cerrar conexiones
       public static void cerrarConexion(CONEXIONBD cbd) {
         try {
             if (resultado != null) resultado.close();

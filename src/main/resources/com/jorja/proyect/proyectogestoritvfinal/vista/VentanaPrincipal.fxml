@@ -46,7 +46,7 @@
                   </Button>
                   <Button contentDisplay="RIGHT" mnemonicParsing="false" onAction="#btnSalir" styleClass="btn-close">
                      <graphic>
-                        <FontAwesomeIconView glyphName="CLOSE" size="18" />
+                        <FontAwesomeIconView glyphName="CLOSE" size="20" />
                      </graphic>
                      <HBox.margin>
                         <Insets right="8.0" top="10.0" />
@@ -91,7 +91,7 @@
                         <FontAwesomeIconView fill="WHITE" glyphName="HOME" size="24" />
                      </graphic>
                      <VBox.margin>
-                        <Insets left="15.0" top="90.0" />
+                        <Insets bottom="5.0" left="15.0" top="70.0" />
                      </VBox.margin>
                   </Button>
                   <Button fx:id="btnLateralCita" mnemonicParsing="false" onAction="#cambiarVentana" prefHeight="42.0" text="Pedir Cita">
@@ -99,7 +99,7 @@
                         <FontAwesomeIconView fill="WHITE" glyphName="PLUS" size="24" />
                      </graphic>
                      <VBox.margin>
-                        <Insets left="15.0" />
+                        <Insets bottom="5.0" left="15.0" />
                      </VBox.margin>
                      <styleClass>
                         <String fx:value="btn-Izquierda" />
@@ -111,7 +111,7 @@
                         <FontAwesomeIconView fill="WHITE" glyphName="USERS" />
                      </graphic>
                      <VBox.margin>
-                        <Insets left="15.0" />
+                        <Insets bottom="5.0" left="15.0" />
                      </VBox.margin>
                      <styleClass>
                         <String fx:value="btn-Izquierda" />
@@ -123,7 +123,7 @@
                         <FontAwesomeIconView fill="WHITE" glyphName="CAR" size="22" />
                      </graphic>
                      <VBox.margin>
-                        <Insets left="15.0" />
+                        <Insets bottom="5.0" left="15.0" />
                      </VBox.margin>
                      <styleClass>
                         <String fx:value="btn-Izquierda" />
@@ -157,7 +157,7 @@
                   <Label styleClass="lbl-General" text="Cerrar Sesión" />
                </children>
                <VBox.margin>
-                  <Insets top="110.0" />
+                  <Insets top="90.0" />
                </VBox.margin>
             </HBox>
          </children>
@@ -267,13 +267,13 @@
                   </VBox>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="layoutPedirCita" prefHeight="748.0" prefWidth="993.0" stylesheets="@../css/Ventana-Principal-Cita.css" visible="false">
+            <AnchorPane fx:id="layoutPedirCita" prefHeight="748.0" prefWidth="993.0" stylesheets="@../css/Ventana-Principal-Cita.css">
                <children>
                   <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="718.0" prefWidth="965.0" styleClass="fondo-principal">
                      <children>
                         <TextField layoutX="21.0" layoutY="13.0" prefHeight="25.0" prefWidth="181.0" promptText="Búsqueda" styleClass="textfiedl-busqueda" />
                         <FontAwesomeIconView glyphName="SEARCH" layoutX="26.0" layoutY="30.0" size="14" />
-                        <TableView fx:id="TableViewCita" layoutX="12.0" layoutY="47.0" prefHeight="375.0" prefWidth="940.0">
+                        <TableView fx:id="TableViewCita" layoutX="12.0" layoutY="47.0" onMouseClicked="#mostrarCitaSeleccionada" prefHeight="375.0" prefWidth="940.0">
                           <columns>
                               <TableColumn fx:id="columnIdCita" prefWidth="44.0" text="ID" />
                             <TableColumn fx:id="columnMatriculaCita" prefWidth="127.0" text="Matrícula" />
@@ -285,34 +285,34 @@
                               <TableColumn fx:id="columnActivaCita" prefWidth="89.0" text="Activa" />
                           </columns>
                         </TableView>
-                        <TextField fx:id="txtMatriculaCita" layoutX="109.0" layoutY="445.0" prefHeight="35.0" prefWidth="170.0" promptText="Introduzca la matrícula" styleClass="textfield">
+                        <TextField fx:id="txtMatriculaCita" layoutX="112.0" layoutY="444.0" prefHeight="27.0" prefWidth="159.0" promptText="Introduzca la matrícula" styleClass="textfield">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </TextField>
-                        <ComboBox fx:id="txtTipoVehiculoCita" layoutX="438.0" layoutY="447.0" prefHeight="35.0" prefWidth="220.0" promptText="Seleccione el tipo de vehículo" styleClass="textfield" />
-                        <ComboBox fx:id="txtTipoInspeccionCita" layoutX="438.0" layoutY="493.0" prefHeight="35.0" prefWidth="220.0" promptText="Seleccione el tipo de inspección" styleClass="textfield" />
-                        <TextField fx:id="txtPrecioCita" editable="false" layoutX="438.0" layoutY="539.0" prefHeight="35.0" prefWidth="220.0" promptText="Precio" styleClass="textfield">
+                        <ComboBox fx:id="txtTipoVehiculoCita" layoutX="422.0" layoutY="444.0" prefHeight="35.0" prefWidth="220.0" promptText="Seleccione el tipo de vehículo" styleClass="textfield" />
+                        <ComboBox fx:id="txtTipoInspeccionCita" layoutX="422.0" layoutY="487.0" prefHeight="35.0" prefWidth="220.0" promptText="Seleccione el tipo de inspección" styleClass="textfield" />
+                        <TextField fx:id="txtPrecioCita" editable="false" layoutX="422.0" layoutY="533.0" prefHeight="35.0" prefWidth="220.0" promptText="Precio" styleClass="textfield">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </TextField>
-                        <DatePicker fx:id="txtFechaCita" layoutX="109.0" layoutY="494.0" prefHeight="35.0" prefWidth="170.0" promptText="Seleccione la fecha" styleClass="textfield" />
+                        <DatePicker fx:id="txtFechaCita" layoutX="107.0" layoutY="487.0" prefHeight="35.0" prefWidth="170.0" promptText="Seleccione la fecha" styleClass="textfield" />
                         <Button layoutX="152.0" layoutY="620.0" mnemonicParsing="false" onAction="#btnAddCita" prefHeight="40.0" prefWidth="95.0" styleClass="btn-add" text="Añadir" />
                         <Button layoutX="401.0" layoutY="620.0" mnemonicParsing="false" onAction="#btnDeleteCita" prefHeight="40.0" prefWidth="95.0" styleClass="btn-delete" text="Borrar" />
                         <Button layoutX="273.0" layoutY="620.0" mnemonicParsing="false" onAction="#btnUpdateCita" prefHeight="40.0" prefWidth="95.0" styleClass="btn-update" text="Actualizar" />
                         <Button layoutX="529.0" layoutY="620.0" mnemonicParsing="false" onAction="#btnCleanCita" prefHeight="40.0" prefWidth="95.0" styleClass="btn-clear" text="Limpiar" />
-                        <Label alignment="CENTER_RIGHT" layoutX="-17.0" layoutY="451.0" prefHeight="20.0" prefWidth="115.0" styleClass="lbl-General" text="Matrícula:" />
-                        <Label alignment="CENTER_RIGHT" layoutX="309.0" layoutY="452.0" prefHeight="20.0" prefWidth="115.0" styleClass="lbl-General" text="Tipo Vehículo:" />
-                        <Label alignment="CENTER_RIGHT" layoutX="-17.0" layoutY="500.0" prefHeight="20.0" prefWidth="115.0" styleClass="lbl-General" text="Fecha:" />
-                        <Label alignment="CENTER_RIGHT" layoutX="309.0" layoutY="497.0" prefHeight="20.0" prefWidth="115.0" styleClass="lbl-General" text="Tipo Inspección:" />
-                        <Label alignment="CENTER_RIGHT" layoutX="309.0" layoutY="547.0" prefHeight="20.0" prefWidth="115.0" styleClass="lbl-General" text="Precio:" />
-                        <Label alignment="CENTER_RIGHT" layoutX="-17.0" layoutY="546.0" prefHeight="20.0" prefWidth="115.0" styleClass="lbl-General" text="Hora:" />
-                        <ComboBox fx:id="txtHoraCita" layoutX="109.0" layoutY="539.0" prefHeight="35.0" prefWidth="170.0" promptText="Seleccione la hora" styleClass="textfield" />
-                        <Label layoutX="690.0" layoutY="456.0" text="ID:" />
-                        <TextField fx:id="txtIdCita" editable="false" layoutX="730.0" layoutY="452.0" promptText="ID Cita" styleClass="textfield" />
-                        <Label layoutX="684.0" layoutY="485.0" text="Activa:" />
-                        <TextField fx:id="txtActivaCita" layoutX="731.0" layoutY="490.0" promptText="¿Activa?" styleClass="textfield" />
+                        <Label alignment="CENTER_RIGHT" layoutX="-19.0" layoutY="450.0" prefHeight="20.0" prefWidth="115.0" styleClass="lbl-General" text="Matrícula:" />
+                        <Label alignment="CENTER_RIGHT" layoutX="293.0" layoutY="450.0" prefHeight="20.0" prefWidth="115.0" styleClass="lbl-General" text="Tipo Vehículo:" />
+                        <Label alignment="CENTER_RIGHT" layoutX="-19.0" layoutY="493.0" prefHeight="20.0" prefWidth="115.0" styleClass="lbl-General" text="Fecha:" />
+                        <Label alignment="CENTER_RIGHT" layoutX="293.0" layoutY="493.0" prefHeight="20.0" prefWidth="115.0" styleClass="lbl-General" text="Tipo Inspección:" />
+                        <Label alignment="CENTER_RIGHT" layoutX="293.0" layoutY="540.0" prefHeight="20.0" prefWidth="115.0" styleClass="lbl-General" text="Precio:" />
+                        <Label alignment="CENTER_RIGHT" layoutX="-19.0" layoutY="540.0" prefHeight="20.0" prefWidth="115.0" styleClass="lbl-General" text="Hora:" />
+                        <ComboBox fx:id="txtHoraCita" layoutX="107.0" layoutY="533.0" prefHeight="35.0" prefWidth="170.0" promptText="Seleccione la hora" styleClass="textfield" />
+                        <Label layoutX="688.0" layoutY="504.0" styleClass="lbl-General" text="ID:" />
+                        <TextField fx:id="txtIdCita" editable="false" layoutX="727.0" layoutY="496.0" prefHeight="35.0" prefWidth="220.0" promptText="ID Cita" styleClass="textfield" />
+                        <Label layoutX="665.0" layoutY="452.0" styleClass="lbl-General" text="Activa:" />
+                        <TextField fx:id="txtActivaCita" layoutX="727.0" layoutY="444.0" prefHeight="35.0" prefWidth="220.0" promptText="¿Activa?" styleClass="textfield" />
                      </children>
                   </AnchorPane>
                </children>
