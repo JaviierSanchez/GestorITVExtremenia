@@ -363,8 +363,7 @@ public class VentanaPrincipalControlador implements Initializable {
     // Logica Ventana Principal Cita
     @FXML
     void btnAddCita(ActionEvent event) {
-
-        String sql = "INSERT INTO cita ( Fecha, Hora, id_Vehiculo, Tipo_Inspeccion_id, Tipo_Vehiculo_id, Activa) VALUES ( ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO cita (Fecha, Hora, id_Vehiculo, Tipo_Inspeccion_id, Tipo_Vehiculo_id, Activa) VALUES (?, ?, ?, ?, ?, ?)";
         conexion = cbd.abrirConexion();
         comprobarConexion(conexion);
 
@@ -376,9 +375,20 @@ public class VentanaPrincipalControlador implements Initializable {
             if (!validarMatricula(txtMatriculaCita) || !validarFechaCita(txtFechaCita)) return;
 
             // Consulta para comprobar que esa cita no esté registrada
-            String sqlComprobacion = "SELECT * FROM CITA C WHERE  C.Fecha = ? AND C.Hora = ?";
+            String sqlComprobacion = "SELECT * FROM CITA WHERE Fecha = ? AND Hora = ?";
+            String sqlVerificarVehiculo = "SELECT * FROM vehiculo WHERE Matricula = ?";
 
             try {
+                // Verificar si el vehículo existe en la tabla vehiculo
+                sentencia = conexion.prepareStatement(sqlVerificarVehiculo);
+                sentencia.setString(1, txtMatriculaCita.getText().toUpperCase());
+                resultado = sentencia.executeQuery();
+                if (!resultado.next()) {
+                    mostrarAlerta("Vehículo no registrado", "La matrícula introducida no se encuentra en la base de datos", Alert.AlertType.ERROR);
+                    return;
+                }
+
+                // Verificar si la cita ya está registrada
                 sentencia = conexion.prepareStatement(sqlComprobacion);
                 sentencia.setString(1, String.valueOf(txtFechaCita.getValue()));
                 sentencia.setString(2, txtHoraCita.getValue());
@@ -408,10 +418,10 @@ public class VentanaPrincipalControlador implements Initializable {
                         btnCleanCita(event);
                         agregarCitaLista();
 
-                        // Recargar las horas disponibles para la fecha seleccionada
+                        // Recargar las horas disponibles para la fecha seleccionada utilizando obtenerHorasOcupadas2
                         LocalDate fechaSeleccionada = txtFechaCita.getValue();
-                        List<String> horasOcupadas = obtenerHorasOcupadas(fechaSeleccionada, cbd);
-                        cargarHorasComboBox(txtHoraCita, horasOcupadas);
+                        List<String> horasDisponibles = obtenerHorasOcupadas2(fechaSeleccionada, cbd);
+                        cargarHorasComboBox(txtHoraCita, horasDisponibles);
 
                     } else {
                         mostrarAlerta("Error", "No se pudo añadir la cita", Alert.AlertType.ERROR);
@@ -1081,15 +1091,17 @@ public class VentanaPrincipalControlador implements Initializable {
         txtFechaCita.valueProperty().addListener(new ChangeListener<>() {
             @Override
             public void changed(ObservableValue<? extends LocalDate> observable, LocalDate oldValue, LocalDate newValue) {
-                comprobarFechaIsSelected(txtFechaCita,txtHoraCita);
+                comprobarFechaIsSelected(txtFechaCita, txtHoraCita);
             }
         });
+
         txtFechaCita.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                List<String> horasOcupadas = obtenerHorasOcupadas(newValue, cbd);
-                cargarHorasComboBox(txtHoraCita, horasOcupadas);
+                List<String> horasDisponibles = obtenerHorasOcupadas2(newValue, cbd);
+                cargarHorasComboBox(txtHoraCita, horasDisponibles);
             }
         });
+
         // Agregar listener al ComboBox
         txtTipoInspeccionCita.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
