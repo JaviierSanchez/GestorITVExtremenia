@@ -534,7 +534,7 @@ public class VentanaPrincipalControlador implements Initializable {
         datePicker.setOnAction(event -> {
             LocalDate fechaSeleccionada = datePicker.getValue();
             if (fechaSeleccionada != null) {
-                List<String> horasOcupadas = obtenerHorasOcupadas(fechaSeleccionada, cbd);
+                List<String> horasOcupadas = obtenerHorasOcupadas2(fechaSeleccionada, cbd);
                 cargarHorasComboBox(comboBox, horasOcupadas);
             }
         });
