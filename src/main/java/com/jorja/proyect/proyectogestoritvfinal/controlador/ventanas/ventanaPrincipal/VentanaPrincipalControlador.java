@@ -279,6 +279,7 @@ public class VentanaPrincipalControlador implements Initializable {
         buscarUsuarioTableView();
         buscarVehiculoTableView();
         buscarCitaTableView();
+        buscarHistorialCitaTableView();
         asignarDatosUsuarioSesion();
         limpiarCamposBusqueda();
         btnCleanUsuarios(actionEvent);
@@ -1209,6 +1210,33 @@ public class VentanaPrincipalControlador implements Initializable {
         return listaHistorial;
     }
 
+    public void buscarHistorialCitaTableView() {
+        FilteredList<HistorialCita> filtroHistorial = new FilteredList<>(addHistorialCitaLista, u -> true);
+        txtBusquedaHistorial.textProperty().addListener((observable, oldValue, newValue) -> {
+            filtroHistorial.setPredicate(historialCita -> {
+                if (newValue == null || newValue.isEmpty()) return true;
+                String lowerCaseFiltrer = newValue.toLowerCase();
+
+                if (historialCita.getMatricula().toLowerCase().indexOf(lowerCaseFiltrer) != -1) {
+                    return true;
+                } else if (historialCita.getFecha().toLowerCase().indexOf(lowerCaseFiltrer) != -1) {
+                    return true;
+                } else if (historialCita.getHora().toLowerCase().indexOf(lowerCaseFiltrer) != -1) {
+                    return true;
+                } else if (historialCita.getTipoInspeccionId().toLowerCase().indexOf(lowerCaseFiltrer) != -1) {
+                    return true;
+                } else {
+                    return false;
+                }
+            });
+        });
+
+        SortedList<HistorialCita> listaOrdenadaHistorialCita = new SortedList<>(filtroHistorial);
+        listaOrdenadaHistorialCita.comparatorProperty().bind(TableViewHistorial.comparatorProperty());
+        TableViewHistorial.setItems(listaOrdenadaHistorialCita);
+    }
+
+
     public void agregarHistorialLista(){
         addHistorialCitaLista = addHistorialCita();
         columnFechaHistorial.setCellValueFactory(new PropertyValueFactory<>(COLUMNFECHAHISTORIAL));
@@ -1239,6 +1267,7 @@ public class VentanaPrincipalControlador implements Initializable {
         buscarUsuarioTableView();
         buscarVehiculoTableView();
         buscarCitaTableView();
+        buscarHistorialCitaTableView();
         asignarDatosUsuarioSesion();
         sacarNombreUsuarioLogueado(lblNombreUsuario);
         cargarDatosTipoVehiculo(txtTipoVehiculoVehiculo, cbd);
