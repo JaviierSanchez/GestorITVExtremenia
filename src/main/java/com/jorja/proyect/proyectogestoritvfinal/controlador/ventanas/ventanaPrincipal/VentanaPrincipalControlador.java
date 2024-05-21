@@ -52,11 +52,13 @@ public class VentanaPrincipalControlador implements Initializable {
     private Usuario usuario;
     private Vehiculo vehiculo;
     private Cita cita;
+    private HistorialCita historialCita;
 
     public VentanaPrincipalControlador() {
         cbd = new CONEXIONBD();
     }
 
+    // Elementos Lateral
     @FXML
     private Button btnLateralCita;
 
@@ -72,26 +74,30 @@ public class VentanaPrincipalControlador implements Initializable {
     @FXML
     private Button btnLateralVehiculo;
 
+    // Elementos Cita
     @FXML
     private TableView<Cita> TableViewCita;
     private ObservableList<Cita> addCitaLista;
     @FXML
-    private TableColumn<?, ?> columnIdCita;
+    private TableColumn<Cita, String> columnIdCita;
     @FXML
-    private TableColumn<?, ?> columnMatriculaCita;
+    private TableColumn<Cita, String> columnMatriculaCita;
     @FXML
-    private TableColumn<?, ?> columnPrecioCita;
+    private TableColumn<Cita, String> columnPrecioCita;
     @FXML
-    private TableColumn<?, ?> columnTipoInspeccionCita;
+    private TableColumn<Cita, String> columnTipoInspeccionCita;
     @FXML
-    private TableColumn<?, ?> columnTipoVehiculoCita;
+    private TableColumn<Cita, String> columnTipoVehiculoCita;
     @FXML
-    private TableColumn<?, ?> columnFechaCita;
+    private TableColumn<Cita, String> columnFechaCita;
     @FXML
-    private TableColumn<?, ?> columnHoraCita;
+    private TableColumn<Cita, String> columnHoraCita;
     @FXML
-    private TableColumn<?, ?> columnActivaCita;
+    private TableColumn<Cita, String> columnActivaCita;
+    @FXML
+    private TextField txtBusquedaCita;
 
+    // Elementos Usuario
     private ObservableList<Usuario> addUsuarioLista;
     @FXML
     private TableView<Usuario> TableViewUsuario;
@@ -231,6 +237,21 @@ public class VentanaPrincipalControlador implements Initializable {
     @FXML
     private ComboBox<TipoVehiculo> txtTipoVehiculoVehiculo;
 
+    // Elementos Historial
+    @FXML
+    private TextField txtBusquedaHistorial;
+    private ObservableList<HistorialCita> addHistorialCitaLista;
+    @FXML
+    private TableView<HistorialCita> TableViewHistorial;
+    @FXML
+    private TableColumn<HistorialCita, String> columnMatriculaHistorial;
+    @FXML
+    private TableColumn<HistorialCita, String> columnFechaHistorial;
+    @FXML
+    private TableColumn<HistorialCita, String> columnHoraHistorial;
+    @FXML
+    private TableColumn<HistorialCita, String> columnTipoInspeccionHistorial;
+
 
     @FXML
     void btnMinimizar(ActionEvent event) {
@@ -257,6 +278,7 @@ public class VentanaPrincipalControlador implements Initializable {
         cargarDatosGraficoUsuario();
         buscarUsuarioTableView();
         buscarVehiculoTableView();
+        buscarCitaTableView();
         asignarDatosUsuarioSesion();
         limpiarCamposBusqueda();
         btnCleanUsuarios(actionEvent);
@@ -268,6 +290,9 @@ public class VentanaPrincipalControlador implements Initializable {
     private void limpiarCamposBusqueda() {
         txtBusquedaUsuario.clear();
         txtBusquedaVehiculo.clear();
+        txtBusquedaCita.clear();
+        txtBusquedaHistorial.clear();
+
     }
 
     public void cerrarVentana(ActionEvent actionEvent) {
@@ -368,8 +393,8 @@ public class VentanaPrincipalControlador implements Initializable {
         comprobarConexion(conexion);
 
         // Comprobar que los campos no están vacíos
-        if (!txtMatriculaVehicula.getText().isEmpty() || !txtModeloVehiculo.getText().isEmpty() || txtMarcaVehiculo.getValue() == null ||
-                !txtAñoVehiculo.getText().isEmpty() || !txtIdUsuarioVehiculo.getText().isEmpty() || txtTipoVehiculoVehiculo.getValue() == null) {
+        if (!txtMatriculaCita.getText().isEmpty() || txtFechaCita.getValue() == null || txtHoraCita.getValue() == null ||
+                txtTipoInspeccionCita.getValue() == null || txtTipoVehiculoCita.getValue() == null) {
 
             // Comprobar validaciones de campo
             if (!validarMatricula(txtMatriculaCita) || !validarFechaCita(txtFechaCita)) return;
@@ -417,6 +442,7 @@ public class VentanaPrincipalControlador implements Initializable {
                         mostrarAlerta("Añadida", "La cita ha sido añadida correctamente", Alert.AlertType.INFORMATION);
                         btnCleanCita(event);
                         agregarCitaLista();
+                        agregarHistorialLista();
 
                         // Recargar las horas disponibles para la fecha seleccionada utilizando obtenerHorasOcupadas2
                         LocalDate fechaSeleccionada = txtFechaCita.getValue();
@@ -440,17 +466,69 @@ public class VentanaPrincipalControlador implements Initializable {
         }
     }
 
-
     @FXML
-    void btnCleanCita(ActionEvent event) {
-       txtIdCita.clear();
-        txtMatriculaCita.clear();
-        txtFechaCita.setValue(null);
-        txtHoraCita.setValue(null);
-        txtTipoVehiculoCita.setValue(null);
-        txtTipoInspeccionCita.setValue(null);
-        txtPrecioCita.clear();
-        txtActivaCita.clear();
+    void btnUpdateCita(ActionEvent event) {
+
+        String sql = "UPDATE cita SET Fecha = ?, Hora = ?, id_Vehiculo = ?, Tipo_Inspeccion_id = ?, Tipo_Vehiculo_id = ?, Activa = ? WHERE id = ?";
+        conexion = cbd.abrirConexion();
+        comprobarConexion(conexion);
+
+        // Comprobar que los campos no están vacíos
+        if (!txtMatriculaCita.getText().isEmpty() || txtFechaCita.getValue() == null || txtHoraCita.getValue() == null ||
+                txtTipoInspeccionCita.getValue() == null || txtTipoVehiculoCita.getValue() == null) {
+
+            // Comprobar validaciones de campo
+            if (!validarMatricula(txtMatriculaCita) || !validarFechaCita(txtFechaCita)) return;
+
+            // Verificar si el ID de la cita existe en la base de datos
+            int idCita = Integer.parseInt(txtIdCita.getText());
+            if (!existeCita(idCita)) {
+                mostrarAlerta("Error", "El ID de cita no existe en la base de datos", Alert.AlertType.ERROR);
+                return;
+            }
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Actualizar vehiculo");
+            alert.setContentText("¿Estás seguro que quieres actualizar los cambios?");
+            ButtonType opcion = alert.showAndWait().orElse(ButtonType.CANCEL);
+
+            if (opcion == ButtonType.OK) {
+                try {
+                    // Obtener el id del tipo vehículo seleccionado
+                    int idTipoVehiculo = obtenerIdTipoVehiculo(txtTipoVehiculoCita.getValue());
+
+                    // Obtener el id del tipo inspeccion seleccionada
+                    int idTipoInspeccion = obtenerIdTipoInspeccion(txtTipoInspeccionCita.getValue());
+
+                    sentencia = conexion.prepareStatement(sql);
+                    sentencia.setString(1, String.valueOf(txtFechaCita.getValue()));
+                    sentencia.setString(2, txtHoraCita.getValue());
+                    sentencia.setString(3, txtMatriculaCita.getText().toUpperCase());
+                    sentencia.setInt(4, idTipoInspeccion);
+                    sentencia.setInt(5, idTipoVehiculo);
+                    sentencia.setBoolean(6, Boolean.parseBoolean(txtActivaCita.getText()));
+                    sentencia.setInt(7, Integer.parseInt(txtIdCita.getText()));
+
+                    int resultado = sentencia.executeUpdate();
+
+                    if (resultado > 0) {
+                        mostrarAlerta("Cita actualizada", "La cita ha sido actualizada con éxito", Alert.AlertType.INFORMATION);
+                        agregarCitaLista();
+                        btnCleanCita(event);
+                    } else {
+                        mostrarAlerta("Error", "No se ha podido actualizar la cita", Alert.AlertType.ERROR);
+                    }
+
+
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                } finally {
+                    cerrarConexion(cbd);
+                }
+            }
+
+        } else {
+            mostrarAlerta("Campos vacíos", "Por favor, complete todos los campos.", Alert.AlertType.WARNING);
+        }
 
     }
 
@@ -490,7 +568,15 @@ public class VentanaPrincipalControlador implements Initializable {
     }
 
     @FXML
-    void btnUpdateCita(ActionEvent event) {
+    void btnCleanCita(ActionEvent event) {
+        txtIdCita.clear();
+        txtMatriculaCita.clear();
+        txtFechaCita.setValue(null);
+        txtHoraCita.setValue(null);
+        txtTipoVehiculoCita.setValue(null);
+        txtTipoInspeccionCita.setValue(null);
+        txtPrecioCita.clear();
+        txtActivaCita.clear();
 
     }
 
@@ -505,6 +591,41 @@ public class VentanaPrincipalControlador implements Initializable {
         columnPrecioCita.setCellValueFactory(new PropertyValueFactory<>(COLUMNPRECIOCITA));
         columnActivaCita.setCellValueFactory(new PropertyValueFactory<>(COLUMNACTIVACITA));
         TableViewCita.setItems(addCitaLista);
+    }
+
+    public void buscarCitaTableView() {
+        FilteredList<Cita> filtroCita = new FilteredList<>(addCitaLista, u -> true);
+        txtBusquedaCita.textProperty().addListener((observable, oldValue, newValue) -> {
+            // Configurar el predicado para el filtrado
+            filtroCita.setPredicate(cita -> {
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+                // Convertir el valor de búsqueda a minúsculas para la comparación sin distinción de mayúsculas
+                String lowerCaseFiltrer = newValue.toLowerCase();
+
+                // Verificar si el valor de búsqueda se encuentra en alguno de los atributos del empleado
+                if (cita.getMatriculaVehiculo().toLowerCase().indexOf(lowerCaseFiltrer) != -1) {
+                    return true;
+                } else if (cita.getFecha().toLowerCase().indexOf(lowerCaseFiltrer) != -1) {
+                    return true;
+                } else if (cita.getHora().toLowerCase().indexOf(lowerCaseFiltrer) != -1) {
+                    return true;
+                } else if (cita.getPrecio().toLowerCase().indexOf(lowerCaseFiltrer) != -1) {
+                    return true;
+                } else if (cita.getTipoVehiculoId().toString().toLowerCase().indexOf(lowerCaseFiltrer) != -1) {
+                    return true;
+                } else if (cita.getTipoInspeccionId().toString().toLowerCase().indexOf(lowerCaseFiltrer) != -1) {
+                    return true;
+                } else {
+                    return false;
+                }
+            });
+        });
+
+        SortedList<Cita> listaOrdenadorCita = new SortedList<>(filtroCita);
+        listaOrdenadorCita.comparatorProperty().bind(TableViewCita.comparatorProperty());
+        TableViewCita.setItems(listaOrdenadorCita);
     }
 
 
@@ -1060,6 +1181,46 @@ public class VentanaPrincipalControlador implements Initializable {
         }
     }
 
+    public ObservableList<HistorialCita> addHistorialCita() {
+
+        ObservableList<HistorialCita> listaHistorial = FXCollections.observableArrayList();
+        String sql = """
+                SELECT hi.Fecha as 'Fecha', hi.Hora as 'Hora', hi.id_Vehiculo as 'Matricula', ti.Nombre as 'TipoInspeccion'
+			FROM historial_inspecciones hi
+            	INNER JOIN tipo_inspeccion ti ON ti.ID = hi.Tipo_Inspeccion_id
+                    """;
+        conexion = cbd.abrirConexion();
+
+        try {
+            sentencia = conexion.prepareStatement(sql);
+            resultado = sentencia.executeQuery();
+            while (resultado.next()) {
+                historialCita = new HistorialCita(
+                        resultado.getString("Matricula"),
+                        resultado.getString("Fecha"),
+                        resultado.getString("Hora"),
+                        resultado.getString("TipoInspeccion")
+                );
+                listaHistorial.add(historialCita);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return listaHistorial;
+    }
+
+    public void agregarHistorialLista(){
+        addHistorialCitaLista = addHistorialCita();
+        columnFechaHistorial.setCellValueFactory(new PropertyValueFactory<>(COLUMNFECHAHISTORIAL));
+        columnHoraHistorial.setCellValueFactory(new PropertyValueFactory<>(COLUMNHORAHISTORIAL));
+        columnMatriculaHistorial.setCellValueFactory(new PropertyValueFactory<>(COLUMNMATRICULAHISTORIAL));
+        columnTipoInspeccionHistorial.setCellValueFactory(new PropertyValueFactory<>(COLUMNTIPOINSPECCIONHISTORIAL));
+        TableViewHistorial.setItems(addHistorialCitaLista);
+    }
+
+
+
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -1071,11 +1232,13 @@ public class VentanaPrincipalControlador implements Initializable {
         agregarUsuarioLista();
         agregarVehiculoLista();
         agregarCitaLista();
+        agregarHistorialLista();
         mostrarUsuarioSeleccionado();
         mostrarVehiculoSeleccionado();
         mostrarCitaSeleccionada();
         buscarUsuarioTableView();
         buscarVehiculoTableView();
+        buscarCitaTableView();
         asignarDatosUsuarioSesion();
         sacarNombreUsuarioLogueado(lblNombreUsuario);
         cargarDatosTipoVehiculo(txtTipoVehiculoVehiculo, cbd);

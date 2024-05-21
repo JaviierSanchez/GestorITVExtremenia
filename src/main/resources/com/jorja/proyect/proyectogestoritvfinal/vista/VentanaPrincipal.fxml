@@ -267,11 +267,11 @@
                   </VBox>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="layoutPedirCita" prefHeight="748.0" prefWidth="993.0" stylesheets="@../css/Ventana-Principal-Cita.css">
+            <AnchorPane fx:id="layoutPedirCita" prefHeight="748.0" prefWidth="993.0" stylesheets="@../css/Ventana-Principal-Cita.css" visible="false">
                <children>
                   <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="718.0" prefWidth="965.0" styleClass="fondo-principal">
                      <children>
-                        <TextField layoutX="21.0" layoutY="13.0" prefHeight="25.0" prefWidth="181.0" promptText="Búsqueda" styleClass="textfiedl-busqueda" />
+                        <TextField fx:id="txtBusquedaCita" layoutX="21.0" layoutY="13.0" prefHeight="25.0" prefWidth="181.0" promptText="Búsqueda" styleClass="textfiedl-busqueda" />
                         <FontAwesomeIconView glyphName="SEARCH" layoutX="26.0" layoutY="30.0" size="14" />
                         <TableView fx:id="TableViewCita" layoutX="12.0" layoutY="47.0" onMouseClicked="#mostrarCitaSeleccionada" prefHeight="375.0" prefWidth="940.0">
                           <columns>
@@ -393,7 +393,7 @@
                   </AnchorPane>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="layoutPerfil" prefHeight="748.0" prefWidth="992.0" visible="false">
+            <AnchorPane fx:id="layoutPerfil" prefHeight="748.0" prefWidth="992.0">
                <children>
                   <AnchorPane layoutX="14.0" layoutY="15.0" prefHeight="718.0" prefWidth="965.0" styleClass="fondo-principal" stylesheets="@../css/Ventana-Principal-Vehiculo.css">
                      <children>
@@ -406,22 +406,24 @@
                         <Label layoutX="281.0" layoutY="102.0" styleClass="lbl-General" text="Apellido" />
                         <Label layoutX="31.0" layoutY="165.0" styleClass="lbl-General" text="Correo" />
                         <Label layoutX="514.0" layoutY="102.0" styleClass="lbl-General" text="Teléfono" />
-                        <TableView layoutX="28.0" layoutY="306.0" prefHeight="364.0" prefWidth="506.0">
+                        <TableView fx:id="TableViewHistorial" layoutX="28.0" layoutY="340.0" prefHeight="364.0" prefWidth="506.0">
                           <columns>
-                            <TableColumn prefWidth="104.0" text="Matrícula" />
-                            <TableColumn prefWidth="98.0" text="Fecha" />
-                              <TableColumn prefWidth="191.0" text="Tipo Inspeción" />
-                              <TableColumn prefWidth="112.0" text="Precio" />
+                            <TableColumn fx:id="columnMatriculaHistorial" prefWidth="104.0" text="Matrícula" />
+                            <TableColumn fx:id="columnFechaHistorial" prefWidth="98.0" text="Fecha" />
+                              <TableColumn fx:id="columnHoraHistorial" prefWidth="112.0" text="Hora" />
+                              <TableColumn fx:id="columnTipoInspeccionHistorial" prefWidth="191.0" text="Tipo Inspeción" />
                           </columns>
                         </TableView>
                         <Separator layoutX="6.0" layoutY="238.0" prefHeight="9.0" prefWidth="952.0" />
-                        <Label layoutX="32.0" layoutY="265.0" styleClass="lbl-Titulos" text="Historial Inspecciones Vehículos" />
-                        <Separator layoutX="547.0" layoutY="316.0" orientation="VERTICAL" prefHeight="324.0" prefWidth="9.0" />
+                        <Label layoutX="32.0" layoutY="260.0" styleClass="lbl-Titulos" text="Historial Inspecciones Vehículos" />
+                        <Separator layoutX="550.0" layoutY="286.0" orientation="VERTICAL" prefHeight="407.0" prefWidth="11.0" />
                         <Button layoutX="604.0" layoutY="359.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" styleClass="btn-clear" text="Informe Clientes" />
                         <Button layoutX="604.0" layoutY="406.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="151.0" styleClass="btn-update" text="Informe Citas" />
                         <Button layoutX="604.0" layoutY="459.0" mnemonicParsing="false" styleClass="btn-add" text="Informe Vehículos" />
-                        <Label layoutX="604.0" layoutY="273.0" styleClass="lbl-Titulos" text="Generar Informes" />
+                        <Label layoutX="604.0" layoutY="260.0" styleClass="lbl-Titulos" text="Generar Informes" />
                         <Button layoutX="281.0" layoutY="157.0" mnemonicParsing="false" onAction="#btnModificarPasswordPerfil" prefHeight="35.0" prefWidth="183.0" styleClass="btn-add" text="Modificar Contraseña" />
+                        <TextField fx:id="txtBusquedaHistorial" layoutX="31.0" layoutY="304.0" prefHeight="25.0" prefWidth="180.0" promptText="Búsqueda" styleClass="textfiedl-busqueda" />
+                        <FontAwesomeIconView glyphName="SEARCH" layoutX="38.0" layoutY="320.0" size="14" />
                      </children>
                   </AnchorPane>
                </children>

@@ -187,6 +187,37 @@ public class VentanaPrincipalCitaControlador {
         datePicker.setDayCellFactory(dayCellFactory);
     }
 
+    // Método para verificar si el ID de la cita existe en la base de datos
+    public static boolean existeCita(int idCita) {
+        String sql = "SELECT id FROM cita WHERE id = ?";
+        try {
+            sentencia = conexion.prepareStatement(sql);
+            sentencia.setInt(1, idCita);
+            resultado = sentencia.executeQuery();
+            return resultado.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // Método para obtener el ID del tipo de inspeccion seleccionado
+    public static int obtenerIdTipoInspeccion(TipoInspeccion tipoInspeccionSeleccionado) {
+        int idTipoInspeccion = 0;
+        String sql = "SELECT id FROM tipo_inspeccion WHERE Nombre = ?";
+        try {
+            sentencia = conexion.prepareStatement(sql);
+            sentencia.setString(1, tipoInspeccionSeleccionado.getNombre());
+            resultado = sentencia.executeQuery();
+            if (resultado.next()) {
+                idTipoInspeccion = resultado.getInt("id");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return idTipoInspeccion;
+    }
+
 
 
 

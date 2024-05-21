@@ -66,6 +66,11 @@ public class Utils {
     public static final String COLUMNPRECIOCITA = "precio";
     public static final String COLUMNACTIVACITA = "activa";
 
+    // Columnas Historial Cita
+    public static final String COLUMNMATRICULAHISTORIAL ="matricula";
+    public static final String COLUMNFECHAHISTORIAL = "fecha";
+    public static final String COLUMNHORAHISTORIAL = "hora";
+    public static final String COLUMNTIPOINSPECCIONHISTORIAL = "tipoInspeccionId";
 
 
 
