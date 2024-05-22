@@ -389,7 +389,8 @@ public class VentanaPrincipalControlador implements Initializable {
     // Logica Ventana Principal Cita
     @FXML
     void btnAddCita(ActionEvent event) {
-        String sql = "INSERT INTO cita (Fecha, Hora, id_Vehiculo, Tipo_Inspeccion_id, Tipo_Vehiculo_id, Activa) VALUES (?, ?, ?, ?, ?, ?)";
+        String sqlCita = "INSERT INTO cita (Fecha, Hora, id_Vehiculo, Tipo_Inspeccion_id, Tipo_Vehiculo_id, Activa) VALUES (?, ?, ?, ?, ?, ?)";
+        String sqlHistorial = "INSERT INTO historial_inspecciones (Fecha, Hora, id_Vehiculo, Tipo_Inspeccion_id) VALUES (?, ?, ?, ?)";
         conexion = cbd.abrirConexion();
         comprobarConexion(conexion);
 
@@ -421,7 +422,11 @@ public class VentanaPrincipalControlador implements Initializable {
                 resultado = sentencia.executeQuery();
 
                 if (!resultado.next()) {
-                    sentencia = conexion.prepareStatement(sql);
+                    // Iniciar una transacción
+                    conexion.setAutoCommit(false);
+
+                    // Insertar en la tabla cita
+                    sentencia = conexion.prepareStatement(sqlCita);
 
                     // Obtener el ID del tipo vehículo seleccionado
                     TipoVehiculo tipoVehiculoSeleccionado = txtTipoVehiculoCita.getValue();
@@ -438,26 +443,47 @@ public class VentanaPrincipalControlador implements Initializable {
                     sentencia.setInt(5, idTipoVehiculo);
                     sentencia.setBoolean(6, true);
 
-                    int filas = sentencia.executeUpdate();
-                    if (filas > 0) {
-                        mostrarAlerta("Añadida", "La cita ha sido añadida correctamente", Alert.AlertType.INFORMATION);
-                        btnCleanCita(event);
-                        agregarCitaLista();
-                        agregarHistorialLista();
+                    int filasCita = sentencia.executeUpdate();
+                    if (filasCita > 0) {
+                        // Insertar en la tabla historial_inspecciones
+                        sentencia = conexion.prepareStatement(sqlHistorial);
+                        sentencia.setString(1, String.valueOf(txtFechaCita.getValue()));
+                        sentencia.setString(2, txtHoraCita.getValue());
+                        sentencia.setString(3, txtMatriculaCita.getText().toUpperCase());
+                        sentencia.setInt(4, idTipoInspeccion);
 
-                        // Recargar las horas disponibles para la fecha seleccionada utilizando obtenerHorasOcupadas2
-                        LocalDate fechaSeleccionada = txtFechaCita.getValue();
-                        List<String> horasDisponibles = obtenerHorasOcupadas2(fechaSeleccionada, cbd);
-                        cargarHorasComboBox(txtHoraCita, horasDisponibles);
+                        int filasHistorial = sentencia.executeUpdate();
+                        if (filasHistorial > 0) {
+                            // Confirmar la transacción
+                            conexion.commit();
 
+                            mostrarAlerta("Añadida", "La cita ha sido añadida correctamente", Alert.AlertType.INFORMATION);
+                            btnCleanCita(event);
+                            agregarCitaLista();
+                            agregarHistorialLista();
+
+                            // Recargar las horas disponibles para la fecha seleccionada utilizando obtenerHorasOcupadas2
+                            LocalDate fechaSeleccionada = txtFechaCita.getValue();
+                            List<String> horasDisponibles = obtenerHorasOcupadas2(fechaSeleccionada, cbd);
+                            cargarHorasComboBox(txtHoraCita, horasDisponibles);
+                        } else {
+                            // Revertir la transacción si la inserción en historial falla
+                            conexion.rollback();
+                            mostrarAlerta("Error", "No se pudo añadir la cita en el historial", Alert.AlertType.ERROR);
+                        }
                     } else {
                         mostrarAlerta("Error", "No se pudo añadir la cita", Alert.AlertType.ERROR);
                     }
-
                 } else {
                     mostrarAlerta("Error", "La cita ya existe", Alert.AlertType.ERROR);
                 }
             } catch (SQLException e) {
+                try {
+                    // Revertir la transacción en caso de excepción
+                    conexion.rollback();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
                 throw new RuntimeException(e);
             } finally {
                 cerrarConexion(cbd);
@@ -1236,7 +1262,6 @@ public class VentanaPrincipalControlador implements Initializable {
         TableViewHistorial.setItems(listaOrdenadaHistorialCita);
     }
 
-
     public void agregarHistorialLista(){
         addHistorialCitaLista = addHistorialCita();
         columnFechaHistorial.setCellValueFactory(new PropertyValueFactory<>(COLUMNFECHAHISTORIAL));
@@ -1244,6 +1269,21 @@ public class VentanaPrincipalControlador implements Initializable {
         columnMatriculaHistorial.setCellValueFactory(new PropertyValueFactory<>(COLUMNMATRICULAHISTORIAL));
         columnTipoInspeccionHistorial.setCellValueFactory(new PropertyValueFactory<>(COLUMNTIPOINSPECCIONHISTORIAL));
         TableViewHistorial.setItems(addHistorialCitaLista);
+    }
+
+
+    @FXML
+    void btnBackUpBD(ActionEvent event) {
+        CONEXIONBD conexionBD = new CONEXIONBD();
+        conexionBD.abrirConexion();
+        boolean exito = conexionBD.hacerCopiaDeSeguridad();
+        conexionBD.cerrarConexion();
+
+        if (exito) {
+            System.out.println("La copia de seguridad se realizó correctamente");
+        } else {
+            System.out.println("Hubo un error al realizar la copia de seguridad");
+        }
     }
 
 
