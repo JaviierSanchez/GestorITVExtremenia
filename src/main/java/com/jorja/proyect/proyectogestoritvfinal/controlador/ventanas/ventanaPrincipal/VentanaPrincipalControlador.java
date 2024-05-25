@@ -134,6 +134,23 @@ public class VentanaPrincipalControlador implements Initializable {
     private TableColumn<Vehiculo, String> columTipoVehiculoVehiculo;
     @FXML
     private TableColumn<Vehiculo, String> columPropietarioVehiculo;
+
+    // Elementos Historial
+    @FXML
+    private TextField txtBusquedaHistorial;
+    private ObservableList<HistorialCita> addHistorialCitaLista;
+    @FXML
+    private TableView<HistorialCita> TableViewHistorial;
+    @FXML
+    private TableColumn<HistorialCita, String> columnMatriculaHistorial;
+    @FXML
+    private TableColumn<HistorialCita, String> columnFechaHistorial;
+    @FXML
+    private TableColumn<HistorialCita, String> columnHoraHistorial;
+    @FXML
+    private TableColumn<HistorialCita, String> columnTipoInspeccionHistorial;
+
+    // Otros Elementos
     @FXML
     private BarChart<?, ?> graficoUsuarios;
     @FXML
@@ -156,101 +173,66 @@ public class VentanaPrincipalControlador implements Initializable {
     private Label lblCountUser;
     @FXML
     private Label lblCountvehicle;
-
     @FXML
     private Label lblNombreUsuario;
 
+    // TextFields
     @FXML
     private TextField txtApellidoPerfil;
-
     @FXML
     private TextField txtApellidoUsuario;
     @FXML
     private TextField txtAdminUsuario;
-
     @FXML
     private TextField txtIdUsuarioVehiculo;
-
     @FXML
     private TextField txtAñoVehiculo;
-
     @FXML
     private TextField txtBusquedaUsuario;
-
     @FXML
     private TextField txtBusquedaVehiculo;
-
     @FXML
     private TextField txtCorreoPerfil;
-
     @FXML
     private TextField txtCorreoUsuario;
     @FXML
     private TextField txtIdCita;
-
     @FXML
     private DatePicker txtFechaCita;
-
-    @FXML
-    private ComboBox<String> txtHoraCita;
-
     @FXML
     private TextField txtIdUsuario;
-
     @FXML
     private TextField txtMatriculaCita;
-
     @FXML
     private TextField txtMatriculaVehicula;
-
     @FXML
     private TextField txtModeloVehiculo;
-
     @FXML
     private TextField txtNombrePerfil;
-
     @FXML
     private TextField txtNombreUsuario;
     @FXML
     private PasswordField txtPassWordUsuario;
-
     @FXML
     private TextField txtPrecioCita;
-
     @FXML
     private TextField txtActivaCita;
-
     @FXML
     private TextField txtTelefonoPerfil;
-
     @FXML
     private TextField txtTelefonoUsuario;
+
+    // ComboBoxes
     @FXML
     private ComboBox<MarcaVehiculo> txtMarcaVehiculo;
-
     @FXML
     private ComboBox<TipoInspeccion> txtTipoInspeccionCita;
-
     @FXML
     private ComboBox<TipoVehiculo> txtTipoVehiculoCita;
-
     @FXML
     private ComboBox<TipoVehiculo> txtTipoVehiculoVehiculo;
-
-    // Elementos Historial
     @FXML
-    private TextField txtBusquedaHistorial;
-    private ObservableList<HistorialCita> addHistorialCitaLista;
-    @FXML
-    private TableView<HistorialCita> TableViewHistorial;
-    @FXML
-    private TableColumn<HistorialCita, String> columnMatriculaHistorial;
-    @FXML
-    private TableColumn<HistorialCita, String> columnFechaHistorial;
-    @FXML
-    private TableColumn<HistorialCita, String> columnHoraHistorial;
-    @FXML
-    private TableColumn<HistorialCita, String> columnTipoInspeccionHistorial;
+    private ComboBox<String> txtHoraCita;
 
 
     @FXML
@@ -607,6 +589,11 @@ public class VentanaPrincipalControlador implements Initializable {
 
     }
 
+  // Metodo que se ejecuta cada 24 horas para eliminar las citas que ya han sido vencidas
+    private void elimnarCitasScheduler(){
+        eliminarCitasPasadas(cbd);
+    }
+
     public void agregarCitaLista() {
         addCitaLista = obtenerListaCitaBD(cbd, cita);
         columnIdCita.setCellValueFactory(new PropertyValueFactory<>(COLUMNIDCITA));
@@ -687,8 +674,6 @@ public class VentanaPrincipalControlador implements Initializable {
             }
         });
     }
-
-
 
     // Logica Ventana Principal Usuario
 
@@ -1317,6 +1302,7 @@ public class VentanaPrincipalControlador implements Initializable {
         deshabilitarDiasNoValidos(txtFechaCita);
         cargarDatosTipoInspeccion(txtTipoInspeccionCita, cbd);
         comprobarFechaIsSelected(txtFechaCita,txtHoraCita);
+        elimnarCitasScheduler();
 
 
         // Escuchador para comprobar que la fecha esta seleccionada
@@ -1327,6 +1313,8 @@ public class VentanaPrincipalControlador implements Initializable {
             }
         });
 
+
+        // Listener para cargar las horas disponibles cuando cambia la fecha
         txtFechaCita.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 List<String> horasDisponibles = obtenerHorasOcupadas2(newValue, cbd);
@@ -1334,7 +1322,7 @@ public class VentanaPrincipalControlador implements Initializable {
             }
         });
 
-        // Agregar listener al ComboBox
+        // Agregar listener al ComboBox de Tipo de Inspección
         txtTipoInspeccionCita.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 txtPrecioCita.setText(String.valueOf(newValue.getPrecio()));

@@ -76,21 +76,22 @@ public class CONEXIONBD {
      * @return true si la copia de seguridad se realizó correctamente, false en caso contrario
      */
     public boolean hacerCopiaDeSeguridad() {
-        String userHome = System.getProperty("user.home");
-        String downloadDir = userHome + "/Downloads";
+        // Obtener el directorio del usuario
+        String dirUsuario = System.getProperty("user.home");
+        String dirDescargas = dirUsuario + "/Downloads";
         String fecha = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-        String backupFile = downloadDir + "/backup_" + DBNAME + "_" + fecha + ".sql";
+        String backupFile = dirDescargas + "/backup_" + DBNAME + "_" + fecha + ".sql";
 
-        // Especificar la ruta completa a mysqldump
+        // Ruta  mysqldump
         String mysqldumpPath = "C:\\xampp\\mysql\\bin\\mysqldump.exe";
 
-        String command = String.format("\"%s\" -h %s -u root --databases %s -r \"%s\"", mysqldumpPath, DBHOST, DBNAME, backupFile);
+        String comando = String.format("\"%s\" -h %s -u root --databases %s -r \"%s\"", mysqldumpPath, DBHOST, DBNAME, backupFile);
 
         try {
-            Process process = Runtime.getRuntime().exec(command);
-            int processComplete = process.waitFor();
+            Process proceso = Runtime.getRuntime().exec(comando);
+            int resultado = proceso.waitFor();
 
-            if (processComplete == 0) {
+            if (resultado == 0) {
                 mostrarAlerta("Copia de Seguridad", "La copia de seguridad se realizó correctamente. Archivo guardado en: " + backupFile, Alert.AlertType.INFORMATION);
                 return true;
             } else {

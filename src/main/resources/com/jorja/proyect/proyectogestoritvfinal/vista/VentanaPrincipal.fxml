@@ -393,7 +393,7 @@
                   </AnchorPane>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="layoutPerfil" prefHeight="748.0" prefWidth="992.0">
+            <AnchorPane fx:id="layoutPerfil" prefHeight="748.0" prefWidth="992.0" visible="false">
                <children>
                   <AnchorPane layoutX="14.0" layoutY="15.0" prefHeight="718.0" prefWidth="965.0" styleClass="fondo-principal" stylesheets="@../css/Ventana-Principal-Vehiculo.css">
                      <children>
@@ -420,11 +420,11 @@
                         <Button layoutX="604.0" layoutY="359.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" styleClass="btn-clear" text="Informe Clientes" />
                         <Button layoutX="604.0" layoutY="406.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="151.0" styleClass="btn-update" text="Informe Citas" />
                         <Button layoutX="604.0" layoutY="459.0" mnemonicParsing="false" styleClass="btn-add" text="Informe Vehículos" />
-                        <Label layoutX="650.0" layoutY="260.0" styleClass="lbl-Titulos" text="Generar Informes" />
+                        <Label layoutX="650.0" layoutY="260.0" styleClass="lbl-Titulos" text="Funciones" />
                         <Button layoutX="281.0" layoutY="157.0" mnemonicParsing="false" onAction="#btnModificarPasswordPerfil" prefHeight="35.0" prefWidth="183.0" styleClass="btn-add" text="Modificar Contraseña" />
                         <TextField fx:id="txtBusquedaHistorial" layoutX="31.0" layoutY="304.0" prefHeight="25.0" prefWidth="180.0" promptText="Búsqueda" styleClass="textfiedl-busqueda" />
                         <FontAwesomeIconView glyphName="SEARCH" layoutX="38.0" layoutY="320.0" size="14" />
-                        <Button layoutX="628.0" layoutY="539.0" mnemonicParsing="false" onAction="#btnBackUpBD" text="Copia Base de Datos" />
+                        <Button layoutX="616.0" layoutY="501.0" mnemonicParsing="false" onAction="#btnBackUpBD" prefHeight="30.0" prefWidth="151.0" text="Copia Base de Datos" />
                      </children>
                   </AnchorPane>
                </children>
