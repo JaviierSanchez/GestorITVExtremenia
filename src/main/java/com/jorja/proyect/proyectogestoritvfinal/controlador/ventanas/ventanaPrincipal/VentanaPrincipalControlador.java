@@ -377,103 +377,104 @@ public class VentanaPrincipalControlador implements Initializable {
         comprobarConexion(conexion);
 
         // Comprobar que los campos no están vacíos
-        if (!txtMatriculaCita.getText().isEmpty() || txtFechaCita.getValue() == null || txtHoraCita.getValue() == null ||
+        if (txtMatriculaCita.getText().isEmpty() || txtFechaCita.getValue() == null || txtHoraCita.getValue() == null ||
                 txtTipoInspeccionCita.getValue() == null || txtTipoVehiculoCita.getValue() == null) {
+            mostrarAlerta("Error", "Rellena todos los campos", Alert.AlertType.ERROR);
+            return;
+        }
 
-            // Comprobar validaciones de campo
-            if (!validarMatricula(txtMatriculaCita) || !validarFechaCita(txtFechaCita)) return;
+        // Comprobar validaciones de campo
+        if (!validarMatricula(txtMatriculaCita) || !validarFechaCita(txtFechaCita)) return;
 
-            // Consulta para comprobar que esa cita no esté registrada
-            String sqlComprobacion = "SELECT * FROM CITA WHERE Fecha = ? AND Hora = ?";
-            String sqlVerificarVehiculo = "SELECT * FROM vehiculo WHERE Matricula = ?";
+        // Consulta para comprobar que esa cita no esté registrada
+        String sqlComprobacion = "SELECT * FROM CITA WHERE Fecha = ? AND Hora = ?";
+        String sqlVerificarVehiculo = "SELECT * FROM vehiculo WHERE Matricula = ?";
 
-            try {
-                // Verificar si el vehículo existe en la tabla vehiculo
-                sentencia = conexion.prepareStatement(sqlVerificarVehiculo);
-                sentencia.setString(1, txtMatriculaCita.getText().toUpperCase());
-                resultado = sentencia.executeQuery();
-                if (!resultado.next()) {
-                    mostrarAlerta("Vehículo no registrado", "La matrícula introducida no se encuentra en la base de datos", Alert.AlertType.ERROR);
-                    return;
-                }
+        try {
+            // Verificar si el vehículo existe en la tabla vehiculo
+            sentencia = conexion.prepareStatement(sqlVerificarVehiculo);
+            sentencia.setString(1, txtMatriculaCita.getText().toUpperCase());
+            resultado = sentencia.executeQuery();
+            if (!resultado.next()) {
+                mostrarAlerta("Vehículo no registrado", "La matrícula introducida no se encuentra en la base de datos", Alert.AlertType.ERROR);
+                return;
+            }
 
-                // Verificar si la cita ya está registrada
-                sentencia = conexion.prepareStatement(sqlComprobacion);
+            // Verificar si la cita ya está registrada
+            sentencia = conexion.prepareStatement(sqlComprobacion);
+            sentencia.setString(1, String.valueOf(txtFechaCita.getValue()));
+            sentencia.setString(2, txtHoraCita.getValue());
+            resultado = sentencia.executeQuery();
+
+            if (!resultado.next()) {
+                // Iniciar una transacción
+                conexion.setAutoCommit(false);
+
+                // Insertar en la tabla cita
+                sentencia = conexion.prepareStatement(sqlCita);
+
+                // Obtener el ID del tipo vehículo seleccionado
+                TipoVehiculo tipoVehiculoSeleccionado = txtTipoVehiculoCita.getValue();
+                int idTipoVehiculo = tipoVehiculoSeleccionado.getId();
+
+                // Obtener el ID del tipo inspección seleccionado
+                TipoInspeccion tipoInspeccionSeleccionado = txtTipoInspeccionCita.getValue();
+                int idTipoInspeccion = tipoInspeccionSeleccionado.getId();
+
                 sentencia.setString(1, String.valueOf(txtFechaCita.getValue()));
                 sentencia.setString(2, txtHoraCita.getValue());
-                resultado = sentencia.executeQuery();
+                sentencia.setString(3, txtMatriculaCita.getText().toUpperCase());
+                sentencia.setInt(4, idTipoInspeccion);
+                sentencia.setInt(5, idTipoVehiculo);
+                sentencia.setBoolean(6, true);
 
-                if (!resultado.next()) {
-                    // Iniciar una transacción
-                    conexion.setAutoCommit(false);
-
-                    // Insertar en la tabla cita
-                    sentencia = conexion.prepareStatement(sqlCita);
-
-                    // Obtener el ID del tipo vehículo seleccionado
-                    TipoVehiculo tipoVehiculoSeleccionado = txtTipoVehiculoCita.getValue();
-                    int idTipoVehiculo = tipoVehiculoSeleccionado.getId();
-
-                    // Obtener el ID del tipo inspección seleccionado
-                    TipoInspeccion tipoInspeccionSeleccionado = txtTipoInspeccionCita.getValue();
-                    int idTipoInspeccion = tipoInspeccionSeleccionado.getId();
-
+                int filasCita = sentencia.executeUpdate();
+                if (filasCita > 0) {
+                    // Insertar en la tabla historial_inspecciones
+                    sentencia = conexion.prepareStatement(sqlHistorial);
                     sentencia.setString(1, String.valueOf(txtFechaCita.getValue()));
                     sentencia.setString(2, txtHoraCita.getValue());
                     sentencia.setString(3, txtMatriculaCita.getText().toUpperCase());
                     sentencia.setInt(4, idTipoInspeccion);
-                    sentencia.setInt(5, idTipoVehiculo);
-                    sentencia.setBoolean(6, true);
 
-                    int filasCita = sentencia.executeUpdate();
-                    if (filasCita > 0) {
-                        // Insertar en la tabla historial_inspecciones
-                        sentencia = conexion.prepareStatement(sqlHistorial);
-                        sentencia.setString(1, String.valueOf(txtFechaCita.getValue()));
-                        sentencia.setString(2, txtHoraCita.getValue());
-                        sentencia.setString(3, txtMatriculaCita.getText().toUpperCase());
-                        sentencia.setInt(4, idTipoInspeccion);
+                    int filasHistorial = sentencia.executeUpdate();
+                    if (filasHistorial > 0) {
+                        // Confirmar la transacción
+                        conexion.commit();
 
-                        int filasHistorial = sentencia.executeUpdate();
-                        if (filasHistorial > 0) {
-                            // Confirmar la transacción
-                            conexion.commit();
+                        mostrarAlerta("Añadida", "La cita ha sido añadida correctamente", Alert.AlertType.INFORMATION);
+                        btnCleanCita(event);
+                        agregarCitaLista();
+                        agregarHistorialLista();
 
-                            mostrarAlerta("Añadida", "La cita ha sido añadida correctamente", Alert.AlertType.INFORMATION);
-                            btnCleanCita(event);
-                            agregarCitaLista();
-                            agregarHistorialLista();
-
-                            // Recargar las horas disponibles para la fecha seleccionada utilizando obtenerHorasOcupadas2
-                            LocalDate fechaSeleccionada = txtFechaCita.getValue();
-                            List<String> horasDisponibles = obtenerHorasOcupadas2(fechaSeleccionada, cbd);
-                            cargarHorasComboBox(txtHoraCita, horasDisponibles);
-                        } else {
-                            // Revertir la transacción si la inserción en historial falla
-                            conexion.rollback();
-                            mostrarAlerta("Error", "No se pudo añadir la cita en el historial", Alert.AlertType.ERROR);
-                        }
+                        // Recargar las horas disponibles para la fecha seleccionada utilizando obtenerHorasOcupadas2
+                        LocalDate fechaSeleccionada = txtFechaCita.getValue();
+                        List<String> horasDisponibles = obtenerHorasOcupadas2(fechaSeleccionada, cbd);
+                        cargarHorasComboBox(txtHoraCita, horasDisponibles);
                     } else {
-                        mostrarAlerta("Error", "No se pudo añadir la cita", Alert.AlertType.ERROR);
+                        // Revertir la transacción si la inserción en historial falla
+                        conexion.rollback();
+                        mostrarAlerta("Error", "No se pudo añadir la cita en el historial", Alert.AlertType.ERROR);
                     }
                 } else {
-                    mostrarAlerta("Error", "La cita ya existe", Alert.AlertType.ERROR);
+                    mostrarAlerta("Error", "No se pudo añadir la cita", Alert.AlertType.ERROR);
                 }
-            } catch (SQLException e) {
-                try {
-                    // Revertir la transacción en caso de excepción
-                    conexion.rollback();
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
-                }
-                throw new RuntimeException(e);
-            } finally {
-                cerrarConexion(cbd);
+            } else {
+                mostrarAlerta("Error", "La cita ya existe", Alert.AlertType.ERROR);
             }
-        } else {
-            mostrarAlerta("Error", "Rellena los campos", Alert.AlertType.ERROR);
+        } catch (SQLException e) {
+            try {
+                // Revertir la transacción en caso de excepción
+                conexion.rollback();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+            throw new RuntimeException(e);
+        } finally {
+            cerrarConexion(cbd);
         }
     }
+
 
     @FXML
     void btnUpdateCita(ActionEvent event) {

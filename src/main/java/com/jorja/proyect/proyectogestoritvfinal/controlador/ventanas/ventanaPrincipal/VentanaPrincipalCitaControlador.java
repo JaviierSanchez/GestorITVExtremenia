@@ -29,6 +29,12 @@ public class VentanaPrincipalCitaControlador {
     private static PreparedStatement sentencia;
     private static ResultSet resultado;
 
+    /***
+     * Metodo para mostrar los datos en el TableView
+     * @param cbd
+     * @param cita
+     * @return
+     */
     public static ObservableList<Cita> obtenerListaCitaBD(CONEXIONBD cbd, Cita cita) {
 
         ObservableList<Cita> listaCita = FXCollections.observableArrayList();
@@ -65,6 +71,10 @@ public class VentanaPrincipalCitaControlador {
     }
 
     public static List<String> obtenerHorasOcupadas2(LocalDate fecha, CONEXIONBD cbd) {
+        if (fecha == null) {
+            throw new IllegalArgumentException("La fecha no puede ser null");
+        }
+
         List<String> horasOcupadas = new ArrayList<>();
         List<String> horasDisponibles = new ArrayList<>();
         String[] totalHoras = {
@@ -101,6 +111,7 @@ public class VentanaPrincipalCitaControlador {
         }
         return horasDisponibles;
     }
+
 
     public static void cargarHorasComboBox(ComboBox<String> comboBox, List<String> horasDisponibles) {
         comboBox.getItems().clear();
