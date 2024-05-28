@@ -5,6 +5,9 @@ import com.jorja.proyect.proyectogestoritvfinal.modelo.HistorialCita;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.view.JasperViewer;
+
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -50,13 +53,33 @@ public class VentanaPrincipalPerfilControlador {
 
     public static void backUpBD(CONEXIONBD cbd) {
         cbd.abrirConexion();
-        boolean exito = cbd.hacerCopiaDeSeguridad();
+        cbd.hacerCopiaDeSeguridad();
         cbd.cerrarConexion();
 
-        if (exito) {
-            mostrarAlerta("Éxito", "La copia de seguridad se realizó correctamente", Alert.AlertType.INFORMATION);
-        } else {
-            mostrarAlerta("Error", "Hubo un error al realizar la copia de seguridad", Alert.AlertType.ERROR);
+    }
+
+    public static void crearInforme(String informeRuta,CONEXIONBD cbd) {
+        Connection conexion = null;
+
+        try {
+            // Establecer conexión con la base de datos
+            conexion = cbd.abrirConexion();
+            CONEXIONBD.comprobarConexion(conexion);
+
+            // Cargar el archivo del informe
+            JasperReport jasperReport = JasperCompileManager.compileReport(VentanaPrincipalPerfilControlador.class.getResourceAsStream(informeRuta));
+
+            // Llenar el informe con datos de la base de datos
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, null, conexion);
+
+            // Mostrar el informe
+            JasperViewer viewer = new JasperViewer(jasperPrint, false);
+            viewer.setVisible(true);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            cbd.cerrarConexion();
         }
     }
 }

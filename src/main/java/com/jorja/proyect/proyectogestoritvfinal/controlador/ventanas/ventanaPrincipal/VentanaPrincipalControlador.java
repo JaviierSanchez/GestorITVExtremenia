@@ -23,6 +23,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.view.JasperViewer;
 
 import java.net.URL;
 import java.sql.Connection;
@@ -40,8 +45,7 @@ import static com.jorja.proyect.proyectogestoritvfinal.controlador.bbdd.CONEXION
 import static com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaPrincipal.VentanaPrincipalCitaControlador.*;
 import static com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaPrincipal.VentanaPrincipalInicioControlador.contadorTarjetas;
 import static com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaPrincipal.VentanaPrincipalInicioControlador.obtenerNombreMes;
-import static com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaPrincipal.VentanaPrincipalPerfilControlador.addHistorialCita;
-import static com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaPrincipal.VentanaPrincipalPerfilControlador.backUpBD;
+import static com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaPrincipal.VentanaPrincipalPerfilControlador.*;
 import static com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaPrincipal.VentanaPrincipalUsuarioControlador.*;
 import static com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaPrincipal.VentanaPrincipalVehiculoControlador.*;
 
@@ -388,7 +392,7 @@ public class VentanaPrincipalControlador implements Initializable {
         comprobarConexion(conexion);
 
         // Comprobar que los campos no están vacíos
-        if (txtMatriculaCita.getText().isEmpty() || txtFechaCita.getValue() == null || txtHoraCita.getValue() == null ||
+        if (txtMatriculaCita.getText().isEmpty() || txtFechaCita.getValue() == null || txtHoraCita.getValue().isEmpty() ||
                 txtTipoInspeccionCita.getValue() == null || txtTipoVehiculoCita.getValue() == null) {
             mostrarAlerta("Error", "Rellena todos los campos", Alert.AlertType.ERROR);
             return;
@@ -458,7 +462,7 @@ public class VentanaPrincipalControlador implements Initializable {
                         agregarCitaLista();
                         agregarHistorialLista();
 
-                        // Recargar las horas disponibles para la fecha seleccionada utilizando obtenerHorasOcupadas2
+                        // Recargar las horas disponibles para la fecha seleccionada utilizando obtenerHorasOcupadas
                         LocalDate fechaSeleccionada = txtFechaCita.getValue();
                         List<String> horasDisponibles = obtenerHorasOcupadas(fechaSeleccionada, cbd);
                         cargarHorasComboBox(txtHoraCita, horasDisponibles);
@@ -485,6 +489,8 @@ public class VentanaPrincipalControlador implements Initializable {
             cerrarConexion(cbd);
         }
     }
+
+
 
 
     @FXML
@@ -700,6 +706,7 @@ public class VentanaPrincipalControlador implements Initializable {
         });
     }
 
+
     // Logica Ventana Principal Usuario
 
     @FXML
@@ -760,7 +767,7 @@ public class VentanaPrincipalControlador implements Initializable {
     @FXML
     void btnUpdateUsuario(ActionEvent event) {
 
-        String sql = "UPDATE datos_usuario du SET du.Nombre = ?, du.Apellido = ?, du.Telefono = ?, du.Correo = ?, du.Contraseña = ?, du.Administrador = ?, du.FechaAlta = ? WHERE du.id = ?";
+        String sql = "UPDATE datos_usuario du SET du.Nombre = ?, du.Apellido = ?, du.Telefono = ?, du.Correo = ?, du.Contraseña = ?, du.Administrador = ? WHERE du.id = ?";
 
         conexion = cbd.abrirConexion();
         comprobarConexion(conexion);
@@ -790,8 +797,7 @@ public class VentanaPrincipalControlador implements Initializable {
                     sentencia.setString(4, txtCorreoUsuario.getText());
                     sentencia.setString(5, hashedPassword);
                     sentencia.setInt(6, (txtAdminUsuario.getText().equalsIgnoreCase("true")) ? 1 : 0);
-                    sentencia.setString(7, usuario.getFechaAlta());
-                    sentencia.setString(8, txtIdUsuario.getText());
+                    sentencia.setString(7, txtIdUsuario.getText());
                     sentencia.executeUpdate();
 
                     mostrarAlerta("Usuario actualizado", "El usuario ha sido actualizado", Alert.AlertType.INFORMATION);
@@ -1245,6 +1251,24 @@ public class VentanaPrincipalControlador implements Initializable {
         TableViewHistorial.setItems(listaOrdenadaHistorialCita);
     }
 
+
+
+    @FXML
+    void btnInformeUsuario(ActionEvent event) {
+        crearInforme(INFORMEUSUARIO,cbd);
+    }
+
+    @FXML
+    void btnInformeCita(ActionEvent event) {
+        crearInforme(INFORMECITA,cbd);
+    }
+
+
+
+    @FXML
+    void btnInformeVehiculo(ActionEvent event) {
+        crearInforme(INFORMEVEHICULO,cbd);
+    }
 
     // Metodo para realizar la copia de seguridad de la base de datos
     @FXML

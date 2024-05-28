@@ -30,6 +30,13 @@ public class Utils {
     public static final String VENTANAREGISTER = "/com/jorja/proyect/proyectogestoritvfinal/vista/VentanaRegister.fxml";
     public static final String VENTANACAMBIARPASSWORD = "/com/jorja/proyect/proyectogestoritvfinal/vista/VentanaCambiarPassworduser.fxml";
 
+    // Ruta archivo informes jrxml
+
+    public static final String INFORMEUSUARIO = "/com/jorja/proyect/proyectogestoritvfinal/informes/InformeITVExtremeñaUsuarios.jrxml";
+    public static final String INFORMEVEHICULO = "/com/jorja/proyect/proyectogestoritvfinal/informes/InformeITVExtremeñaVehiculos.jrxml";
+    public static final String INFORMECITA = "/com/jorja/proyect/proyectogestoritvfinal/informes/InformeITVExtremeñaCitas.jrxml";
+
+
     // Comprobaciones textos
     public static final String TELEFONOREGEX = "\\d{9}";
     public static final String CORREOREGEX = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,}$";

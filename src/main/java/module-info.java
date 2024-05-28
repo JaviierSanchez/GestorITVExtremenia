@@ -2,6 +2,7 @@ module com.jorja.proyect.proyectogestoritvfinal {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;
+    requires jasperreports;
 
 
     opens com.jorja.proyect.proyectogestoritvfinal.controlador to javafx.fxml;

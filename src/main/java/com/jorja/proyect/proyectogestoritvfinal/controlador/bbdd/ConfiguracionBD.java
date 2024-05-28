@@ -4,4 +4,5 @@ public interface ConfiguracionBD {
 
     String DBHOST = "localhost";
     String DBNAME = "itvpruebadev2";
+    String DBPORT = ":3306/";
 }

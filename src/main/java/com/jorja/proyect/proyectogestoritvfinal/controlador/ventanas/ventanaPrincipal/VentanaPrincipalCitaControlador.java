@@ -78,51 +78,59 @@ public class VentanaPrincipalCitaControlador {
      * @return
      */
     public static List<String> obtenerHorasOcupadas(LocalDate fecha, CONEXIONBD cbd) {
-        // Verificar que la fecha
-        if (fecha == null) {
-            throw new IllegalArgumentException("La fecha no puede ser null");
-        }
-        // Inicializamos las listas para almacenar las horas disponibles y ocupadas
         List<String> horasOcupadas = new ArrayList<>();
         List<String> horasDisponibles = new ArrayList<>();
 
-        // Horas de las citas con un intervalo de 15 minutos desde las 9:00 hasta las 20:00
-        String[] totalHoras = {
-                "09:00:00", "09:15:00", "09:30:00", "09:45:00", "10:00:00", "10:15:00", "10:30:00", "10:45:00",
-                "11:00:00", "11:15:00", "11:30:00", "11:45:00", "12:00:00", "12:15:00", "12:30:00", "12:45:00",
-                "13:00:00", "13:15:00", "13:30:00", "13:45:00", "14:00:00", "14:15:00", "14:30:00", "14:45:00",
-                "16:00:00", "16:15:00", "16:30:00", "16:45:00", "17:00:00", "17:15:00", "17:30:00", "17:45:00",
-                "18:00:00", "18:15:00", "18:30:00", "18:45:00", "19:00:00", "19:15:00", "19:30:00", "19:45:00",
-                "20:00:00"
-        };
-
-        Connection conexion = cbd.abrirConexion();
-        String sql = "SELECT c.Hora FROM cita c WHERE c.Fecha = ?";
         try {
-            sentencia = conexion.prepareStatement(sql);
-            sentencia.setString(1, String.valueOf(fecha));
-            resultado = sentencia.executeQuery();
-            // Recorre los resultados de la consulta y agrega las horas ocupadas a la lista.
-            while (resultado.next()) {
-                horasOcupadas.add(resultado.getString("Hora"));
+            // Verificar que la fecha no es null
+            if (fecha == null) {
+                throw new IllegalArgumentException("La fecha no puede ser null");
             }
-            // Obtener hora actual
-            LocalTime ahora = LocalTime.now();
-            // Recorremos el array de horas
-            for (String hora : totalHoras) {
-                LocalTime horaActual = LocalTime.parse(hora);
-                // Si la hora no está ocupada y (la fecha no es hoy o la hora es después de la hora actual si la fecha es hoy), se agrega a las horas disponibles.
-                if (!horasOcupadas.contains(hora) && (!fecha.equals(LocalDate.now()) || (fecha.equals(LocalDate.now()) && horaActual.isAfter(ahora)))) {
-                    horasDisponibles.add(hora);
+
+            // Horas de las citas con un intervalo de 15 minutos desde las 9:00 hasta las 20:00
+            String[] totalHoras = {
+                    "09:00:00", "09:15:00", "09:30:00", "09:45:00", "10:00:00", "10:15:00", "10:30:00", "10:45:00",
+                    "11:00:00", "11:15:00", "11:30:00", "11:45:00", "12:00:00", "12:15:00", "12:30:00", "12:45:00",
+                    "13:00:00", "13:15:00", "13:30:00", "13:45:00", "14:00:00", "14:15:00", "14:30:00", "14:45:00",
+                    "16:00:00", "16:15:00", "16:30:00", "16:45:00", "17:00:00", "17:15:00", "17:30:00", "17:45:00",
+                    "18:00:00", "18:15:00", "18:30:00", "18:45:00", "19:00:00", "19:15:00", "19:30:00", "19:45:00",
+                    "20:00:00"
+            };
+
+            Connection conexion = cbd.abrirConexion();
+            String sql = "SELECT c.Hora FROM cita c WHERE c.Fecha = ?";
+            try {
+                sentencia = conexion.prepareStatement(sql);
+                sentencia.setString(1, fecha.toString());
+                resultado = sentencia.executeQuery();
+                // Recorre los resultados de la consulta y agrega las horas ocupadas a la lista.
+                while (resultado.next()) {
+                    horasOcupadas.add(resultado.getString("Hora"));
                 }
+                // Obtener hora actual
+                LocalTime ahora = LocalTime.now();
+                // Recorremos el array de horas
+                for (String hora : totalHoras) {
+                    LocalTime horaActual = LocalTime.parse(hora);
+                    // Si la hora no está ocupada y (la fecha no es hoy o la hora es después de la hora actual si la fecha es hoy), se agrega a las horas disponibles.
+                    if (!horasOcupadas.contains(hora) && (!fecha.equals(LocalDate.now()) || (fecha.equals(LocalDate.now()) && horaActual.isAfter(ahora)))) {
+                        horasDisponibles.add(hora);
+                    }
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            } finally {
+                cerrarConexion(cbd);
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-            cerrarConexion(cbd);
+        } catch (IllegalArgumentException e) {
+            System.err.println("Error: " + e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
         return horasDisponibles;
     }
+
 
     /***
      * Metoodo para cargar las horas en el combobox

@@ -12,8 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static com.jorja.proyect.proyectogestoritvfinal.controlador.Utils.mostrarAlerta;
-import static com.jorja.proyect.proyectogestoritvfinal.controlador.bbdd.ConfiguracionBD.DBHOST;
-import static com.jorja.proyect.proyectogestoritvfinal.controlador.bbdd.ConfiguracionBD.DBNAME;
+import static com.jorja.proyect.proyectogestoritvfinal.controlador.bbdd.ConfiguracionBD.*;
 
 
 public class CONEXIONBD {
@@ -30,7 +29,7 @@ public class CONEXIONBD {
             Class.forName("com.mysql.cj.jdbc.Driver");
 
             try {
-                conexion = (Connection) DriverManager.getConnection("jdbc:mysql://" + DBHOST + ":3306/" + DBNAME, "root", "");
+                conexion = (Connection) DriverManager.getConnection("jdbc:mysql://" + DBHOST + DBPORT + DBNAME, "root", "");
             } catch (SQLException e) {
                 e.printStackTrace();
             }
