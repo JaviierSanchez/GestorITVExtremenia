@@ -30,7 +30,7 @@ public class VentanaPrincipalCitaControlador {
     private static ResultSet resultado;
 
     /***
-     * Metodo para mostrar los datos en el TableView
+     * Metodo para sacar todos los datos que se quieren mostrar en el tableview
      * @param cbd
      * @param cita
      * @return
@@ -70,13 +70,23 @@ public class VentanaPrincipalCitaControlador {
         return listaCita;
     }
 
-    public static List<String> obtenerHorasOcupadas2(LocalDate fecha, CONEXIONBD cbd) {
+
+    /***
+     * Metodo para obtener las horas que hay ocupadas segun el dia seleccionado, solo se mostraran las horas libres
+     * @param fecha
+     * @param cbd
+     * @return
+     */
+    public static List<String> obtenerHorasOcupadas(LocalDate fecha, CONEXIONBD cbd) {
+        // Verificar que la fecha
         if (fecha == null) {
             throw new IllegalArgumentException("La fecha no puede ser null");
         }
-
+        // Inicializamos las listas para almacenar las horas disponibles y ocupadas
         List<String> horasOcupadas = new ArrayList<>();
         List<String> horasDisponibles = new ArrayList<>();
+
+        // Horas de las citas con un intervalo de 15 minutos desde las 9:00 hasta las 20:00
         String[] totalHoras = {
                 "09:00:00", "09:15:00", "09:30:00", "09:45:00", "10:00:00", "10:15:00", "10:30:00", "10:45:00",
                 "11:00:00", "11:15:00", "11:30:00", "11:45:00", "12:00:00", "12:15:00", "12:30:00", "12:45:00",
@@ -92,14 +102,16 @@ public class VentanaPrincipalCitaControlador {
             sentencia = conexion.prepareStatement(sql);
             sentencia.setString(1, String.valueOf(fecha));
             resultado = sentencia.executeQuery();
-
+            // Recorre los resultados de la consulta y agrega las horas ocupadas a la lista.
             while (resultado.next()) {
                 horasOcupadas.add(resultado.getString("Hora"));
             }
-
+            // Obtener hora actual
             LocalTime ahora = LocalTime.now();
+            // Recorremos el array de horas
             for (String hora : totalHoras) {
                 LocalTime horaActual = LocalTime.parse(hora);
+                // Si la hora no está ocupada y (la fecha no es hoy o la hora es después de la hora actual si la fecha es hoy), se agrega a las horas disponibles.
                 if (!horasOcupadas.contains(hora) && (!fecha.equals(LocalDate.now()) || (fecha.equals(LocalDate.now()) && horaActual.isAfter(ahora)))) {
                     horasDisponibles.add(hora);
                 }
@@ -112,14 +124,24 @@ public class VentanaPrincipalCitaControlador {
         return horasDisponibles;
     }
 
-
+    /***
+     * Metoodo para cargar las horas en el combobox
+     * @param comboBox
+     * @param horasDisponibles
+     */
     public static void cargarHorasComboBox(ComboBox<String> comboBox, List<String> horasDisponibles) {
         comboBox.getItems().clear();
+        // Recorremos el array de horas disponibles y las cargamos en el combobox
         for (String hora : horasDisponibles) {
             comboBox.getItems().add(hora);
         }
     }
 
+    /***
+     * Metodo para cargar el nombre de los tipos de inspeccion que tiene una cita
+     * @param comboBox
+     * @param cbd
+     */
     public static void cargarDatosTipoInspeccion(ComboBox<TipoInspeccion> comboBox, CONEXIONBD cbd) {
         ObservableList<TipoInspeccion> listaTipoInspeccion = FXCollections.observableArrayList();
         String sql = "SELECT ti.id, ti.Nombre, ti.Precio FROM tipo_inspeccion ti;";
@@ -143,6 +165,7 @@ public class VentanaPrincipalCitaControlador {
         }
 
         comboBox.setItems(listaTipoInspeccion);
+        //Convertimos el objeto a toString
         comboBox.setConverter(new StringConverter<>() {
             @Override
             public String toString(TipoInspeccion tipoInspeccion) {
@@ -156,7 +179,11 @@ public class VentanaPrincipalCitaControlador {
         });
     }
 
-
+    /***
+     * Metodo para comprobar que la fecha esta seleccionada sino el combobox de hora estara deshabilitado
+     * @param datePicker
+     * @param comboBox
+     */
     public static void comprobarFechaIsSelected(DatePicker datePicker, ComboBox<String> comboBox) {
         // Comprobar que el datepicker tiene valor
         if (datePicker.getValue() == null) {
@@ -166,6 +193,10 @@ public class VentanaPrincipalCitaControlador {
         }
     }
 
+    /***
+     * Metodo para desabilitar los fin de semanas y los dias anteriores al actual
+      * @param datePicker
+     */
     public static void deshabilitarDiasNoValidos(DatePicker datePicker) {
         // Definimos un Callback que será usado para personalizar las celdas del DatePicker
         Callback<DatePicker, DateCell> dayCellFactory = new Callback<>() {
@@ -224,6 +255,10 @@ public class VentanaPrincipalCitaControlador {
         return idTipoInspeccion;
     }
 
+    /***
+     * Metodo para eliminar de la tabla citas las citas que ya ha vencido su fecha
+     * @param cbd
+     */
     public static void eliminarCitasPasadas(CONEXIONBD cbd) {
         String sql = "DELETE FROM cita WHERE Fecha < ?";
         LocalDate hoy = LocalDate.now();

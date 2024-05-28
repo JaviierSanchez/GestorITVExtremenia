@@ -18,6 +18,7 @@ public class VentanaPrincipalUsuarioControlador {
     private static PreparedStatement sentencia;
     private static ResultSet resultado;
 
+    // Metodo para mostrar el nombre del usuario que ha iniciado sesion
     public static void sacarNombreUsuarioLogueado(Label label){
         // Sacar nombre usuario que ha iniciado sesion
         Usuario usuarioActual = Sesion.getUsuarioActual();
@@ -28,6 +29,11 @@ public class VentanaPrincipalUsuarioControlador {
         }
     }
 
+    /***
+     *  Metodo para sacar la informacion del usuario
+      * @param correo
+     *  @return
+     */
     public static Usuario cargarUsuarioPorCorreo(String correo) {
         String sql = "SELECT * FROM datos_usuario WHERE correo = ?";
         Usuario usuario = null;
@@ -52,6 +58,12 @@ public class VentanaPrincipalUsuarioControlador {
         return usuario;
     }
 
+    /***
+     * Metodo que carga los datos de la base de datos y los muestra en el tableview
+     * @param cbd
+     * @param usuario
+     * @return
+     */
     public static ObservableList<Usuario> addUsuario(CONEXIONBD cbd, Usuario usuario) {
 
         ObservableList<Usuario> listaUsuario = FXCollections.observableArrayList();
@@ -77,7 +89,12 @@ public class VentanaPrincipalUsuarioControlador {
         }
         return listaUsuario;
     }
-    // Método para verificar si el ID de usuario existe en la base de datos
+
+    /***
+     * Método para verificar si el ID de usuario existe en la base de datos
+     * @param idUsuario
+     * @return
+     */
     public static boolean existeUsuario(int idUsuario) {
         String sql = "SELECT id FROM datos_usuario WHERE id = ?";
         try {

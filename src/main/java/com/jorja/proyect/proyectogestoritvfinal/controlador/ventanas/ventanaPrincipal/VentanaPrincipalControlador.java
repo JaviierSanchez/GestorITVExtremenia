@@ -38,7 +38,10 @@ import java.util.ResourceBundle;
 import static com.jorja.proyect.proyectogestoritvfinal.controlador.Utils.*;
 import static com.jorja.proyect.proyectogestoritvfinal.controlador.bbdd.CONEXIONBD.comprobarConexion;
 import static com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaPrincipal.VentanaPrincipalCitaControlador.*;
+import static com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaPrincipal.VentanaPrincipalInicioControlador.contadorTarjetas;
 import static com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaPrincipal.VentanaPrincipalInicioControlador.obtenerNombreMes;
+import static com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaPrincipal.VentanaPrincipalPerfilControlador.addHistorialCita;
+import static com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaPrincipal.VentanaPrincipalPerfilControlador.backUpBD;
 import static com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaPrincipal.VentanaPrincipalUsuarioControlador.*;
 import static com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaPrincipal.VentanaPrincipalVehiculoControlador.*;
 
@@ -246,6 +249,11 @@ public class VentanaPrincipalControlador implements Initializable {
         System.exit(0);
     }
 
+    /***
+     * Metodo para cambiar de ventana y cuando cambies se actualice los
+     * componentes
+     * @param actionEvent
+     */
     public void cambiarVentana(ActionEvent actionEvent) {
 
         Button botonPresionado = (Button) actionEvent.getSource();
@@ -312,17 +320,17 @@ public class VentanaPrincipalControlador implements Initializable {
      */
     public void contadorTotalUsuarios() {
         String sqlUsuarios = "SELECT COUNT(du.ID) as total FROM datos_usuario du";
-        VentanaPrincipalInicioControlador.contadorTarjetas(sqlUsuarios, lblCountUser, cbd);
+        contadorTarjetas(sqlUsuarios, lblCountUser, cbd);
     }
 
     public void contardorTotalVehiculos() {
         String sqlVehiculos = "SELECT COUNT(v.matricula) as total From vehiculo v";
-        VentanaPrincipalInicioControlador.contadorTarjetas(sqlVehiculos, lblCountvehicle, cbd);
+        contadorTarjetas(sqlVehiculos, lblCountvehicle, cbd);
     }
 
     public void contadorTotalCitas() {
         String sqlCitas = "SELECT COUNT(c.id) as total FROM cita C";
-        VentanaPrincipalInicioControlador.contadorTarjetas(sqlCitas, lblCountDate, cbd);
+        contadorTarjetas(sqlCitas, lblCountDate, cbd);
     }
 
     public void contadorTotalGanaciasMensuales() {
@@ -333,9 +341,12 @@ public class VentanaPrincipalControlador implements Initializable {
                                 WHERE YEAR(c.Fecha) = YEAR(CURDATE()) 
                                         AND MONTH(c.Fecha) = MONTH(CURDATE());                          
                 """;
-        VentanaPrincipalInicioControlador.contadorTarjetas(sqlGanancias, lblCountMoney, cbd);
+        contadorTarjetas(sqlGanancias, lblCountMoney, cbd);
     }
 
+    /***
+     * Metodo para cargar los datos de usuarios que hay registrados en el grafico
+     */
     public void cargarDatosGraficoUsuario() {
 
         graficoUsuarios.getData().clear();
@@ -449,7 +460,7 @@ public class VentanaPrincipalControlador implements Initializable {
 
                         // Recargar las horas disponibles para la fecha seleccionada utilizando obtenerHorasOcupadas2
                         LocalDate fechaSeleccionada = txtFechaCita.getValue();
-                        List<String> horasDisponibles = obtenerHorasOcupadas2(fechaSeleccionada, cbd);
+                        List<String> horasDisponibles = obtenerHorasOcupadas(fechaSeleccionada, cbd);
                         cargarHorasComboBox(txtHoraCita, horasDisponibles);
                     } else {
                         // Revertir la transacción si la inserción en historial falla
@@ -501,6 +512,7 @@ public class VentanaPrincipalControlador implements Initializable {
             alert.setContentText("¿Estás seguro que quieres actualizar los cambios?");
             ButtonType opcion = alert.showAndWait().orElse(ButtonType.CANCEL);
 
+            // Si la opcion seleccionada es igual a ok realizamos el update
             if (opcion == ButtonType.OK) {
                 try {
                     // Obtener el id del tipo vehículo seleccionado
@@ -535,7 +547,6 @@ public class VentanaPrincipalControlador implements Initializable {
                     cerrarConexion(cbd);
                 }
             }
-
         } else {
             mostrarAlerta("Campos vacíos", "Por favor, complete todos los campos.", Alert.AlertType.WARNING);
         }
@@ -548,6 +559,7 @@ public class VentanaPrincipalControlador implements Initializable {
         String sql = "DELETE FROM cita WHERE id = ?";
         conexion = cbd.abrirConexion();
 
+        // Comprobamos que los campos no estan vacios
         if (!txtMatriculaVehicula.getText().isEmpty() || !txtModeloVehiculo.getText().isEmpty() || txtMarcaVehiculo.getValue() == null ||
                 !txtAñoVehiculo.getText().isEmpty() || !txtIdUsuarioVehiculo.getText().isEmpty() || txtTipoVehiculoVehiculo.getValue() == null) {
 
@@ -556,7 +568,7 @@ public class VentanaPrincipalControlador implements Initializable {
             alertaEliminar.setTitle("Confirmar eliminación");
             alertaEliminar.setContentText("¿Estás seguro que quieres eliminar la cita?");
             Optional<ButtonType> opcion = alertaEliminar.showAndWait();
-
+            // Si la opcion seleccionada es igual a ok realizamos el delete
             if(opcion.get() == ButtonType.OK){
                 try {
                     sentencia = conexion.prepareStatement(sql);
@@ -590,8 +602,11 @@ public class VentanaPrincipalControlador implements Initializable {
 
     }
 
-  // Metodo que se ejecuta cada 24 horas para eliminar las citas que ya han sido vencidas
-    private void elimnarCitasScheduler(){
+    /***
+     *  Metodo que comprueba la fecha de la cita, si la cita actual es mayor a la de la cita
+     *  eliminara la cita de la tabla Citas, se mantendrá en el historial de movimientos
+     */
+    private void elimnarCitasPasadasDeTiempo(){
         eliminarCitasPasadas(cbd);
     }
 
@@ -608,6 +623,9 @@ public class VentanaPrincipalControlador implements Initializable {
         TableViewCita.setItems(addCitaLista);
     }
 
+    /***
+     * Metodo para buscar los diferentes campos de cita esa cita
+     */
     public void buscarCitaTableView() {
         FilteredList<Cita> filtroCita = new FilteredList<>(addCitaLista, u -> true);
         txtBusquedaCita.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -644,7 +662,7 @@ public class VentanaPrincipalControlador implements Initializable {
     }
 
 
-
+// Metodo para mostrar en los texfield/combobox los datos de la cita seleccionada
     public void mostrarCitaSeleccionada(){
         Cita cita = TableViewCita.getSelectionModel().getSelectedItem();
         int indice = TableViewCita.getSelectionModel().getSelectedIndex();
@@ -665,12 +683,18 @@ public class VentanaPrincipalControlador implements Initializable {
 
     }
 
-    //Cargar horas en el combobox
+    /***
+     *  Cargar horas en el combobox, si las horas ya estan seleccionadas
+     *  se mostraran unicamente las horas que hay disponibles
+     * @param datePicker
+     * @param comboBox
+     * @param cbd
+     */
     public void cargarHorasCitas(DatePicker datePicker, ComboBox<String> comboBox, CONEXIONBD cbd) {
         datePicker.setOnAction(event -> {
             LocalDate fechaSeleccionada = datePicker.getValue();
             if (fechaSeleccionada != null) {
-                List<String> horasOcupadas = obtenerHorasOcupadas2(fechaSeleccionada, cbd);
+                List<String> horasOcupadas = obtenerHorasOcupadas(fechaSeleccionada, cbd);
                 cargarHorasComboBox(comboBox, horasOcupadas);
             }
         });
@@ -696,11 +720,11 @@ public class VentanaPrincipalControlador implements Initializable {
                 txtCorreoUsuario.getText().isEmpty() || txtPassWordUsuario.getText().isEmpty()) {
             mostrarAlerta("Error", "Rellena los campos", Alert.AlertType.ERROR);
         } else {
-
+            // Validar campos
             if (!validarTelefono(txtTelefonoUsuario) || !validarCorreo(txtCorreoUsuario) || !validarPassword(txtPassWordUsuario))
                 return;
 
-            // Comprobar que el usuario no se encuentra en la BBDD
+            // Comprobar que el usuario no se encuentra en la BBDD sino mostrara la alerta
             String comprobarUsuariosql = "SELECT du.Correo FROM datos_usuario du where du.Correo = ?";
             try {
                 sentencia = conexion.prepareStatement(comprobarUsuariosql);
@@ -710,6 +734,7 @@ public class VentanaPrincipalControlador implements Initializable {
                 if (resultado.next()) {
                     mostrarAlerta("Error", "El usuario ya existe", Alert.AlertType.ERROR);
                 } else {
+                    // Ciframos la contraseña del usuario
                     String hashedPassword = hashPassword(txtPassWordUsuario.getText());
 
                     sentencia = conexion.prepareStatement(sql);
@@ -745,7 +770,7 @@ public class VentanaPrincipalControlador implements Initializable {
                 txtCorreoUsuario.getText().isEmpty() || txtPassWordUsuario.getText().isEmpty()) {
             mostrarAlerta("Error", "Rellena los campos", Alert.AlertType.ERROR);
         } else {
-
+            // Validar campos
             if (!validarTelefono(txtTelefonoUsuario) || !validarCorreo(txtCorreoUsuario) || !validarPassword(txtPassWordUsuario))
                 return;
 
@@ -826,7 +851,10 @@ public class VentanaPrincipalControlador implements Initializable {
         txtAdminUsuario.clear();
     }
     public void agregarUsuarioLista() {
+        // Obtenemos la lista de Usuario
         addUsuarioLista = addUsuario(cbd,usuario);
+
+        //Configuramos las columnas
         columnIdUsuario.setCellValueFactory(new PropertyValueFactory<>(COLUMNIDUSUARIO));
         columnNombreUsuario.setCellValueFactory(new PropertyValueFactory<>(COLUMNNOMBREUSUARIO));
         columnApellidoUsuario.setCellValueFactory(new PropertyValueFactory<>(COLUMNAPELLIDOUSUARIO));
@@ -835,9 +863,11 @@ public class VentanaPrincipalControlador implements Initializable {
         columnPasswordUsuario.setCellValueFactory(new PropertyValueFactory<>(COLUMNCONTRASEÑAUSUARIO));
         columnAdminUsuario.setCellValueFactory(new PropertyValueFactory<>(COLUMNADMINISTRADORUSUARIO));
         columnFechaAltaUsuario.setCellValueFactory(new PropertyValueFactory<>(COLUMNFECHAALTAUSUARIO));
+        // Establece los items en el TableView
         TableViewUsuario.setItems(addUsuarioLista);
     }
 
+    // Mostramos en los textfield/combobox el usuario seleccionado
     public void mostrarUsuarioSeleccionado() {
         try {
             Usuario usuario = TableViewUsuario.getSelectionModel().getSelectedItem();
@@ -857,6 +887,7 @@ public class VentanaPrincipalControlador implements Initializable {
         }
     }
 
+    // Metodo para buscar al usuario segun los campos
     public void buscarUsuarioTableView() {
         FilteredList<Usuario> filtroUsuario = new FilteredList<>(addUsuarioLista, u -> true);
         txtBusquedaUsuario.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -1065,50 +1096,24 @@ public class VentanaPrincipalControlador implements Initializable {
         txtIdUsuarioVehiculo.clear();
     }
 
-    public ObservableList<Vehiculo> addVehiculo() {
-
-        ObservableList<Vehiculo> listaVehiculo = FXCollections.observableArrayList();
-        String sql = """
-                SELECT v.Matricula as Matricula,m.Nombre as marca,
-                                    v.Modelo as Modelo ,v.Año as Año,du.Correo as correoUsuario,tv.Nombre as tipoVehiculo
-                                    FROM vehiculo v
-                                                INNER JOIN datos_usuario du ON du.id = v.Usuario_id
-                                                INNER JOIN tipo_vehiculo tv ON tv.id = v.Tipo_Vehiculo_id
-                                                INNER JOIN marcavehiculo m on m.id = v.Marca_id
-                    """;
-        conexion = cbd.abrirConexion();
-
-        try {
-            sentencia = conexion.prepareStatement(sql);
-            resultado = sentencia.executeQuery();
-            while (resultado.next()) {
-                vehiculo = new Vehiculo(
-                        resultado.getString("Matricula"),
-                        resultado.getString("marca"),
-                        resultado.getString("Modelo"),
-                        resultado.getString("Año"),
-                        resultado.getString("correoUsuario"),
-                        resultado.getString("tipoVehiculo")
-                );
-                listaVehiculo.add(vehiculo);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return listaVehiculo;
-    }
 
     public void agregarVehiculoLista() {
-        addVehiculoLista = addVehiculo();
+
+        // Obtenemos la lista de vehiculo
+        addVehiculoLista = addVehiculo(cbd, vehiculo);
+
+        // Configuramos las columnas del TableView
         columnMatriculaVehiculo.setCellValueFactory(new PropertyValueFactory<>(COLUMNMATRICULAVEHICULO));
         columnMarcaVehiculo.setCellValueFactory(new PropertyValueFactory<>(COLUMNMARCAVEHICULO));
         columnModeloVehiculo.setCellValueFactory(new PropertyValueFactory<>(COLUMNMODELOVEHICULO));
         columnAñoVehiculo.setCellValueFactory(new PropertyValueFactory<>(COLUMNAÑOVEHICULO));
         columTipoVehiculoVehiculo.setCellValueFactory(new PropertyValueFactory<>(COLUMNTIPOVEHICULOVEHICULO));
         columPropietarioVehiculo.setCellValueFactory(new PropertyValueFactory<>(COLUMNPROPIETARIOVEHICULO));
+        // Establecemos los items en el TableView
         TableViewVehiculo.setItems(addVehiculoLista);
     }
 
+    // Metodo para mostrar en los textfield/combobox la informacion del vehiculo seleccionado
     public void mostrarVehiculoSeleccionado() {
         Vehiculo vehiculo = TableViewVehiculo.getSelectionModel().getSelectedItem();
         int indice = TableViewVehiculo.getSelectionModel().getSelectedIndex();
@@ -1128,6 +1133,9 @@ public class VentanaPrincipalControlador implements Initializable {
         txtTipoVehiculoVehiculo.setValue(tipoVehiculo);
     }
 
+    /***
+     * Metodo para buscar en el tableview el vehiculo por sus campos
+     */
     public void buscarVehiculoTableView() {
         FilteredList<Vehiculo> filtroVehiculo = new FilteredList<>(addVehiculoLista, u -> true);
         txtBusquedaVehiculo.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -1161,6 +1169,7 @@ public class VentanaPrincipalControlador implements Initializable {
 
     //Logica Ventana Principal Perfil
 
+    // Metodo para cargar en los datos del usuario que inicia sesion en la ventana perfil
     public void asignarDatosUsuarioSesion() {
 
         Usuario usuario = Sesion.getUsuarioActual();
@@ -1178,6 +1187,7 @@ public class VentanaPrincipalControlador implements Initializable {
         }
     }
 
+    // Metodo para modificar la contraseña del usuario que ha iniciado sesion
     @FXML
     void btnModificarPasswordPerfil(ActionEvent event) {
 
@@ -1194,32 +1204,19 @@ public class VentanaPrincipalControlador implements Initializable {
         }
     }
 
-    public ObservableList<HistorialCita> addHistorialCita() {
+    public void agregarHistorialLista(){
 
-        ObservableList<HistorialCita> listaHistorial = FXCollections.observableArrayList();
-        String sql = """
-                SELECT hi.Fecha as 'Fecha', hi.Hora as 'Hora', hi.id_Vehiculo as 'Matricula', ti.Nombre as 'TipoInspeccion'
-			FROM historial_inspecciones hi
-            	INNER JOIN tipo_inspeccion ti ON ti.ID = hi.Tipo_Inspeccion_id
-                    """;
-        conexion = cbd.abrirConexion();
+        // Obtiene la lista de historial de citas.
+        addHistorialCitaLista = addHistorialCita(cbd,historialCita);
 
-        try {
-            sentencia = conexion.prepareStatement(sql);
-            resultado = sentencia.executeQuery();
-            while (resultado.next()) {
-                historialCita = new HistorialCita(
-                        resultado.getString("Matricula"),
-                        resultado.getString("Fecha"),
-                        resultado.getString("Hora"),
-                        resultado.getString("TipoInspeccion")
-                );
-                listaHistorial.add(historialCita);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return listaHistorial;
+        // Configura las columnas de la TableView con los nombres de propiedad correspondientes.
+        columnFechaHistorial.setCellValueFactory(new PropertyValueFactory<>(COLUMNFECHAHISTORIAL));
+        columnHoraHistorial.setCellValueFactory(new PropertyValueFactory<>(COLUMNHORAHISTORIAL));
+        columnMatriculaHistorial.setCellValueFactory(new PropertyValueFactory<>(COLUMNMATRICULAHISTORIAL));
+        columnTipoInspeccionHistorial.setCellValueFactory(new PropertyValueFactory<>(COLUMNTIPOINSPECCIONHISTORIAL));
+
+        // Establecemos los items en el tableview
+        TableViewHistorial.setItems(addHistorialCitaLista);
     }
 
     public void buscarHistorialCitaTableView() {
@@ -1248,32 +1245,12 @@ public class VentanaPrincipalControlador implements Initializable {
         TableViewHistorial.setItems(listaOrdenadaHistorialCita);
     }
 
-    public void agregarHistorialLista(){
-        addHistorialCitaLista = addHistorialCita();
-        columnFechaHistorial.setCellValueFactory(new PropertyValueFactory<>(COLUMNFECHAHISTORIAL));
-        columnHoraHistorial.setCellValueFactory(new PropertyValueFactory<>(COLUMNHORAHISTORIAL));
-        columnMatriculaHistorial.setCellValueFactory(new PropertyValueFactory<>(COLUMNMATRICULAHISTORIAL));
-        columnTipoInspeccionHistorial.setCellValueFactory(new PropertyValueFactory<>(COLUMNTIPOINSPECCIONHISTORIAL));
-        TableViewHistorial.setItems(addHistorialCitaLista);
-    }
 
-
+    // Metodo para realizar la copia de seguridad de la base de datos
     @FXML
     void btnBackUpBD(ActionEvent event) {
-        CONEXIONBD conexionBD = new CONEXIONBD();
-        conexionBD.abrirConexion();
-        boolean exito = conexionBD.hacerCopiaDeSeguridad();
-        conexionBD.cerrarConexion();
-
-        if (exito) {
-            System.out.println("La copia de seguridad se realizó correctamente");
-        } else {
-            System.out.println("Hubo un error al realizar la copia de seguridad");
-        }
+        backUpBD(cbd);
     }
-
-
-
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -1303,10 +1280,10 @@ public class VentanaPrincipalControlador implements Initializable {
         deshabilitarDiasNoValidos(txtFechaCita);
         cargarDatosTipoInspeccion(txtTipoInspeccionCita, cbd);
         comprobarFechaIsSelected(txtFechaCita,txtHoraCita);
-        elimnarCitasScheduler();
+        elimnarCitasPasadasDeTiempo();
 
 
-        // Escuchador para comprobar que la fecha esta seleccionada
+        // Escuchador para comprobar que la fecha esta seleccionada, sino el combobox de horas estara deshabilitado
         txtFechaCita.valueProperty().addListener(new ChangeListener<>() {
             @Override
             public void changed(ObservableValue<? extends LocalDate> observable, LocalDate oldValue, LocalDate newValue) {
@@ -1318,12 +1295,12 @@ public class VentanaPrincipalControlador implements Initializable {
         // Listener para cargar las horas disponibles cuando cambia la fecha
         txtFechaCita.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                List<String> horasDisponibles = obtenerHorasOcupadas2(newValue, cbd);
+                List<String> horasDisponibles = obtenerHorasOcupadas(newValue, cbd);
                 cargarHorasComboBox(txtHoraCita, horasDisponibles);
             }
         });
 
-        // Agregar listener al ComboBox de Tipo de Inspección
+        // Agregar listener al ComboBox de Tipo de Inspección, para cargar el precio de la cita segun la opcion que selecciones
         txtTipoInspeccionCita.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 txtPrecioCita.setText(String.valueOf(newValue.getPrecio()));

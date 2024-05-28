@@ -12,17 +12,22 @@ import java.sql.SQLException;
 import java.text.DateFormatSymbols;
 
 public class VentanaPrincipalInicioControlador {
+    private static Connection conexion;
+    private static PreparedStatement sentencia;
+    private static ResultSet resultado;
 
     /***
-     * Metodo
+     * Metodo para sacar el total de total que se mostrara en las tarjetas de contadores
      * @param sql
      * @param label
      * @param cbd
      */
     public static void contadorTarjetas(String sql, Label label, CONEXIONBD cbd) {
-        try (Connection conexion = cbd.abrirConexion();
-             PreparedStatement sentencia = conexion.prepareStatement(sql);
-             ResultSet resultado = sentencia.executeQuery()) {
+
+        conexion = cbd.abrirConexion();
+        try {
+            sentencia = conexion.prepareStatement(sql);
+            resultado = sentencia.executeQuery();
 
             if (resultado.next()) {
                 int total = resultado.getInt("total");

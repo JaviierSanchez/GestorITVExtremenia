@@ -64,7 +64,9 @@ public class VentanaCambiarPassworduser {
                 resultado = sentencia.executeQuery();
 
                 if (resultado.next()) {
+                    // Sacamos de la base de datos la contraseña del usuario
                     String passwordUsuario = resultado.getString("Contraseña");
+                    // Comprobamos que la contraseña antigua es igual a la nueva contraseña que se quiere establecer
                     if (!passwordUsuario.equals(hashPassword(txtPasswordAntigua.getText()))) {
                         mostrarAlerta("Error", "La contraseña antigua es incorrecta", Alert.AlertType.ERROR);
                         return;
@@ -78,7 +80,7 @@ public class VentanaCambiarPassworduser {
                 ButtonType opcion = alert.showAndWait().orElse(ButtonType.CANCEL);
 
                 if (opcion == ButtonType.OK) {
-                    // Hash de la nueva contraseña
+                    // Guardamos en la variable la nueva contraseña cifrada
                     String hashedPassword = hashPassword(txtPasswordNueva.getText());
 
                     // Preparar la sentencia SQL para actualizar la contraseña

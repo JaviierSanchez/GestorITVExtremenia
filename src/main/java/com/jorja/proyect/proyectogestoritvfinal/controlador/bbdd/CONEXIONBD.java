@@ -20,14 +20,12 @@ public class CONEXIONBD {
 
     public Connection conexion;
 
-
     /***
      * Metodo para abrir la conexion con la base de datos
      * @return
      */
     public Connection abrirConexion() {
         try {
-
             // Driver mysql
             Class.forName("com.mysql.cj.jdbc.Driver");
 
@@ -43,7 +41,10 @@ public class CONEXIONBD {
         return conexion;
     }
 
-
+    /***
+     * Metodo para comprobar que existe conexion con la base de datos
+     * @param conexion
+     */
     public static void comprobarConexion(Connection conexion){
         if (conexion == null) {
             mostrarAlerta("Error de Conexión", "No se pudo establecer la conexión con la base de datos.", Alert.AlertType.ERROR);
@@ -76,15 +77,16 @@ public class CONEXIONBD {
      * @return true si la copia de seguridad se realizó correctamente, false en caso contrario
      */
     public boolean hacerCopiaDeSeguridad() {
-        // Obtener el directorio del usuario
-        String dirUsuario = System.getProperty("user.home");
-        String dirDescargas = dirUsuario + "/Downloads";
-        String fecha = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-        String backupFile = dirDescargas + "/backup_" + DBNAME + "_" + fecha + ".sql";
+
+        String dirUsuario = System.getProperty("user.home");// Obtener el directorio del usuario
+        String dirDescargas = dirUsuario + "/Downloads"; // Añadimos al directorio del usarios el de descargas
+        String fecha = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()); // Sacamos la fecha con la hora en la que se realiza la copia
+        String backupFile = dirDescargas + "/backup_" + DBNAME + "_" + fecha + ".sql"; // Asignar el nombre al fichero
 
         // Ruta  mysqldump
         String mysqldumpPath = "C:\\xampp\\mysql\\bin\\mysqldump.exe";
 
+        // Comando para ejecutar la copia de seguridad
         String comando = String.format("\"%s\" -h %s -u root --databases %s -r \"%s\"", mysqldumpPath, DBHOST, DBNAME, backupFile);
 
         try {

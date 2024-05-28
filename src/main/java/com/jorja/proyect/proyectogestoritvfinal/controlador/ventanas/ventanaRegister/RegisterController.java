@@ -78,7 +78,7 @@ public class RegisterController implements Initializable {
     /***
      *  Metodo para registar el usuario:
      *
-     *  *  1. Se comprueba que los datos del usuario no existen ya en la BBDD
+     *  1. Se comprueba que los datos del usuario no existen ya en la BBDD
      *  2. Se comprueba que los campos estan rellenos y que los campos de contraseña coinciden
      *  3. Si todo esta correcto se crea el usuario
      */
@@ -108,8 +108,8 @@ public class RegisterController implements Initializable {
                     // El usuario ya existe
                     mostrarAlerta("Usuario Existente", "¡El usuario ya está registrado!", Alert.AlertType.ERROR);
                 } else {
-                    //Cifrar la contraseña mediante hash
 
+                    //Cifrar la contraseña mediante hash
                     String hashedPassword = hashPassword(txtPassword.getText());
 
                     // El usuario no existe y se crea
