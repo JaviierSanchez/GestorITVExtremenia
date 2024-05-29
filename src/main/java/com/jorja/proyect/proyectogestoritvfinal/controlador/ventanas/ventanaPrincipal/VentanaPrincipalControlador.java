@@ -6,7 +6,6 @@ import com.jorja.proyect.proyectogestoritvfinal.vista.Main;
 import com.jorja.proyect.proyectogestoritvfinal.vista.VentanaCambiarPassword;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -23,11 +22,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.view.JasperViewer;
 
 import java.net.URL;
 import java.sql.Connection;
@@ -458,7 +452,6 @@ public class VentanaPrincipalControlador implements Initializable {
                         conexion.commit();
 
                         mostrarAlerta("Añadida", "La cita ha sido añadida correctamente", Alert.AlertType.INFORMATION);
-                        btnCleanCita(event);
                         agregarCitaLista();
                         agregarHistorialLista();
 
@@ -466,6 +459,7 @@ public class VentanaPrincipalControlador implements Initializable {
                         LocalDate fechaSeleccionada = txtFechaCita.getValue();
                         List<String> horasDisponibles = obtenerHorasOcupadas(fechaSeleccionada, cbd);
                         cargarHorasComboBox(txtHoraCita, horasDisponibles);
+                        btnCleanCita(event);
                     } else {
                         // Revertir la transacción si la inserción en historial falla
                         conexion.rollback();

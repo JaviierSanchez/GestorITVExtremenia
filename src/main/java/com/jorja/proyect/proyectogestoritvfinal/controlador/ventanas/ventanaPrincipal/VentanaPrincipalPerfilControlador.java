@@ -4,17 +4,16 @@ import com.jorja.proyect.proyectogestoritvfinal.controlador.bbdd.CONEXIONBD;
 import com.jorja.proyect.proyectogestoritvfinal.modelo.HistorialCita;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Alert;
-import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.view.JasperViewer;
-
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import static com.jorja.proyect.proyectogestoritvfinal.controlador.Utils.mostrarAlerta;
 
 public class VentanaPrincipalPerfilControlador {
 

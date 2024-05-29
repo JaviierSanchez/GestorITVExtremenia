@@ -1,9 +1,7 @@
 package com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaPrincipal;
 
 import com.jorja.proyect.proyectogestoritvfinal.controlador.bbdd.CONEXIONBD;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Pane;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

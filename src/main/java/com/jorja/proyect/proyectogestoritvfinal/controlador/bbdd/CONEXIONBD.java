@@ -26,10 +26,10 @@ public class CONEXIONBD {
     public Connection abrirConexion() {
         try {
             // Driver mysql
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName(DRIVERMYSQL);
 
             try {
-                conexion = (Connection) DriverManager.getConnection("jdbc:mysql://" + DBHOST + DBPORT + DBNAME, "root", "");
+                conexion = (Connection) DriverManager.getConnection(DBCONECTOR + DBHOST + DBPORT + DBNAME, DBUSER, DBPASSWORD);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
