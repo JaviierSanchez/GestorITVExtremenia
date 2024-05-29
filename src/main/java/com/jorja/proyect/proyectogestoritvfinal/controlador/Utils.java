@@ -35,6 +35,7 @@ public class Utils {
     public static final String INFORMEUSUARIO = "/com/jorja/proyect/proyectogestoritvfinal/informes/InformeITVExtremeñaUsuarios.jrxml";
     public static final String INFORMEVEHICULO = "/com/jorja/proyect/proyectogestoritvfinal/informes/InformeITVExtremeñaVehiculos.jrxml";
     public static final String INFORMECITA = "/com/jorja/proyect/proyectogestoritvfinal/informes/InformeITVExtremeñaCitas.jrxml";
+    public static final String INFORMEHISTORIAL = "/com/jorja/proyect/proyectogestoritvfinal/informes/InformeITVExtremeñaHistorial.jrxml";
 
 
     // Comprobaciones textos

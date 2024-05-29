@@ -540,7 +540,6 @@ public class VentanaPrincipalControlador implements Initializable {
                         mostrarAlerta("Error", "No se ha podido actualizar la cita", Alert.AlertType.ERROR);
                     }
 
-
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 } finally {
@@ -1247,21 +1246,25 @@ public class VentanaPrincipalControlador implements Initializable {
 
 
 
+    // Metodo para generar informes de usuarios
     @FXML
     void btnInformeUsuario(ActionEvent event) {
         crearInforme(INFORMEUSUARIO,cbd);
     }
-
+    // Metodo para generar informes de citas
     @FXML
     void btnInformeCita(ActionEvent event) {
         crearInforme(INFORMECITA,cbd);
     }
-
-
-
+    // Metodo para generar informes de vehiculos
     @FXML
     void btnInformeVehiculo(ActionEvent event) {
         crearInforme(INFORMEVEHICULO,cbd);
+    }
+    // Metodo para generar informes de historial
+    @FXML
+    void btnInformeHistorial(ActionEvent event){
+        crearInforme(INFORMEHISTORIAL,cbd);
     }
 
     // Metodo para realizar la copia de seguridad de la base de datos

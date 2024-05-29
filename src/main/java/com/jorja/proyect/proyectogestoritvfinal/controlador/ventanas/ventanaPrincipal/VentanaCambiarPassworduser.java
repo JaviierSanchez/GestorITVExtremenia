@@ -101,10 +101,7 @@ public class VentanaCambiarPassworduser {
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             } finally {
-                // Cerrar la conexión a la base de datos
-                if (conexion != null) {
-                    cbd.cerrarConexion();
-                }
+                cbd.cerrarConexion();
             }
         }
     }
@@ -113,7 +110,6 @@ public class VentanaCambiarPassworduser {
     @FXML
     void btnCancelar(ActionEvent event) {
         txtPasswordAntigua.getScene().getWindow().hide();
-
     }
 
 }
