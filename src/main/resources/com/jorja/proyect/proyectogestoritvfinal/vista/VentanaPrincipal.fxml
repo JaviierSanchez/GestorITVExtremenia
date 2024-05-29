@@ -406,25 +406,26 @@
                         <Label layoutX="281.0" layoutY="102.0" styleClass="lbl-General" text="Apellido:" />
                         <Label layoutX="31.0" layoutY="165.0" styleClass="lbl-General" text="Correo:" />
                         <Label layoutX="534.0" layoutY="99.0" styleClass="lbl-General" text="Teléfono:" />
-                        <TableView fx:id="TableViewHistorial" layoutX="28.0" layoutY="340.0" prefHeight="364.0" prefWidth="506.0">
+                        <TableView fx:id="TableViewHistorial" layoutX="28.0" layoutY="340.0" prefHeight="364.0" prefWidth="556.0">
                           <columns>
                             <TableColumn fx:id="columnMatriculaHistorial" prefWidth="104.0" text="Matrícula" />
-                            <TableColumn fx:id="columnFechaHistorial" prefWidth="98.0" text="Fecha" />
-                              <TableColumn fx:id="columnHoraHistorial" prefWidth="112.0" text="Hora" />
-                              <TableColumn fx:id="columnTipoInspeccionHistorial" prefWidth="191.0" text="Tipo Inspeción" />
+                            <TableColumn fx:id="columnFechaHistorial" prefWidth="126.0" text="Fecha" />
+                              <TableColumn fx:id="columnHoraHistorial" prefWidth="127.0" text="Hora" />
+                              <TableColumn fx:id="columnTipoInspeccionHistorial" prefWidth="198.0" text="Tipo Inspeción" />
                           </columns>
                         </TableView>
                         <Separator layoutX="6.0" layoutY="238.0" prefHeight="9.0" prefWidth="952.0" />
                         <Label layoutX="30.0" layoutY="260.0" styleClass="lbl-Titulos" text="Historial Movimientos" />
-                        <Separator layoutX="550.0" layoutY="286.0" orientation="VERTICAL" prefHeight="407.0" prefWidth="11.0" />
-                        <Button layoutX="650.0" layoutY="346.0" mnemonicParsing="false" onAction="#btnInformeUsuario" prefHeight="35.0" prefWidth="185.0" styleClass="btn-clear" text="Informe Clientes" />
-                        <Button layoutX="650.0" layoutY="393.0" mnemonicParsing="false" onAction="#btnInformeCita" prefHeight="35.0" prefWidth="185.0" styleClass="btn-update" text="Informe Citas" />
-                        <Button layoutX="650.0" layoutY="446.0" mnemonicParsing="false" onAction="#btnInformeVehiculo" prefHeight="35.0" prefWidth="185.0" styleClass="btn-add" text="Informe Vehículos" />
-                        <Label layoutX="650.0" layoutY="260.0" styleClass="lbl-Titulos" text="Funciones" />
+                        <Separator layoutX="592.0" layoutY="309.0" orientation="VERTICAL" prefHeight="407.0" prefWidth="11.0" />
+                        <Button layoutX="650.0" layoutY="345.0" mnemonicParsing="false" onAction="#btnInformeUsuario" prefHeight="35.0" prefWidth="185.0" styleClass="btn-clear" text="Informe Clientes" />
+                        <Button layoutX="650.0" layoutY="395.0" mnemonicParsing="false" onAction="#btnInformeCita" prefHeight="35.0" prefWidth="185.0" styleClass="btn-update" text="Informe Citas" />
+                        <Button layoutX="650.0" layoutY="445.0" mnemonicParsing="false" onAction="#btnInformeVehiculo" prefHeight="35.0" prefWidth="185.0" styleClass="btn-add" text="Informe Vehículos" />
+                        <Label layoutX="670.0" layoutY="260.0" styleClass="lbl-Titulos" text="Funciones" />
                         <Button layoutX="300.0" layoutY="157.0" mnemonicParsing="false" onAction="#btnModificarPasswordPerfil" prefHeight="35.0" prefWidth="183.0" styleClass="btn-add" text="Modificar Contraseña" />
                         <TextField fx:id="txtBusquedaHistorial" layoutX="31.0" layoutY="304.0" prefHeight="25.0" prefWidth="180.0" promptText="Búsqueda" styleClass="textfiedl-busqueda" />
                         <FontAwesomeIconView glyphName="SEARCH" layoutX="38.0" layoutY="320.0" size="14" />
-                        <Button layoutX="650.0" layoutY="494.0" mnemonicParsing="false" onAction="#btnBackUpBD" prefHeight="35.0" prefWidth="185.0" styleClass="btn-delete" text="Copia Base de Datos" />
+                        <Button layoutX="650.0" layoutY="545.0" mnemonicParsing="false" onAction="#btnBackUpBD" prefHeight="35.0" prefWidth="185.0" styleClass="btn-delete" text="Copia Base de Datos" />
+                        <Button layoutX="650.0" layoutY="495.0" mnemonicParsing="false" onAction="#btnInformeHistorial" prefHeight="35.0" prefWidth="185.0" styleClass="btn-clear" text="Informe Historial" />
                      </children>
                   </AnchorPane>
                </children>
