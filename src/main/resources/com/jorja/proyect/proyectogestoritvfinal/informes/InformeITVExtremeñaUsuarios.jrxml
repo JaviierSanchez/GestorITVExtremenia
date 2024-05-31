@@ -71,23 +71,19 @@ FROM itvpruebadev2.datos_usuario]]>
 			<frame>
 				<reportElement mode="Opaque" x="0" y="0" width="555" height="95" backcolor="#267AEA" uuid="6c6ca4e1-17cd-4913-93d6-5e670ea9ae8a"/>
 				<staticText>
-					<reportElement style="Title" mode="Opaque" x="0" y="0" width="450" height="66" backcolor="#267AEA" uuid="a2a2cac8-5a7d-4487-8c54-dab235ce4e21"/>
+					<reportElement style="Title" mode="Opaque" x="0" y="0" width="553" height="66" backcolor="#267AEA" uuid="a2a2cac8-5a7d-4487-8c54-dab235ce4e21"/>
 					<textElement textAlignment="Center">
 						<font isBold="true"/>
 					</textElement>
 					<text><![CDATA[ITV Extremeña]]></text>
 				</staticText>
 				<staticText>
-					<reportElement style="SubTitle" mode="Opaque" x="2" y="66" width="448" height="29" forecolor="#FFFFFF" backcolor="#267AEA" uuid="8978eac3-c578-41c9-837e-48d2b0184642"/>
+					<reportElement style="SubTitle" mode="Opaque" x="2" y="66" width="551" height="29" forecolor="#CCCCCC" backcolor="#267AEA" uuid="8978eac3-c578-41c9-837e-48d2b0184642"/>
 					<textElement textAlignment="Center">
 						<font size="22" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Informe Usuarios]]></text>
 				</staticText>
-				<image>
-					<reportElement x="451" y="10" width="101" height="85" uuid="4fdc7bee-f4df-4d16-94af-ef90bd2c079c"/>
-					<imageExpression><![CDATA["C:/Users/javie/Downloads/android_icon_corrected (1).png"]]></imageExpression>
-				</image>
 			</frame>
 			<frame>
 				<reportElement mode="Opaque" x="0" y="100" width="451" height="32" forecolor="#000000" backcolor="#FFFFFF" uuid="e3c14156-5b51-4201-918b-97fdc012e5d4"/>
