@@ -3,6 +3,7 @@ package com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaPri
 import com.jorja.proyect.proyectogestoritvfinal.controlador.bbdd.CONEXIONBD;
 import com.jorja.proyect.proyectogestoritvfinal.modelo.Cita;
 import com.jorja.proyect.proyectogestoritvfinal.modelo.TipoInspeccion;
+import com.jorja.proyect.proyectogestoritvfinal.modelo.TipoVehiculo;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
@@ -288,4 +289,31 @@ public class VentanaPrincipalCitaControlador {
         }
 
     }
+
+    public static TipoVehiculo obtenerTipoVehiculoPorMatricula(String matricula, CONEXIONBD cbd) {
+        String sql = "SELECT TV.id, TV.Nombre FROM vehiculo V INNER JOIN tipo_vehiculo TV ON V.Tipo_Vehiculo_id = TV.id WHERE V.Matricula = ?";
+        TipoVehiculo tipoVehiculo = null;
+
+        try {
+            conexion = cbd.abrirConexion();
+            sentencia = conexion.prepareStatement(sql);
+            sentencia.setString(1, matricula.toUpperCase());
+            resultado = sentencia.executeQuery();
+
+            if (resultado.next()) {
+                int idTipoVehiculo = resultado.getInt("id");
+                String nombreTipoVehiculo = resultado.getString("Nombre");
+                tipoVehiculo = new TipoVehiculo(idTipoVehiculo, nombreTipoVehiculo);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            cerrarConexion(cbd);
+        }
+
+        return tipoVehiculo;
+    }
+
+
+
 }

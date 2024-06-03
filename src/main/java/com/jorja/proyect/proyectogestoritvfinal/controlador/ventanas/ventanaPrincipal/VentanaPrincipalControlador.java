@@ -222,14 +222,16 @@ public class VentanaPrincipalControlador implements Initializable {
     private TextField txtTelefonoPerfil;
     @FXML
     private TextField txtTelefonoUsuario;
+    @FXML
+    private TextField txtTipoVehiculoCita;
+    @FXML
+    private CheckBox checkBoxAdmin;
 
     // ComboBoxes
     @FXML
     private ComboBox<MarcaVehiculo> txtMarcaVehiculo;
     @FXML
     private ComboBox<TipoInspeccion> txtTipoInspeccionCita;
-    @FXML
-    private ComboBox<TipoVehiculo> txtTipoVehiculoCita;
     @FXML
     private ComboBox<TipoVehiculo> txtTipoVehiculoVehiculo;
     @FXML
@@ -387,7 +389,7 @@ public class VentanaPrincipalControlador implements Initializable {
 
         // Comprobar que los campos no están vacíos
         if (txtMatriculaCita.getText().isEmpty() || txtFechaCita.getValue() == null || txtHoraCita.getValue().isEmpty() ||
-                txtTipoInspeccionCita.getValue() == null || txtTipoVehiculoCita.getValue() == null) {
+                txtTipoInspeccionCita.getValue() == null) {
             mostrarAlerta("Error", "Rellena todos los campos", Alert.AlertType.ERROR);
             return;
         }
@@ -423,7 +425,7 @@ public class VentanaPrincipalControlador implements Initializable {
                 sentencia = conexion.prepareStatement(sqlCita);
 
                 // Obtener el ID del tipo vehículo seleccionado
-                TipoVehiculo tipoVehiculoSeleccionado = txtTipoVehiculoCita.getValue();
+                TipoVehiculo tipoVehiculoSeleccionado = obtenerTipoVehiculoPorMatricula(txtMatriculaCita.getText(),cbd);
                 int idTipoVehiculo = tipoVehiculoSeleccionado.getId();
 
                 // Obtener el ID del tipo inspección seleccionado
@@ -496,7 +498,7 @@ public class VentanaPrincipalControlador implements Initializable {
 
         // Comprobar que los campos no están vacíos
         if (!txtMatriculaCita.getText().isEmpty() || txtFechaCita.getValue() == null || txtHoraCita.getValue() == null ||
-                txtTipoInspeccionCita.getValue() == null || txtTipoVehiculoCita.getValue() == null) {
+                txtTipoInspeccionCita.getValue() == null) {
 
             // Comprobar validaciones de campo
             if (!validarMatricula(txtMatriculaCita) || !validarFechaCita(txtFechaCita)) return;
@@ -515,11 +517,14 @@ public class VentanaPrincipalControlador implements Initializable {
             // Si la opcion seleccionada es igual a ok realizamos el update
             if (opcion == ButtonType.OK) {
                 try {
-                    // Obtener el id del tipo vehículo seleccionado
-                    int idTipoVehiculo = obtenerIdTipoVehiculo(txtTipoVehiculoCita.getValue());
+
 
                     // Obtener el id del tipo inspeccion seleccionada
                     int idTipoInspeccion = obtenerIdTipoInspeccion(txtTipoInspeccionCita.getValue());
+
+                    // Obtener el ID del tipo vehículo seleccionado
+                    TipoVehiculo tipoVehiculoSeleccionado = obtenerTipoVehiculoPorMatricula(txtMatriculaCita.getText(),cbd);
+                    int idTipoVehiculo = tipoVehiculoSeleccionado.getId();
 
                     sentencia = conexion.prepareStatement(sql);
                     sentencia.setString(1, String.valueOf(txtFechaCita.getValue()));
@@ -594,7 +599,7 @@ public class VentanaPrincipalControlador implements Initializable {
         txtMatriculaCita.clear();
         txtFechaCita.setValue(null);
         txtHoraCita.setValue(null);
-        txtTipoVehiculoCita.setValue(null);
+        txtTipoVehiculoCita.clear();
         txtTipoInspeccionCita.setValue(null);
         txtPrecioCita.clear();
         txtActivaCita.clear();
@@ -675,7 +680,7 @@ public class VentanaPrincipalControlador implements Initializable {
         txtMatriculaCita.setText(cita.getMatriculaVehiculo());
         txtFechaCita.setValue(LocalDate.parse(cita.getFecha()));
         txtHoraCita.setValue(cita.getHora());
-        txtTipoVehiculoCita.setValue(tipoVehiculo);
+        txtTipoVehiculoCita.setText(cita.getTipoVehiculoId());
         txtTipoInspeccionCita.setValue(tipoInspeccion);
         txtPrecioCita.setText(cita.getPrecio());
         txtActivaCita.setText(String.valueOf(cita.isActiva()));
@@ -701,30 +706,23 @@ public class VentanaPrincipalControlador implements Initializable {
 
 
     // Logica Ventana Principal Usuario
-
     @FXML
     void btnAddUsuario(ActionEvent event) {
-
-        String fechaAlta = obtenerFechaActual();
-
         String sql = """
-                INSERT INTO datos_usuario
-                 (Nombre, Apellido,Telefono, Correo, Contraseña, FechaAlta)
-                  VALUES (?, ?, ?, ?, ?, ?)
-                """;
+        INSERT INTO datos_usuario
+         (Nombre, Apellido, Telefono, Correo, Contraseña, FechaAlta, Administrador)
+          VALUES (?, ?, ?, ?, ?, CURRENT_DATE, ?)
+        """;
         conexion = cbd.abrirConexion();
         comprobarConexion(conexion);
 
-        // Comprobaciones de campos, si esta vacio muestra alerta error, sino compprueba que los datos se han introducido con formato correcto
         if (txtNombreUsuario.getText().isEmpty() || txtApellidoUsuario.getText().isEmpty() || txtTelefonoUsuario.getText().isEmpty() ||
                 txtCorreoUsuario.getText().isEmpty() || txtPassWordUsuario.getText().isEmpty()) {
             mostrarAlerta("Error", "Rellena los campos", Alert.AlertType.ERROR);
         } else {
-            // Validar campos
             if (!validarTelefono(txtTelefonoUsuario) || !validarCorreo(txtCorreoUsuario) || !validarPassword(txtPassWordUsuario))
                 return;
 
-            // Comprobar que el usuario no se encuentra en la BBDD sino mostrara la alerta
             String comprobarUsuariosql = "SELECT du.Correo FROM datos_usuario du where du.Correo = ?";
             try {
                 sentencia = conexion.prepareStatement(comprobarUsuariosql);
@@ -734,16 +732,16 @@ public class VentanaPrincipalControlador implements Initializable {
                 if (resultado.next()) {
                     mostrarAlerta("Error", "El usuario ya existe", Alert.AlertType.ERROR);
                 } else {
-                    // Ciframos la contraseña del usuario
                     String hashedPassword = hashPassword(txtPassWordUsuario.getText());
 
                     sentencia = conexion.prepareStatement(sql);
-                    sentencia.setString(1, txtNombreUsuario.getText());
-                    sentencia.setString(2, txtApellidoUsuario.getText());
+                    sentencia.setString(1, toTitleCase(txtNombreUsuario.getText()));
+                    sentencia.setString(2, toTitleCase(txtApellidoUsuario.getText()));
                     sentencia.setString(3, txtTelefonoUsuario.getText());
                     sentencia.setString(4, txtCorreoUsuario.getText());
                     sentencia.setString(5, hashedPassword);
-                    sentencia.setString(6, fechaAlta);
+                    sentencia.setBoolean(6, checkBoxAdmin.isSelected());
+
                     sentencia.executeUpdate();
                     mostrarAlerta("Añadido", "El usuario ha sido añadido", Alert.AlertType.INFORMATION);
                     btnCleanUsuarios(event);
@@ -759,13 +757,12 @@ public class VentanaPrincipalControlador implements Initializable {
 
     @FXML
     void btnUpdateUsuario(ActionEvent event) {
-
         String sql = "UPDATE datos_usuario du SET du.Nombre = ?, du.Apellido = ?, du.Telefono = ?, du.Correo = ?, du.Contraseña = ?, du.Administrador = ? WHERE du.id = ?";
 
         conexion = cbd.abrirConexion();
         comprobarConexion(conexion);
 
-        // Comprobaciones de campos, si esta vacio muestra alerta error, sino compprueba que los datos se han introducido con formato correcto
+        // Comprobaciones de campos, si está vacío muestra alerta error, sino comprueba que los datos se han introducido con formato correcto
         if (txtNombreUsuario.getText().isEmpty() || txtApellidoUsuario.getText().isEmpty() || txtTelefonoUsuario.getText().isEmpty() ||
                 txtCorreoUsuario.getText().isEmpty() || txtPassWordUsuario.getText().isEmpty()) {
             mostrarAlerta("Error", "Rellena los campos", Alert.AlertType.ERROR);
@@ -784,12 +781,12 @@ public class VentanaPrincipalControlador implements Initializable {
                 try {
                     String hashedPassword = hashPassword(txtPassWordUsuario.getText());
                     sentencia = conexion.prepareStatement(sql);
-                    sentencia.setString(1, txtNombreUsuario.getText());
-                    sentencia.setString(2, txtApellidoUsuario.getText());
+                    sentencia.setString(1, toTitleCase(txtNombreUsuario.getText()));
+                    sentencia.setString(2, toTitleCase(txtApellidoUsuario.getText()));
                     sentencia.setString(3, txtTelefonoUsuario.getText());
                     sentencia.setString(4, txtCorreoUsuario.getText());
                     sentencia.setString(5, hashedPassword);
-                    sentencia.setInt(6, (txtAdminUsuario.getText().equalsIgnoreCase("true")) ? 1 : 0);
+                    sentencia.setBoolean(6, checkBoxAdmin.isSelected());
                     sentencia.setString(7, txtIdUsuario.getText());
                     sentencia.executeUpdate();
 
@@ -802,7 +799,6 @@ public class VentanaPrincipalControlador implements Initializable {
                     cerrarConexion(cbd);
                 }
             }
-
         }
     }
 
@@ -827,7 +823,7 @@ public class VentanaPrincipalControlador implements Initializable {
                     sentencia = conexion.prepareStatement(sql);
                     sentencia.setString(1, txtCorreoUsuario.getText());
                     sentencia.executeUpdate();
-                    mostrarAlerta("Eliminado con éxito", "El empleado ha sido eliminado con éxito", Alert.AlertType.INFORMATION);
+                    mostrarAlerta("Eliminado con éxito", "El usuario ha sido eliminado con éxito", Alert.AlertType.INFORMATION);
                     btnCleanUsuarios(event);
                     agregarUsuarioLista();
                 } catch (SQLException e) {
@@ -847,7 +843,7 @@ public class VentanaPrincipalControlador implements Initializable {
         txtTelefonoUsuario.clear();
         txtCorreoUsuario.clear();
         txtPassWordUsuario.clear();
-        txtAdminUsuario.clear();
+       checkBoxAdmin.setSelected(false);
     }
     public void agregarUsuarioLista() {
         // Obtenemos la lista de Usuario
@@ -880,7 +876,7 @@ public class VentanaPrincipalControlador implements Initializable {
             txtTelefonoUsuario.setText(usuario.getTelefono());
             txtCorreoUsuario.setText(usuario.getCorreo());
             txtPassWordUsuario.setText(usuario.getContraseña());
-            txtAdminUsuario.setText(String.valueOf(usuario.isAdministrador()));
+            checkBoxAdmin.setSelected(usuario.isAdministrador());
         } catch (NullPointerException e) {
             System.err.println("ADVERTENCIA: No se ha seleccionado ningún empleado.");
         }
@@ -932,19 +928,36 @@ public class VentanaPrincipalControlador implements Initializable {
         conexion = cbd.abrirConexion();
         comprobarConexion(conexion);
 
-        // Comprobar que los campos no estan vacios
-        if (!txtMatriculaVehicula.getText().isEmpty() || !txtModeloVehiculo.getText().isEmpty() || txtMarcaVehiculo.getValue() == null ||
-                !txtAñoVehiculo.getText().isEmpty() || !txtIdUsuarioVehiculo.getText().isEmpty() || txtTipoVehiculoVehiculo.getValue() == null) {
+        // Comprobar que los campos no están vacíos
+        if (!txtMatriculaVehicula.getText().isEmpty() && !txtModeloVehiculo.getText().isEmpty() && txtMarcaVehiculo.getValue() != null &&
+                !txtAñoVehiculo.getText().isEmpty() && !txtIdUsuarioVehiculo.getText().isEmpty() && txtTipoVehiculoVehiculo.getValue() != null) {
+
+            // Eliminar espacios en blanco de la matrícula
+            String matricula = txtMatriculaVehicula.getText().replaceAll("\\s+", "").toUpperCase();
+
             // Comprobar validaciones de campos
             if (!validarMatricula(txtMatriculaVehicula) || !validarAño(txtAñoVehiculo)) return;
 
-            // Consulta para comprobar que el vehiculo no se encuentra en la bbdd
-            String sqlComprobacion = "SELECT * from vehiculo v WHERE v.Matricula = ?";
+            // Consulta para comprobar que el vehículo no se encuentra en la BBDD
+            String sqlComprobacion = "SELECT * FROM vehiculo v WHERE v.Matricula = ?";
+
+            // Consulta para comprobar que el usuario existe en la BBDD
+            String sqlComprobacionUsuario = "SELECT * FROM datos_usuario WHERE id = ?";
 
             try {
-                // Comprobación de duplicados
+                // Comprobar si el usuario existe
+                sentencia = conexion.prepareStatement(sqlComprobacionUsuario);
+                sentencia.setString(1, txtIdUsuarioVehiculo.getText());
+                resultado = sentencia.executeQuery();
+
+                if (!resultado.next()) {
+                    mostrarAlerta("Error", "El usuario no existe", Alert.AlertType.ERROR);
+                    return;
+                }
+
+                // Comprobación de duplicados de vehículo
                 sentencia = conexion.prepareStatement(sqlComprobacion);
-                sentencia.setString(1, txtMatriculaVehicula.getText());
+                sentencia.setString(1, matricula);
                 resultado = sentencia.executeQuery();
 
                 if (!resultado.next()) {
@@ -959,9 +972,9 @@ public class VentanaPrincipalControlador implements Initializable {
                     TipoVehiculo tipoVehiculoSeleccionado = txtTipoVehiculoVehiculo.getValue();
                     int idTipoVehiculo = tipoVehiculoSeleccionado.getId();
 
-                    sentencia.setString(1, txtMatriculaVehicula.getText().toUpperCase());
+                    sentencia.setString(1, matricula);
                     sentencia.setInt(2, idMarcaVehiculo);
-                    sentencia.setString(3, txtModeloVehiculo.getText().toUpperCase());
+                    sentencia.setString(3, toTitleCase(txtModeloVehiculo.getText()));
                     sentencia.setString(4, txtAñoVehiculo.getText());
                     sentencia.setString(5, txtIdUsuarioVehiculo.getText());
                     sentencia.setInt(6, idTipoVehiculo);
@@ -971,14 +984,14 @@ public class VentanaPrincipalControlador implements Initializable {
 
                     // Verificar si se insertó correctamente
                     if (filasInsertadas > 0) {
-                        mostrarAlerta("Añadido", "El vehiculo ha sido añadido", Alert.AlertType.INFORMATION);
+                        mostrarAlerta("Añadido", "El vehículo ha sido añadido", Alert.AlertType.INFORMATION);
                         btnCleanUsuarios(event);
                         agregarVehiculoLista();
                     } else {
-                        mostrarAlerta("Error", "No se pudo añadir el vehiculo", Alert.AlertType.ERROR);
+                        mostrarAlerta("Error", "No se pudo añadir el vehículo", Alert.AlertType.ERROR);
                     }
                 } else {
-                    mostrarAlerta("Error", "El vehiculo ya existe", Alert.AlertType.ERROR);
+                    mostrarAlerta("Error", "El vehículo ya existe", Alert.AlertType.ERROR);
                 }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
@@ -999,6 +1012,8 @@ public class VentanaPrincipalControlador implements Initializable {
         // Verificar que los campos no estén vacíos
         if (!txtMatriculaVehicula.getText().isEmpty() && !txtModeloVehiculo.getText().isEmpty() && txtMarcaVehiculo.getValue() != null &&
                 !txtAñoVehiculo.getText().isEmpty() && !txtIdUsuarioVehiculo.getText().isEmpty() && txtTipoVehiculoVehiculo.getValue() != null) {
+
+            String matricula = txtMatriculaVehicula.getText().replaceAll(" ", "").toUpperCase();
             // Validar matrícula y año
             if (!validarMatricula(txtMatriculaVehicula) || !validarAño(txtAñoVehiculo)) return;
 
@@ -1023,13 +1038,13 @@ public class VentanaPrincipalControlador implements Initializable {
                     int idTipoVehiculo = obtenerIdTipoVehiculo(txtTipoVehiculoVehiculo.getValue());
 
                     sentencia = conexion.prepareStatement(sql);
-                    sentencia.setString(1, txtMatriculaVehicula.getText().toUpperCase());
+                    sentencia.setString(1, matricula);
                     sentencia.setInt(2, idMarcaVehiculo);
                     sentencia.setString(3, txtModeloVehiculo.getText().toUpperCase());
                     sentencia.setString(4, txtAñoVehiculo.getText());
                     sentencia.setInt(5, Integer.parseInt(txtIdUsuarioVehiculo.getText()));
                     sentencia.setInt(6, idTipoVehiculo);
-                    sentencia.setString(7, txtMatriculaVehicula.getText());
+                    sentencia.setString(7, matricula);
 
                     int resultado = sentencia.executeUpdate();
                     if (resultado > 0) {
@@ -1070,7 +1085,7 @@ public class VentanaPrincipalControlador implements Initializable {
                     sentencia = conexion.prepareStatement(sql);
                     sentencia.setString(1, txtMatriculaVehicula.getText());
                     sentencia.executeUpdate();
-                    mostrarAlerta("Eliminado con éxito", "El empleado ha sido eliminado con éxito", Alert.AlertType.INFORMATION);
+                    mostrarAlerta("Eliminado con éxito", "El vehículo ha sido eliminado con éxito", Alert.AlertType.INFORMATION);
                     btnCleanVehiculo(event);
                     agregarVehiculoLista();
                 } catch (SQLException e) {
@@ -1295,7 +1310,6 @@ public class VentanaPrincipalControlador implements Initializable {
         asignarDatosUsuarioSesion();
         sacarNombreUsuarioLogueado(lblNombreUsuario);
         cargarDatosTipoVehiculo(txtTipoVehiculoVehiculo, cbd);
-        cargarDatosTipoVehiculo(txtTipoVehiculoCita, cbd);
         cargarDatosMarcaVehiculo(txtMarcaVehiculo, cbd);
         cargarHorasCitas(txtFechaCita,txtHoraCita,cbd);
         deshabilitarDiasNoValidos(txtFechaCita);
@@ -1327,5 +1341,27 @@ public class VentanaPrincipalControlador implements Initializable {
                 txtPrecioCita.setText(String.valueOf(newValue.getPrecio()));
             }
         });
+
+        // Listener para autocompletar el tipo de vehículo cuando se introduce la matrícula
+        txtMatriculaCita.textProperty().addListener((observable, oldValue, newValue) -> {
+            // Verifica si el nuevo valor (newValue) no está vacío y tiene exactamente 7 caracteres
+            if (!newValue.isEmpty() && newValue.length() == 7) {
+                // Realiza la consulta para obtener el tipo de vehículo asociado a la matrícula ingresada
+                TipoVehiculo tipoVehiculo = obtenerTipoVehiculoPorMatricula(newValue, cbd);
+
+                // Si se encuentra un tipo de vehículo correspondiente a la matrícula
+                if (tipoVehiculo != null) {
+                    // Establece el texto del campo txtTipoVehiculoCita2 al nombre del tipo de vehículo
+                    txtTipoVehiculoCita.setText(String.valueOf(tipoVehiculo.getNombre()));
+                } else {
+                    // Si no se encuentra un tipo de vehículo, limpia el campo txtTipoVehiculoCita2
+                    txtTipoVehiculoCita.setText(null);
+                }
+            } else {
+                // Si el nuevo valor está vacío o no tiene 7 caracteres, limpia el campo txtTipoVehiculoCita2
+                txtTipoVehiculoCita.setText(null);
+            }
+        });
+
     }
 }

@@ -139,7 +139,7 @@ public class Utils {
     // Metodo para validar Matricula
     public static boolean validarMatricula(TextField textField){
         if(!textField.getText().matches(MATRICULAREGEX)){
-            mostrarAlerta("Error","La matricula no cumple el formato. \n Ejemplo: 1234 ABC", Alert.AlertType.ERROR);
+            mostrarAlerta("Error","La matricula no cumple el formato. \n Ejemplo: 1234ABC", Alert.AlertType.ERROR);
             return false;
         }
         return true;
@@ -222,6 +222,30 @@ public class Utils {
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    //Metodo que te pone una frase en minuscula a que el inicio de la frase se ponga en Mayuscula
+    public static String toTitleCase(String input) {
+        if (input == null || input.isEmpty()) {
+            return input;
+        }
+
+        StringBuilder titleCase = new StringBuilder();
+        boolean nextTitleCase = true;
+
+        for (char c : input.toCharArray()) {
+            if (Character.isSpaceChar(c)) {
+                nextTitleCase = true;
+            } else if (nextTitleCase) {
+                c = Character.toTitleCase(c);
+                nextTitleCase = false;
+            } else {
+                c = Character.toLowerCase(c);
+            }
+            titleCase.append(c);
+        }
+
+        return titleCase.toString();
     }
 
 }

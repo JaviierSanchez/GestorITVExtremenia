@@ -1,6 +1,5 @@
 package com.jorja.proyect.proyectogestoritvfinal.controlador.ventanas.ventanaRegister;
 
-import com.jorja.proyect.proyectogestoritvfinal.controlador.Utils;
 import com.jorja.proyect.proyectogestoritvfinal.controlador.bbdd.CONEXIONBD;
 import com.jorja.proyect.proyectogestoritvfinal.vista.Main;
 import javafx.event.ActionEvent;
@@ -105,15 +104,11 @@ public class RegisterController implements Initializable {
                 return;
             } else {
                 if (resultado.next()) {
-                    // El usuario ya existe
                     mostrarAlerta("Usuario Existente", "¡El usuario ya está registrado!", Alert.AlertType.ERROR);
                 } else {
-
-                    //Cifrar la contraseña mediante hash
                     String hashedPassword = hashPassword(txtPassword.getText());
 
-                    // El usuario no existe y se crea
-                    String sqlInsert = "INSERT INTO datos_usuario(Nombre,Apellido,Telefono,Correo,Contraseña) VALUES (?,?,?,?,?)";
+                    String sqlInsert = "INSERT INTO datos_usuario(Nombre, Apellido, Telefono, Correo, Contraseña, FechaAlta) VALUES (?, ?, ?, ?, ?, CURRENT_DATE)";
                     sentencia = conexion.prepareStatement(sqlInsert);
                     sentencia.setString(1, txtNombre.getText());
                     sentencia.setString(2, txtApellido.getText());
@@ -124,7 +119,6 @@ public class RegisterController implements Initializable {
 
                     if (filas > 0) {
                         mostrarAlerta("Usuario registrado", "El usuario se registro con exito, inicie sesion", Alert.AlertType.INFORMATION);
-                        // Nos dirige hacia la ventana Login
                         txtCorreo.getScene().getWindow().hide();
                         try {
                             new Main().start(new Stage());
@@ -139,17 +133,10 @@ public class RegisterController implements Initializable {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            if (conexion != null) {
-
-                try {
-                    cbd.cerrarConexion();
-                    conexion.close();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-            }
+            cbd.cerrarConexion();
         }
     }
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
