@@ -266,6 +266,8 @@ public class VentanaPrincipalControlador implements Initializable {
         contardorTotalVehiculos();
         contadorTotalGanaciasMensuales();
         cargarDatosGraficoUsuario();
+        agregarVehiculoLista();
+        agregarCitaLista();
         buscarUsuarioTableView();
         buscarVehiculoTableView();
         buscarCitaTableView();
@@ -275,8 +277,7 @@ public class VentanaPrincipalControlador implements Initializable {
         btnCleanUsuarios(actionEvent);
         btnCleanVehiculo(actionEvent);
         btnCleanCita(actionEvent);
-        agregarVehiculoLista();
-        agregarCitaLista();
+
     }
 
     // Metodo para limpiar la barra de busqueda cuando cambias de ventana
@@ -285,7 +286,6 @@ public class VentanaPrincipalControlador implements Initializable {
         txtBusquedaVehiculo.clear();
         txtBusquedaCita.clear();
         txtBusquedaHistorial.clear();
-
     }
 
     public void cerrarVentana(ActionEvent actionEvent) {
@@ -662,9 +662,9 @@ public class VentanaPrincipalControlador implements Initializable {
             });
         });
 
-        SortedList<Cita> listaOrdenadorCita = new SortedList<>(filtroCita);
-        listaOrdenadorCita.comparatorProperty().bind(TableViewCita.comparatorProperty());
-        TableViewCita.setItems(listaOrdenadorCita);
+        SortedList<Cita> listaOrdenadaCita = new SortedList<>(filtroCita);
+        listaOrdenadaCita.comparatorProperty().bind(TableViewCita.comparatorProperty());
+        TableViewCita.setItems(listaOrdenadaCita);
     }
 
 
@@ -1155,21 +1155,21 @@ public class VentanaPrincipalControlador implements Initializable {
     public void buscarVehiculoTableView() {
         FilteredList<Vehiculo> filtroVehiculo = new FilteredList<>(addVehiculoLista, u -> true);
         txtBusquedaVehiculo.textProperty().addListener((observable, oldValue, newValue) -> {
-            filtroVehiculo.setPredicate(vehiculo1 -> {
+            filtroVehiculo.setPredicate(vehiculo -> {
                 if (newValue == null || newValue.isEmpty()) return true;
                 String lowerCaseFiltrer = newValue.toLowerCase();
 
-                if (vehiculo1.getMatricula().toLowerCase().indexOf(lowerCaseFiltrer) != -1) {
+                if (vehiculo.getMatricula().toLowerCase().indexOf(lowerCaseFiltrer) != -1) {
                     return true;
-                } else if (vehiculo1.getMarca().toLowerCase().indexOf(lowerCaseFiltrer) != -1) {
+                } else if (vehiculo.getMarca().toLowerCase().indexOf(lowerCaseFiltrer) != -1) {
                     return true;
-                } else if (vehiculo1.getModelo().toLowerCase().indexOf(lowerCaseFiltrer) != -1) {
+                } else if (vehiculo.getModelo().toLowerCase().indexOf(lowerCaseFiltrer) != -1) {
                     return true;
-                } else if (vehiculo1.getYear().toLowerCase().indexOf(lowerCaseFiltrer) != -1) {
+                } else if (vehiculo.getYear().toLowerCase().indexOf(lowerCaseFiltrer) != -1) {
                     return true;
-                } else if (vehiculo1.getTipoVehiculo().toLowerCase().indexOf(lowerCaseFiltrer) != -1) {
+                } else if (vehiculo.getTipoVehiculo().toLowerCase().indexOf(lowerCaseFiltrer) != -1) {
                     return true;
-                } else if (vehiculo1.getCorreoUsuario().toLowerCase().indexOf(lowerCaseFiltrer) != -1) {
+                } else if (vehiculo.getCorreoUsuario().toLowerCase().indexOf(lowerCaseFiltrer) != -1) {
                     return true;
                 } else {
                     return false;

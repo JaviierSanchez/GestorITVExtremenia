@@ -62,8 +62,8 @@ public class LoginController implements Initializable {
         String sql = "SELECT * FROM datos_usuario du WHERE du.Correo = ? AND du.Contraseña = ?";
 
         cbd = new CONEXIONBD();
-        comprobarConexion(conexion);
         conexion = cbd.abrirConexion();
+        comprobarConexion(conexion);
         try {
             sentencia = conexion.prepareStatement(sql);
             sentencia.setString(1, txtEmail.getText());
