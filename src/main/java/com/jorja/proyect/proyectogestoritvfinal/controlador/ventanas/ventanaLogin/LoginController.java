@@ -60,10 +60,10 @@ public class LoginController implements Initializable {
 
     private void iniciarSesion() {
         String sql = "SELECT * FROM datos_usuario du WHERE du.Correo = ? AND du.Contraseña = ?";
-        cbd = new CONEXIONBD();
-        conexion = cbd.abrirConexion();
-        comprobarConexion(conexion);
 
+        cbd = new CONEXIONBD();
+        comprobarConexion(conexion);
+        conexion = cbd.abrirConexion();
         try {
             sentencia = conexion.prepareStatement(sql);
             sentencia.setString(1, txtEmail.getText());
@@ -110,9 +110,10 @@ public class LoginController implements Initializable {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-        cerrarConexion(cbd);
+            cerrarConexion(cbd);
         }
     }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         txtPassword.setOnKeyPressed(e -> {

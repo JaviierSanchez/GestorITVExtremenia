@@ -275,6 +275,8 @@ public class VentanaPrincipalControlador implements Initializable {
         btnCleanUsuarios(actionEvent);
         btnCleanVehiculo(actionEvent);
         btnCleanCita(actionEvent);
+        agregarVehiculoLista();
+        agregarCitaLista();
     }
 
     // Metodo para limpiar la barra de busqueda cuando cambias de ventana
