@@ -458,6 +458,7 @@ public class VentanaPrincipalControlador implements Initializable {
                         mostrarAlerta("Añadida", "La cita ha sido añadida correctamente", Alert.AlertType.INFORMATION);
                         agregarCitaLista();
                         agregarHistorialLista();
+                        buscarCitaTableView();
 
                         // Recargar las horas disponibles para la fecha seleccionada utilizando obtenerHorasOcupadas
                         LocalDate fechaSeleccionada = txtFechaCita.getValue();
@@ -543,6 +544,7 @@ public class VentanaPrincipalControlador implements Initializable {
                         mostrarAlerta("Cita actualizada", "La cita ha sido actualizada con éxito", Alert.AlertType.INFORMATION);
                         agregarCitaLista();
                         btnCleanCita(event);
+                        buscarCitaTableView();
                     } else {
                         mostrarAlerta("Error", "No se ha podido actualizar la cita", Alert.AlertType.ERROR);
                     }
@@ -583,6 +585,7 @@ public class VentanaPrincipalControlador implements Initializable {
                     mostrarAlerta("Eliminado con éxito","La cita ha sido eliminada con éxito", Alert.AlertType.INFORMATION);
                     btnCleanCita(event);
                     agregarCitaLista();
+                    buscarCitaTableView();
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }finally {
@@ -605,6 +608,7 @@ public class VentanaPrincipalControlador implements Initializable {
         txtTipoInspeccionCita.setValue(null);
         txtPrecioCita.clear();
         txtActivaCita.clear();
+        txtBusquedaCita.clear();
 
     }
 
@@ -748,6 +752,7 @@ public class VentanaPrincipalControlador implements Initializable {
                     mostrarAlerta("Añadido", "El usuario ha sido añadido", Alert.AlertType.INFORMATION);
                     btnCleanUsuarios(event);
                     agregarUsuarioLista();
+                    buscarUsuarioTableView();
                 }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
@@ -795,6 +800,7 @@ public class VentanaPrincipalControlador implements Initializable {
                     mostrarAlerta("Usuario actualizado", "El usuario ha sido actualizado", Alert.AlertType.INFORMATION);
                     agregarUsuarioLista();
                     btnCleanUsuarios(event);
+                    buscarUsuarioTableView();
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 } finally {
@@ -828,6 +834,7 @@ public class VentanaPrincipalControlador implements Initializable {
                     mostrarAlerta("Eliminado con éxito", "El usuario ha sido eliminado con éxito", Alert.AlertType.INFORMATION);
                     btnCleanUsuarios(event);
                     agregarUsuarioLista();
+                    buscarUsuarioTableView();
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 } finally {
@@ -846,6 +853,7 @@ public class VentanaPrincipalControlador implements Initializable {
         txtCorreoUsuario.clear();
         txtPassWordUsuario.clear();
        checkBoxAdmin.setSelected(false);
+       txtBusquedaUsuario.clear();
     }
     public void agregarUsuarioLista() {
         // Obtenemos la lista de Usuario
@@ -989,6 +997,7 @@ public class VentanaPrincipalControlador implements Initializable {
                         mostrarAlerta("Añadido", "El vehículo ha sido añadido", Alert.AlertType.INFORMATION);
                         btnCleanUsuarios(event);
                         agregarVehiculoLista();
+                        buscarVehiculoTableView();
                     } else {
                         mostrarAlerta("Error", "No se pudo añadir el vehículo", Alert.AlertType.ERROR);
                     }
@@ -1053,6 +1062,7 @@ public class VentanaPrincipalControlador implements Initializable {
                         mostrarAlerta("Vehículo actualizado", "El vehículo ha sido actualizado correctamente.", Alert.AlertType.INFORMATION);
                         agregarVehiculoLista();
                         btnCleanVehiculo(event);
+                        buscarVehiculoTableView();
                     } else {
                         mostrarAlerta("Error", "No se ha podido actualizar el vehículo.", Alert.AlertType.ERROR);
                     }
@@ -1090,6 +1100,7 @@ public class VentanaPrincipalControlador implements Initializable {
                     mostrarAlerta("Eliminado con éxito", "El vehículo ha sido eliminado con éxito", Alert.AlertType.INFORMATION);
                     btnCleanVehiculo(event);
                     agregarVehiculoLista();
+                    buscarVehiculoTableView();
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 } finally {
@@ -1110,6 +1121,7 @@ public class VentanaPrincipalControlador implements Initializable {
         txtAñoVehiculo.clear();
         txtTipoVehiculoVehiculo.setValue(null);
         txtIdUsuarioVehiculo.clear();
+        txtBusquedaVehiculo.clear();
     }
 
 

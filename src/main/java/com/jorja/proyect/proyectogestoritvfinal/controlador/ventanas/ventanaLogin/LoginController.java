@@ -108,7 +108,7 @@ public class LoginController implements Initializable {
                 mostrarAlerta("Error de Credenciales", "¡Error de credenciales! Por favor, verifica tus datos e inténtalo nuevamente.", Alert.AlertType.ERROR);
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+           mostrarAlerta("Error","Error en la conexión de la base de datos", Alert.AlertType.ERROR);
         } finally {
             cerrarConexion(cbd);
         }
