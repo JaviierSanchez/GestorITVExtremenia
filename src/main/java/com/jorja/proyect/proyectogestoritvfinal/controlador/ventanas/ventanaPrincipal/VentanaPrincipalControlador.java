@@ -459,6 +459,7 @@ public class VentanaPrincipalControlador implements Initializable {
                         mostrarAlerta("Añadida", "La cita ha sido añadida correctamente", Alert.AlertType.INFORMATION);
                         agregarCitaLista();
                         agregarHistorialLista();
+                        buscarCitaTableView();
 
                         // Recargar las horas disponibles para la fecha seleccionada utilizando obtenerHorasOcupadas
                         LocalDate fechaSeleccionada = txtFechaCita.getValue();
@@ -545,7 +546,6 @@ public class VentanaPrincipalControlador implements Initializable {
                         mostrarAlerta("Cita actualizada", "La cita ha sido actualizada con éxito", Alert.AlertType.INFORMATION);
                         agregarCitaLista();
                         btnCleanCita(event);
-                        buscarCitaTableView();
                     } else {
                         mostrarAlerta("Error", "No se ha podido actualizar la cita", Alert.AlertType.ERROR);
                     }
@@ -835,6 +835,7 @@ public class VentanaPrincipalControlador implements Initializable {
                     sentencia.setString(1, txtCorreoUsuario.getText());
                     sentencia.executeUpdate();
                     mostrarAlerta("Eliminado con éxito", "El usuario ha sido eliminado con éxito", Alert.AlertType.INFORMATION);
+                    btnCleanUsuarios(event);
                     agregarUsuarioLista();
                     btnCleanUsuarios(event);
                     buscarUsuarioTableView();

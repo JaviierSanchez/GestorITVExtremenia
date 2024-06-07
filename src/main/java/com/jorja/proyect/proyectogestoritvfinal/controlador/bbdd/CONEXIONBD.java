@@ -31,7 +31,7 @@ public class CONEXIONBD {
             try {
                 conexion = (Connection) DriverManager.getConnection(DBCONECTOR + DBHOST + DBPORT + DBNAME, DBUSER, DBPASSWORD);
             } catch (SQLException e) {
-                e.printStackTrace();
+                System.out.println("1.Error al abrir la conexion");
             }
         } catch (ClassNotFoundException e) {
             e.printStackTrace();

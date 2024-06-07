@@ -1,0 +1,250 @@
+@startuml
+
+class Usuario {
+    -int id
+    -String nombre
+    -String apellido
+    -String telefono
+    -String correo
+    -String contraseña
+    -boolean administrador
+    -String FechaAlta
+}
+
+class Vehiculo {
+    -String matricula
+    -String marca
+    -String modelo
+    -String year
+    -String correoUsuario
+    -String tipoVehiculo
+}
+
+class TipoVehiculo {
+    -int id
+    -String nombre
+}
+
+class TipoInspeccion {
+    -int id
+    -String Nombre
+    -float precio
+}
+
+class Sesion {
+    -static Usuario usuarioActual
+    +static void iniciarSesion(Usuario usuario)
+    +static Usuario getUsuarioActual()
+}
+
+class MarcaVehiculo {
+    -int id
+    -String nombre
+}
+
+class HistorialCita {
+    -String matricula
+    -String fecha
+    -String hora
+    -String tipoInspeccionId
+}
+
+class Cita {
+    -int id
+    -String matriculaVehiculo
+    -String fecha
+    -String hora
+    -String tipoInspeccionId
+    -String tipoVehiculoId
+    -String precio
+    -boolean activa
+}
+
+class LoginController {
+    -TextField txtEmail
+    -PasswordField txtPassword
+    -Connection conexion
+    -PreparedStatement sentencia
+    -ResultSet resultado
+    -CONEXIONBD cbd
+    +void btnLogin(ActionEvent event)
+    +void btnClose(ActionEvent event)
+    +void btnRegister(ActionEvent event)
+    +void iniciarSesion()
+    +void registrar()
+}
+
+class RegisterController {
+    -TextField txtApellido
+    -TextField txtCorreo
+    -TextField txtNombre
+    -PasswordField txtPassword
+    -PasswordField txtPassword2
+    -TextField txtTelefono
+    -Connection conexion
+    -PreparedStatement sentencia
+    -ResultSet resultado
+    -CONEXIONBD cbd
+    +void btnRegister(ActionEvent event)
+    +void btnCancelar(ActionEvent event)
+    +void btnClose(ActionEvent event)
+    +void registrarUsuario()
+}
+
+class VentanaPrincipalControlador {
+    -Connection conexion
+    -PreparedStatement sentencia
+    -ResultSet resultado
+    -CONEXIONBD cbd
+    -Date fecha
+    -Usuario usuario
+    -Vehiculo vehiculo
+    -Cita cita
+    -HistorialCita historialCita
+    +void cambiarVentana(ActionEvent actionEvent)
+    +void cerrarVentana(ActionEvent actionEvent)
+    +void contadorTotalUsuarios()
+    +void contardorTotalVehiculos()
+    +void contadorTotalCitas()
+    +void contadorTotalGanaciasMensuales()
+    +void cargarDatosGraficoUsuario()
+    +void btnAddCita(ActionEvent event)
+    +void btnUpdateCita(ActionEvent event)
+    +void btnDeleteCita(ActionEvent event)
+    +void btnCleanCita(ActionEvent event)
+    +void agregarCitaLista()
+    +void buscarCitaTableView()
+    +void mostrarCitaSeleccionada()
+    +void cargarHorasCitas(DatePicker datePicker, ComboBox<String> comboBox, CONEXIONBD cbd)
+    +void btnAddUsuario(ActionEvent event)
+    +void btnUpdateUsuario(ActionEvent event)
+    +void btnDeleteUsuario(ActionEvent event)
+    +void btnCleanUsuarios(ActionEvent actionEvent)
+    +void agregarUsuarioLista()
+    +void mostrarUsuarioSeleccionado()
+    +void buscarUsuarioTableView()
+    +void btnAddVehiculo(ActionEvent event)
+    +void btnUpdateVehiculo(ActionEvent event)
+    +void btnDeleteVehiculo(ActionEvent event)
+    +void btnCleanVehiculo(ActionEvent event)
+    +void agregarVehiculoLista()
+    +void mostrarVehiculoSeleccionado()
+    +void buscarVehiculoTableView()
+    +void asignarDatosUsuarioSesion()
+    +void btnModificarPasswordPerfil(ActionEvent event)
+    +void agregarHistorialLista()
+    +void buscarHistorialCitaTableView()
+    +void btnInformeUsuario(ActionEvent event)
+    +void btnInformeCita(ActionEvent event)
+    +void btnInformeVehiculo(ActionEvent event)
+    +void btnInformeHistorial(ActionEvent event)
+    +void btnBackUpBD(ActionEvent event)
+}
+
+class VentanaPrincipalInicioControlador {
+    +void contadorTarjetas(String sql, Label label, CONEXIONBD cbd)
+    +String obtenerNombreMes(int numeroMes)
+}
+
+class VentanaPrincipalPerfilControlador {
+    +ObservableList<HistorialCita> addHistorialCita(CONEXIONBD cbd, HistorialCita historialCita)
+    +void backUpBD(CONEXIONBD cbd)
+    +void crearInforme(String informeRuta, CONEXIONBD cbd)
+}
+
+class VentanaPrincipalUsuarioControlador {
+    +void sacarNombreUsuarioLogueado(Label label)
+    +Usuario cargarUsuarioPorCorreo(String correo)
+    +ObservableList<Usuario> addUsuario(CONEXIONBD cbd, Usuario usuario)
+    +boolean existeUsuario(int idUsuario)
+}
+
+class VentanaPrincipalVehiculoControlador {
+    +ObservableList<Vehiculo> addVehiculo(CONEXIONBD cbd, Vehiculo vehiculo)
+    +void cargarDatosTipoVehiculo(ComboBox<TipoVehiculo> comboBox, CONEXIONBD cbd)
+    +void cargarDatosMarcaVehiculo(ComboBox<MarcaVehiculo> comboBox, CONEXIONBD cbd)
+    +int obtenerIdMarca(MarcaVehiculo marcaSeleccionada)
+    +int obtenerIdTipoVehiculo(TipoVehiculo tipoVehiculoSeleccionado)
+}
+
+class Utils {
+    +String VENTANALOGIN
+    +String VENTANAPRINCIPAL
+    +String VENTANAREGISTER
+    +String VENTANACAMBIARPASSWORD
+    +String INFORMEUSUARIO
+    +String INFORMEVEHICULO
+    +String INFORMECITA
+    +String INFORMEHISTORIAL
+    +String TELEFONOREGEX
+    +String CORREOREGEX
+    +String PASSWORDREGEX
+    +String MATRICULAREGEX
+    +String COLUMNIDUSUARIO
+    +String COLUMNNOMBREUSUARIO
+    +String COLUMNAPELLIDOUSUARIO
+    +String COLUMNTELEFONOUSUARIO
+    +String COLUMNCORREOUSUARIO
+    +String COLUMNCONTRASEÑAUSUARIO
+    +String COLUMNADMINISTRADORUSUARIO
+    +String COLUMNFECHAALTAUSUARIO
+    +String COLUMNMATRICULAVEHICULO
+    +String COLUMNMARCAVEHICULO
+    +String COLUMNMODELOVEHICULO
+    +String COLUMNAÑOVEHICULO
+    +String COLUMNTIPOVEHICULOVEHICULO
+    +String COLUMNPROPIETARIOVEHICULO
+    +String COLUMNIDCITA
+    +String COLUMNMATRICULAVEHICULOCITA
+    +String COLUMNFECHACITA
+    +String COLUMNHORACITA
+    +String COLUMNTIPOINSPECCIONIDCITA
+    +String COLUMNTIPOVEHICULOIDCITA
+    +String COLUMNPRECIOCITA
+    +String COLUMNACTIVACITA
+    +String COLUMNMATRICULAHISTORIAL
+    +String COLUMNFECHAHISTORIAL
+    +String COLUMNHORAHISTORIAL
+    +String COLUMNTIPOINSPECCIONHISTORIAL
+    +String obtenerFechaActual()
+    +void cambiarVentanaBtn(Button botonPresionado, Button[] botones, Pane[] layouts)
+    +boolean validarTelefono(TextField textField)
+    +boolean validarCorreo(TextField textField)
+    +boolean validarPassword(TextField textField)
+    +boolean validarMatricula(TextField textField)
+    +boolean validarFechaCita(DatePicker datePicker)
+    +boolean validarAño(TextField textField)
+    +void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipoAlerta)
+    +void cerrarConexion(CONEXIONBD cbd)
+    +String hashPassword(String password)
+    +String toTitleCase(String input)
+}
+
+Sesion --> Usuario : usuarioActual
+HistorialCita --> Cita : "tipoInspeccionId"
+Cita --> Vehiculo : "matriculaVehiculo"
+Cita --> TipoInspeccion : "tipoInspeccionId"
+Cita --> TipoVehiculo : "tipoVehiculoId"
+Vehiculo --> Usuario : "correoUsuario"
+Vehiculo --> TipoVehiculo : "tipoVehiculo"
+Vehiculo --> MarcaVehiculo : "marca"
+
+LoginController --> Usuario
+RegisterController --> Usuario
+VentanaPrincipalControlador --> Usuario
+VentanaPrincipalControlador --> Vehiculo
+VentanaPrincipalControlador --> Cita
+VentanaPrincipalControlador --> HistorialCita
+VentanaPrincipalControlador --> TipoInspeccion
+VentanaPrincipalControlador --> TipoVehiculo
+VentanaPrincipalControlador --> MarcaVehiculo
+VentanaPrincipalControlador --> Sesion
+VentanaPrincipalInicioControlador --> Usuario
+VentanaPrincipalPerfilControlador --> HistorialCita
+VentanaPrincipalUsuarioControlador --> Usuario
+VentanaPrincipalVehiculoControlador --> Vehiculo
+VentanaPrincipalVehiculoControlador --> MarcaVehiculo
+VentanaPrincipalVehiculoControlador --> TipoVehiculo
+VentanaPrincipalControlador --> Utils
+
+@enduml
