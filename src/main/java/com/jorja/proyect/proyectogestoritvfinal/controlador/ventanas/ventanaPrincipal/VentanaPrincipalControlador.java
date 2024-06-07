@@ -546,6 +546,7 @@ public class VentanaPrincipalControlador implements Initializable {
                         mostrarAlerta("Cita actualizada", "La cita ha sido actualizada con éxito", Alert.AlertType.INFORMATION);
                         agregarCitaLista();
                         btnCleanCita(event);
+                        buscarCitaTableView();
                     } else {
                         mostrarAlerta("Error", "No se ha podido actualizar la cita", Alert.AlertType.ERROR);
                     }
