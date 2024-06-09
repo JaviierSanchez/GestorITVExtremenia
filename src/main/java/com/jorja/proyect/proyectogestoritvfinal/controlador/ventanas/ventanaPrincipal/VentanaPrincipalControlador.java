@@ -502,8 +502,8 @@ public class VentanaPrincipalControlador implements Initializable {
         comprobarConexion(conexion);
 
         // Comprobar que los campos no están vacíos
-        if (!txtMatriculaCita.getText().isEmpty() || txtFechaCita.getValue() == null || txtHoraCita.getValue() == null ||
-                txtTipoInspeccionCita.getValue() == null) {
+        if (!txtMatriculaCita.getText().isEmpty() && txtFechaCita.getValue() != null && txtHoraCita.getValue() != null &&
+                txtTipoInspeccionCita.getValue() != null) {
 
             // Comprobar validaciones de campo
             if (!validarMatricula(txtMatriculaCita) || !validarFechaCita(txtFechaCita)) return;
