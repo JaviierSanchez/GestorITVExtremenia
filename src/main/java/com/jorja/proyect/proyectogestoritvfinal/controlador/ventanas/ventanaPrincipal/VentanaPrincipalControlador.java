@@ -497,7 +497,7 @@ public class VentanaPrincipalControlador implements Initializable {
     @FXML
     void btnUpdateCita(ActionEvent event) {
 
-        String sql = "UPDATE cita SET Fecha = ?, Hora = ?, id_Vehiculo = ?, Tipo_Inspeccion_id = ?, Tipo_Vehiculo_id = ?, Activa = ? WHERE id = ?";
+        String sql = "UPDATE cita SET Fecha = ?, Hora = ?,  Tipo_Inspeccion_id = ?, Tipo_Vehiculo_id = ?, Activa = ? WHERE id = ?";
         conexion = cbd.abrirConexion();
         comprobarConexion(conexion);
 
@@ -514,6 +514,24 @@ public class VentanaPrincipalControlador implements Initializable {
                 mostrarAlerta("Error", "El ID de cita no existe en la base de datos", Alert.AlertType.ERROR);
                 return;
             }
+
+            String sqlVerificarVehiculo = "SELECT * FROM vehiculo WHERE Matricula = ?";
+
+
+            // Verificar si el vehículo existe en la tabla vehiculo
+            try {
+                sentencia = conexion.prepareStatement(sqlVerificarVehiculo);
+
+                sentencia.setString(1, txtMatriculaCita.getText().toUpperCase());
+                resultado = sentencia.executeQuery();
+                if (!resultado.next()) {
+                    mostrarAlerta("Vehículo no registrado", "La matrícula introducida no se encuentra en la base de datos", Alert.AlertType.ERROR);
+                    return;
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Actualizar vehiculo");
             alert.setContentText("¿Estás seguro que quieres actualizar los cambios?");
@@ -534,11 +552,10 @@ public class VentanaPrincipalControlador implements Initializable {
                     sentencia = conexion.prepareStatement(sql);
                     sentencia.setString(1, String.valueOf(txtFechaCita.getValue()));
                     sentencia.setString(2, txtHoraCita.getValue());
-                    sentencia.setString(3, txtMatriculaCita.getText().toUpperCase());
-                    sentencia.setInt(4, idTipoInspeccion);
-                    sentencia.setInt(5, idTipoVehiculo);
-                    sentencia.setBoolean(6, Boolean.parseBoolean(txtActivaCita.getText()));
-                    sentencia.setInt(7, Integer.parseInt(txtIdCita.getText()));
+                    sentencia.setInt(3, idTipoInspeccion);
+                    sentencia.setInt(4, idTipoVehiculo);
+                    sentencia.setBoolean(5, Boolean.parseBoolean(txtActivaCita.getText()));
+                    sentencia.setInt(6, Integer.parseInt(txtIdCita.getText()));
 
                     int resultado = sentencia.executeUpdate();
 
