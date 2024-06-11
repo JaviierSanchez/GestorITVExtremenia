@@ -71,8 +71,11 @@ public class LoginController implements Initializable {
             resultado = sentencia.executeQuery();
 
             if (txtEmail.getText().isEmpty() || txtPassword.getText().isEmpty()) {
-                mostrarAlerta("Campos Vacíos", "¡Campos vacíos! Por favor, completa todos los campos antes de continuar.", Alert.AlertType.ERROR);
-            } else if (resultado.next()) {
+                mostrarAlerta("Campos Vacíos", "¡Campos vacíos! Por favor, completa todos los campos antes de continuar.", Alert.AlertType.WARNING);
+                return;
+            }
+
+            if (resultado.next()) {
                 String passwordUsuario = resultado.getString("Contraseña");
                 if (passwordUsuario.equals(hashPassword(txtPassword.getText()))) {
                     boolean esAdministrador = resultado.getBoolean("administrador");

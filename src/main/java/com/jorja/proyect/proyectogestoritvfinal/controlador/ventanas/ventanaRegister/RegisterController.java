@@ -95,8 +95,11 @@ public class RegisterController implements Initializable {
             resultado = sentencia.executeQuery();
 
             if (txtNombre.getText().isEmpty() || txtApellido.getText().isEmpty() || txtTelefono.getText().isEmpty() || txtCorreo.getText().isEmpty() || txtPassword.getText().isEmpty() || txtPassword2.getText().isEmpty()) {
-                mostrarAlerta("Campos Vacíos", "¡Campos vacíos! Por favor, completa todos los campos antes de continuar.", Alert.AlertType.ERROR);
-            } else if (!txtPassword.getText().equals(txtPassword2.getText())) {
+                mostrarAlerta("Campos Vacíos", "¡Campos vacíos! Por favor, completa todos los campos antes de continuar.", Alert.AlertType.WARNING);
+                return;
+            }
+
+            if (!txtPassword.getText().equals(txtPassword2.getText())) {
                 lblPasswordError1.setVisible(true);
                 lblPasswordError2.setVisible(true);
 

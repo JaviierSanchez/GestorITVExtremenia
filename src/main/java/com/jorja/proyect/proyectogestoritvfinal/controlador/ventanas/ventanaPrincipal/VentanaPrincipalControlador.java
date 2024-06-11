@@ -393,7 +393,7 @@ public class VentanaPrincipalControlador implements Initializable {
         // Comprobar que los campos no están vacíos
         if (txtMatriculaCita.getText().isEmpty() || txtFechaCita.getValue() == null || txtHoraCita.getValue().isEmpty() ||
                 txtTipoInspeccionCita.getValue() == null) {
-            mostrarAlerta("Error", "Rellena todos los campos", Alert.AlertType.ERROR);
+            mostrarAlerta("Campos vacíos", "Rellena todos los campos", Alert.AlertType.ERROR);
             return;
         }
 
@@ -502,82 +502,78 @@ public class VentanaPrincipalControlador implements Initializable {
         comprobarConexion(conexion);
 
         // Comprobar que los campos no están vacíos
-        if (!txtMatriculaCita.getText().isEmpty() && txtFechaCita.getValue() != null && txtHoraCita.getValue() != null &&
-                txtTipoInspeccionCita.getValue() != null) {
-
-            // Comprobar validaciones de campo
-            if (!validarMatricula(txtMatriculaCita) || !validarFechaCita(txtFechaCita)) return;
-
-            // Verificar si el ID de la cita existe en la base de datos
-            int idCita = Integer.parseInt(txtIdCita.getText());
-            if (!existeCita(idCita)) {
-                mostrarAlerta("Error", "El ID de cita no existe en la base de datos", Alert.AlertType.ERROR);
-                return;
-            }
-
-            String sqlVerificarVehiculo = "SELECT * FROM vehiculo WHERE Matricula = ?";
-
-
-            // Verificar si el vehículo existe en la tabla vehiculo
-            try {
-                sentencia = conexion.prepareStatement(sqlVerificarVehiculo);
-
-                sentencia.setString(1, txtMatriculaCita.getText().toUpperCase());
-                resultado = sentencia.executeQuery();
-                if (!resultado.next()) {
-                    mostrarAlerta("Vehículo no registrado", "La matrícula introducida no se encuentra en la base de datos", Alert.AlertType.ERROR);
-                    return;
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Actualizar vehiculo");
-            alert.setContentText("¿Estás seguro que quieres actualizar los cambios?");
-            ButtonType opcion = alert.showAndWait().orElse(ButtonType.CANCEL);
-
-            // Si la opcion seleccionada es igual a ok realizamos el update
-            if (opcion == ButtonType.OK) {
-                try {
-
-
-                    // Obtener el id del tipo inspeccion seleccionada
-                    int idTipoInspeccion = obtenerIdTipoInspeccion(txtTipoInspeccionCita.getValue());
-
-                    // Obtener el ID del tipo vehículo seleccionado
-                    TipoVehiculo tipoVehiculoSeleccionado = obtenerTipoVehiculoPorMatricula(txtMatriculaCita.getText(),cbd);
-                    int idTipoVehiculo = tipoVehiculoSeleccionado.getId();
-
-                    sentencia = conexion.prepareStatement(sql);
-                    sentencia.setString(1, String.valueOf(txtFechaCita.getValue()));
-                    sentencia.setString(2, txtHoraCita.getValue());
-                    sentencia.setInt(3, idTipoInspeccion);
-                    sentencia.setInt(4, idTipoVehiculo);
-                    sentencia.setBoolean(5, Boolean.parseBoolean(txtActivaCita.getText()));
-                    sentencia.setInt(6, Integer.parseInt(txtIdCita.getText()));
-
-                    int resultado = sentencia.executeUpdate();
-
-                    if (resultado > 0) {
-                        mostrarAlerta("Cita actualizada", "La cita ha sido actualizada con éxito", Alert.AlertType.INFORMATION);
-                        agregarCitaLista();
-                        btnCleanCita(event);
-                        buscarCitaTableView();
-                    } else {
-                        mostrarAlerta("Error", "No se ha podido actualizar la cita", Alert.AlertType.ERROR);
-                    }
-
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                } finally {
-                    cerrarConexion(cbd);
-                }
-            }
-        } else {
+        if (txtMatriculaCita.getText().isEmpty() || txtFechaCita.getValue() == null || txtHoraCita.getValue() == null || txtTipoInspeccionCita.getValue() == null) {
             mostrarAlerta("Campos vacíos", "Por favor, complete todos los campos.", Alert.AlertType.WARNING);
+            return;
         }
 
+        // Comprobar validaciones de campo
+        if (!validarMatricula(txtMatriculaCita) || !validarFechaCita(txtFechaCita)) {
+            return;
+        }
+
+        // Verificar si el ID de la cita existe en la base de datos
+        int idCita = Integer.parseInt(txtIdCita.getText());
+        if (!existeCita(idCita)) {
+            mostrarAlerta("Error", "El ID de cita no existe en la base de datos", Alert.AlertType.ERROR);
+            return;
+        }
+
+        String sqlVerificarVehiculo = "SELECT * FROM vehiculo WHERE Matricula = ?";
+
+        // Verificar si el vehículo existe en la tabla vehiculo
+        try {
+            sentencia = conexion.prepareStatement(sqlVerificarVehiculo);
+            sentencia.setString(1, txtMatriculaCita.getText().toUpperCase());
+            resultado = sentencia.executeQuery();
+            if (!resultado.next()) {
+                mostrarAlerta("Vehículo no registrado", "La matrícula introducida no se encuentra en la base de datos", Alert.AlertType.ERROR);
+                return;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Actualizar vehiculo");
+        alert.setContentText("¿Estás seguro que quieres actualizar los cambios?");
+        ButtonType opcion = alert.showAndWait().orElse(ButtonType.CANCEL);
+
+        // Si la opcion seleccionada es igual a ok realizamos el update
+        if (opcion == ButtonType.OK) {
+            try {
+                // Obtener el id del tipo inspeccion seleccionada
+                int idTipoInspeccion = obtenerIdTipoInspeccion(txtTipoInspeccionCita.getValue());
+
+                // Obtener el ID del tipo vehículo seleccionado
+                TipoVehiculo tipoVehiculoSeleccionado = obtenerTipoVehiculoPorMatricula(txtMatriculaCita.getText(), cbd);
+                int idTipoVehiculo = tipoVehiculoSeleccionado.getId();
+
+                sentencia = conexion.prepareStatement(sql);
+                sentencia.setString(1, String.valueOf(txtFechaCita.getValue()));
+                sentencia.setString(2, txtHoraCita.getValue());
+                sentencia.setInt(3, idTipoInspeccion);
+                sentencia.setInt(4, idTipoVehiculo);
+                sentencia.setBoolean(5, Boolean.parseBoolean(txtActivaCita.getText()));
+                sentencia.setInt(6, Integer.parseInt(txtIdCita.getText()));
+
+                int resultado = sentencia.executeUpdate();
+
+                if (resultado > 0) {
+                    mostrarAlerta("Cita actualizada", "La cita ha sido actualizada con éxito", Alert.AlertType.INFORMATION);
+                    agregarCitaLista();
+                    btnCleanCita(event);
+                    buscarCitaTableView();
+                } else {
+                    mostrarAlerta("Error", "No se ha podido actualizar la cita", Alert.AlertType.ERROR);
+                }
+
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            } finally {
+                cerrarConexion(cbd);
+            }
+        }
     }
 
     @FXML
@@ -589,32 +585,32 @@ public class VentanaPrincipalControlador implements Initializable {
         // Comprobamos que los campos no estan vacios
         if (!txtMatriculaVehicula.getText().isEmpty() || !txtModeloVehiculo.getText().isEmpty() || txtMarcaVehiculo.getValue() == null ||
                 !txtAñoVehiculo.getText().isEmpty() || !txtIdUsuarioVehiculo.getText().isEmpty() || txtTipoVehiculoVehiculo.getValue() == null) {
-
-
-            Alert alertaEliminar = new Alert(Alert.AlertType.CONFIRMATION);
-            alertaEliminar.setTitle("Confirmar eliminación");
-            alertaEliminar.setContentText("¿Estás seguro que quieres eliminar la cita?");
-            Optional<ButtonType> opcion = alertaEliminar.showAndWait();
-            // Si la opcion seleccionada es igual a ok realizamos el delete
-            if(opcion.get() == ButtonType.OK){
-                try {
-                    sentencia = conexion.prepareStatement(sql);
-                    sentencia.setInt(1, Integer.parseInt(txtIdCita.getText()));
-                    sentencia.executeUpdate();
-                    mostrarAlerta("Eliminado con éxito","La cita ha sido eliminada con éxito", Alert.AlertType.INFORMATION);
-                    agregarCitaLista();
-                    btnCleanCita(event);
-                    buscarCitaTableView();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }finally {
-                    cerrarConexion(cbd);
-                }
-            }
-
-        }else {
-            mostrarAlerta("Error", "Rellena los campos", Alert.AlertType.ERROR);
+            mostrarAlerta("Campos vacíos", "Rellena los campos", Alert.AlertType.WARNING);
+            return;
         }
+
+
+        Alert alertaEliminar = new Alert(Alert.AlertType.CONFIRMATION);
+        alertaEliminar.setTitle("Confirmar eliminación");
+        alertaEliminar.setContentText("¿Estás seguro que quieres eliminar la cita?");
+        Optional<ButtonType> opcion = alertaEliminar.showAndWait();
+        // Si la opcion seleccionada es igual a ok realizamos el delete
+        if (opcion.get() == ButtonType.OK) {
+            try {
+                sentencia = conexion.prepareStatement(sql);
+                sentencia.setInt(1, Integer.parseInt(txtIdCita.getText()));
+                sentencia.executeUpdate();
+                mostrarAlerta("Eliminado con éxito", "La cita ha sido eliminada con éxito", Alert.AlertType.INFORMATION);
+                agregarCitaLista();
+                btnCleanCita(event);
+                buscarCitaTableView();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            } finally {
+                cerrarConexion(cbd);
+            }
+        }
+
     }
 
     @FXML
@@ -743,8 +739,10 @@ public class VentanaPrincipalControlador implements Initializable {
 
         if (txtNombreUsuario.getText().isEmpty() || txtApellidoUsuario.getText().isEmpty() || txtTelefonoUsuario.getText().isEmpty() ||
                 txtCorreoUsuario.getText().isEmpty() || txtPassWordUsuario.getText().isEmpty()) {
-            mostrarAlerta("Error", "Rellena los campos", Alert.AlertType.ERROR);
-        } else {
+            mostrarAlerta("Campos vacíos", "Rellena los campos", Alert.AlertType.WARNING);
+            return;
+        }
+
             if (!validarTelefono(txtTelefonoUsuario) || !validarCorreo(txtCorreoUsuario) || !validarPassword(txtPassWordUsuario))
                 return;
 
@@ -779,7 +777,6 @@ public class VentanaPrincipalControlador implements Initializable {
             } finally {
                 cerrarConexion(cbd);
             }
-        }
     }
 
     @FXML
@@ -793,8 +790,9 @@ public class VentanaPrincipalControlador implements Initializable {
         // Comprobaciones de campos, si está vacío muestra alerta error, sino comprueba que los datos se han introducido con formato correcto
         if (txtNombreUsuario.getText().isEmpty() || txtApellidoUsuario.getText().isEmpty() || txtTelefonoUsuario.getText().isEmpty() ||
                 txtCorreoUsuario.getText().isEmpty() || txtPassWordUsuario.getText().isEmpty()) {
-            mostrarAlerta("Error", "Rellena los campos", Alert.AlertType.ERROR);
-        } else {
+            mostrarAlerta("Campos vacíos", "Rellena los campos", Alert.AlertType.WARNING);
+            return;
+        }
             // Validar campos
             if (!validarTelefono(txtTelefonoUsuario) || !validarCorreo(txtCorreoUsuario) || !validarPassword(txtPassWordUsuario))
                 return;
@@ -847,7 +845,6 @@ public class VentanaPrincipalControlador implements Initializable {
                     cerrarConexion(cbd);
                 }
             }
-        }
     }
 
     @FXML
@@ -859,8 +856,10 @@ public class VentanaPrincipalControlador implements Initializable {
 
         if (txtNombreUsuario.getText().isEmpty() || txtApellidoUsuario.getText().isEmpty() || txtTelefonoUsuario.getText().isEmpty() ||
                 txtCorreoUsuario.getText().isEmpty() || txtPassWordUsuario.getText().isEmpty()) {
-            mostrarAlerta("Error", "Rellena los campos", Alert.AlertType.ERROR);
-        } else {
+            mostrarAlerta("Campos vacíos", "Rellena los campos", Alert.AlertType.WARNING);
+            return;
+        }
+
             Alert alertaEliminar = new Alert(Alert.AlertType.CONFIRMATION);
             alertaEliminar.setTitle("Confirmar eliminación");
             alertaEliminar.setContentText("¿Estás seguro que quieres eliminar al usuario?");
@@ -883,7 +882,6 @@ public class VentanaPrincipalControlador implements Initializable {
                     cerrarConexion(cbd);
                 }
             }
-        }
     }
 
     @FXML
@@ -981,8 +979,12 @@ public class VentanaPrincipalControlador implements Initializable {
         comprobarConexion(conexion);
 
         // Comprobar que los campos no están vacíos
-        if (!txtMatriculaVehicula.getText().isEmpty() && !txtModeloVehiculo.getText().isEmpty() && txtMarcaVehiculo.getValue() != null &&
-                !txtAñoVehiculo.getText().isEmpty() && !txtIdUsuarioVehiculo.getText().isEmpty() && txtTipoVehiculoVehiculo.getValue() != null) {
+        if (txtMatriculaVehicula.getText().isEmpty() && txtModeloVehiculo.getText().isEmpty() && txtMarcaVehiculo.getValue() == null &&
+                txtAñoVehiculo.getText().isEmpty() && txtIdUsuarioVehiculo.getText().isEmpty() && txtTipoVehiculoVehiculo.getValue() == null) {
+            mostrarAlerta("Campos vacíos", "Rellena los campos", Alert.AlertType.WARNING);
+            return;
+        }
+
 
             // Eliminar espacios en blanco de la matrícula
             String matricula = txtMatriculaVehicula.getText().replaceAll("\\s+", "").toUpperCase();
@@ -1052,9 +1054,6 @@ public class VentanaPrincipalControlador implements Initializable {
             } finally {
                 cerrarConexion(cbd);
             }
-        } else {
-            mostrarAlerta("Error", "Rellena los campos", Alert.AlertType.ERROR);
-        }
     }
 
     @FXML
@@ -1064,8 +1063,11 @@ public class VentanaPrincipalControlador implements Initializable {
         comprobarConexion(conexion);
 
         // Verificar que los campos no estén vacíos
-        if (!txtMatriculaVehicula.getText().isEmpty() && !txtModeloVehiculo.getText().isEmpty() && txtMarcaVehiculo.getValue() != null &&
-                !txtAñoVehiculo.getText().isEmpty() && !txtIdUsuarioVehiculo.getText().isEmpty() && txtTipoVehiculoVehiculo.getValue() != null) {
+        if (txtMatriculaVehicula.getText().isEmpty() && txtModeloVehiculo.getText().isEmpty() && txtMarcaVehiculo.getValue() == null &&
+                txtAñoVehiculo.getText().isEmpty() && txtIdUsuarioVehiculo.getText().isEmpty() && txtTipoVehiculoVehiculo.getValue() == null) {
+            mostrarAlerta("Campos vacíos", "Por favor, complete todos los campos.", Alert.AlertType.WARNING);
+            return;
+        }
 
             String matricula = txtMatriculaVehicula.getText().replaceAll(" ", "").toUpperCase();
             // Validar matrícula y año
@@ -1115,9 +1117,6 @@ public class VentanaPrincipalControlador implements Initializable {
                     cerrarConexion(cbd);
                 }
             }
-        } else {
-            mostrarAlerta("Campos vacíos", "Por favor, complete todos los campos.", Alert.AlertType.WARNING);
-        }
     }
 
     @FXML
@@ -1127,8 +1126,11 @@ public class VentanaPrincipalControlador implements Initializable {
         conexion = cbd.abrirConexion();
         comprobarConexion(conexion);
 
-        if (!txtMatriculaVehicula.getText().isEmpty() || !txtMarcaVehiculo.getSelectionModel().isEmpty() || !txtModeloVehiculo.getText().isEmpty() ||
-                txtAñoVehiculo.getText().isEmpty() || !txtTipoVehiculoVehiculo.getSelectionModel().isEmpty() || txtIdUsuarioVehiculo.getText().isEmpty()) {
+        if (txtMatriculaVehicula.getText().isEmpty() || txtMarcaVehiculo.getSelectionModel().isEmpty() || txtModeloVehiculo.getText().isEmpty() ||
+                txtAñoVehiculo.getText().isEmpty() || txtTipoVehiculoVehiculo.getSelectionModel().isEmpty() || txtIdUsuarioVehiculo.getText().isEmpty()) {
+            mostrarAlerta("Campos vacíos", "Rellena los campos", Alert.AlertType.WARNING);
+            return;
+        }
 
             Alert alertaEliminar = new Alert(Alert.AlertType.CONFIRMATION);
             alertaEliminar.setTitle("Confirmar eliminación");
@@ -1151,9 +1153,6 @@ public class VentanaPrincipalControlador implements Initializable {
                     cerrarConexion(cbd);
                 }
             }
-        } else {
-            mostrarAlerta("Error", "Rellena los campos", Alert.AlertType.ERROR);
-        }
     }
 
     @FXML

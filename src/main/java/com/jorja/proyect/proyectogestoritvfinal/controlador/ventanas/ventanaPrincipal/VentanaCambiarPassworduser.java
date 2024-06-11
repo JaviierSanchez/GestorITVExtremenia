@@ -49,8 +49,13 @@ public class VentanaCambiarPassworduser {
 
         // Verificar que los campos de contraseña no estén vacíos
         if (txtPasswordAntigua.getText().isEmpty() || txtPasswordNueva.getText().isEmpty() || txtPasswordNueva2.getText().isEmpty()) {
-            mostrarAlerta("Error", "Rellena los campos", Alert.AlertType.ERROR);
-        } else if (!txtPasswordNueva.getText().equals(txtPasswordNueva2.getText())) { // si no son iguales mostramos etiquetas de error
+            mostrarAlerta("Campos vacíos", "Rellena los campos", Alert.AlertType.WARNING);
+            return;
+        }
+
+
+        // si no son iguales mostramos etiquetas de error
+        if (!txtPasswordNueva.getText().equals(txtPasswordNueva2.getText())) {
             labelErrorPassword.setVisible(true);
             labelErrorPassword2.setVisible(true);
         } else if (!validarPassword(txtPasswordNueva)) { // Validar la nueva contraseña
