@@ -393,7 +393,7 @@ public class VentanaPrincipalControlador implements Initializable {
         // Comprobar que los campos no están vacíos
         if (txtMatriculaCita.getText().isEmpty() || txtFechaCita.getValue() == null || txtHoraCita.getValue().isEmpty() ||
                 txtTipoInspeccionCita.getValue() == null) {
-            mostrarAlerta("Campos vacíos", "Rellena todos los campos", Alert.AlertType.ERROR);
+            mostrarAlerta("Campos vacíos", "Por favor, complete todos los campos.", Alert.AlertType.WARNING);
             return;
         }
 
@@ -585,7 +585,7 @@ public class VentanaPrincipalControlador implements Initializable {
         // Comprobamos que los campos no estan vacios
         if (!txtMatriculaVehicula.getText().isEmpty() || !txtModeloVehiculo.getText().isEmpty() || txtMarcaVehiculo.getValue() == null ||
                 !txtAñoVehiculo.getText().isEmpty() || !txtIdUsuarioVehiculo.getText().isEmpty() || txtTipoVehiculoVehiculo.getValue() == null) {
-            mostrarAlerta("Campos vacíos", "Rellena los campos", Alert.AlertType.WARNING);
+            mostrarAlerta("Campos vacíos", "Por favor, complete todos los campos.", Alert.AlertType.WARNING);
             return;
         }
 
@@ -739,7 +739,7 @@ public class VentanaPrincipalControlador implements Initializable {
 
         if (txtNombreUsuario.getText().isEmpty() || txtApellidoUsuario.getText().isEmpty() || txtTelefonoUsuario.getText().isEmpty() ||
                 txtCorreoUsuario.getText().isEmpty() || txtPassWordUsuario.getText().isEmpty()) {
-            mostrarAlerta("Campos vacíos", "Rellena los campos", Alert.AlertType.WARNING);
+            mostrarAlerta("Campos vacíos", "Por favor, complete todos los campos.", Alert.AlertType.WARNING);
             return;
         }
 
@@ -790,7 +790,7 @@ public class VentanaPrincipalControlador implements Initializable {
         // Comprobaciones de campos, si está vacío muestra alerta error, sino comprueba que los datos se han introducido con formato correcto
         if (txtNombreUsuario.getText().isEmpty() || txtApellidoUsuario.getText().isEmpty() || txtTelefonoUsuario.getText().isEmpty() ||
                 txtCorreoUsuario.getText().isEmpty() || txtPassWordUsuario.getText().isEmpty()) {
-            mostrarAlerta("Campos vacíos", "Rellena los campos", Alert.AlertType.WARNING);
+            mostrarAlerta("Campos vacíos", "Por favor, complete todos los campos.", Alert.AlertType.WARNING);
             return;
         }
             // Validar campos
@@ -856,7 +856,7 @@ public class VentanaPrincipalControlador implements Initializable {
 
         if (txtNombreUsuario.getText().isEmpty() || txtApellidoUsuario.getText().isEmpty() || txtTelefonoUsuario.getText().isEmpty() ||
                 txtCorreoUsuario.getText().isEmpty() || txtPassWordUsuario.getText().isEmpty()) {
-            mostrarAlerta("Campos vacíos", "Rellena los campos", Alert.AlertType.WARNING);
+            mostrarAlerta("Campos vacíos", "Por favor, complete todos los campos.", Alert.AlertType.WARNING);
             return;
         }
 
@@ -981,7 +981,7 @@ public class VentanaPrincipalControlador implements Initializable {
         // Comprobar que los campos no están vacíos
         if (txtMatriculaVehicula.getText().isEmpty() && txtModeloVehiculo.getText().isEmpty() && txtMarcaVehiculo.getValue() == null &&
                 txtAñoVehiculo.getText().isEmpty() && txtIdUsuarioVehiculo.getText().isEmpty() && txtTipoVehiculoVehiculo.getValue() == null) {
-            mostrarAlerta("Campos vacíos", "Rellena los campos", Alert.AlertType.WARNING);
+            mostrarAlerta("Campos vacíos", "Por favor, complete todos los campos.", Alert.AlertType.WARNING);
             return;
         }
 
@@ -1128,7 +1128,7 @@ public class VentanaPrincipalControlador implements Initializable {
 
         if (txtMatriculaVehicula.getText().isEmpty() || txtMarcaVehiculo.getSelectionModel().isEmpty() || txtModeloVehiculo.getText().isEmpty() ||
                 txtAñoVehiculo.getText().isEmpty() || txtTipoVehiculoVehiculo.getSelectionModel().isEmpty() || txtIdUsuarioVehiculo.getText().isEmpty()) {
-            mostrarAlerta("Campos vacíos", "Rellena los campos", Alert.AlertType.WARNING);
+            mostrarAlerta("Campos vacíos", "Por favor, complete todos los campos.", Alert.AlertType.WARNING);
             return;
         }
 
