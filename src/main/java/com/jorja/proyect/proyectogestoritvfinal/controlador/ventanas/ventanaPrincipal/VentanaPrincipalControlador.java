@@ -784,7 +784,8 @@ public class VentanaPrincipalControlador implements Initializable {
 
     @FXML
     void btnUpdateUsuario(ActionEvent event) {
-        String sql = "UPDATE datos_usuario du SET du.Nombre = ?, du.Apellido = ?, du.Telefono = ?, du.Correo = ?, du.Contraseña = ?, du.Administrador = ? WHERE du.id = ?";
+        String sqlSelect = "SELECT du.Contraseña FROM datos_usuario du WHERE du.id = ?";
+        String sqlUpdate = "UPDATE datos_usuario du SET du.Nombre = ?, du.Apellido = ?, du.Telefono = ?, du.Correo = ?, du.Contraseña = ?, du.Administrador = ? WHERE du.id = ?";
 
         conexion = cbd.abrirConexion();
         comprobarConexion(conexion);
@@ -806,8 +807,26 @@ public class VentanaPrincipalControlador implements Initializable {
 
             if (opcion == ButtonType.OK) {
                 try {
-                    String hashedPassword = hashPassword(txtPassWordUsuario.getText());
-                    sentencia = conexion.prepareStatement(sql);
+                    String passwordBD = "";
+
+                    // Sacamos la contraseña de la base de datos
+                    sentencia = conexion.prepareStatement(sqlSelect);
+                    sentencia.setString(1, txtIdUsuario.getText());
+                     resultado = sentencia.executeQuery();
+                    if (resultado.next()) {
+                        passwordBD = resultado.getString("Contraseña");
+                    }
+                    resultado.close();
+                    sentencia.close();
+                    // Guardamos la nueva contraseña escrita en la caja de texto
+                    String passwordNueva = txtPassWordUsuario.getText();
+
+                    /* Hacemos una ternaria en la que si la contraseña que esta en bd es igual a la que esta en la caja de texto la deja tal cual,
+                     *   pero si la contraseña no es igual la cifra de nuevo y la modifica
+                     */
+                    String hashedPassword = passwordBD.equals(passwordNueva) ? passwordBD : hashPassword(passwordNueva);
+
+                    sentencia = conexion.prepareStatement(sqlUpdate);
                     sentencia.setString(1, toTitleCase(txtNombreUsuario.getText()));
                     sentencia.setString(2, toTitleCase(txtApellidoUsuario.getText()));
                     sentencia.setString(3, txtTelefonoUsuario.getText());
