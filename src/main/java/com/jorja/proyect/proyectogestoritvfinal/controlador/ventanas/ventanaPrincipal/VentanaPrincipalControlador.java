@@ -391,7 +391,7 @@ public class VentanaPrincipalControlador implements Initializable {
         comprobarConexion(conexion);
 
         // Comprobar que los campos no están vacíos
-        if (txtMatriculaCita.getText().isEmpty() || txtFechaCita.getValue() == null || txtHoraCita.getValue().isEmpty() ||
+        if (txtMatriculaCita.getText().isEmpty() || txtFechaCita.getValue() == null || txtHoraCita.getValue() == null ||
                 txtTipoInspeccionCita.getValue() == null) {
             mostrarAlerta("Campos vacíos", "Por favor, complete todos los campos.", Alert.AlertType.WARNING);
             return;
@@ -497,7 +497,7 @@ public class VentanaPrincipalControlador implements Initializable {
     @FXML
     void btnUpdateCita(ActionEvent event) {
 
-        String sql = "UPDATE cita SET Fecha = ?, Hora = ?,  Tipo_Inspeccion_id = ?, Tipo_Vehiculo_id = ?, Activa = ? WHERE id = ?";
+        String sql = "UPDATE cita SET id_Vehiculo = ?, Fecha = ?, Hora = ?,  Tipo_Inspeccion_id = ?, Tipo_Vehiculo_id = ?, Activa = ? WHERE id = ?";
         conexion = cbd.abrirConexion();
         comprobarConexion(conexion);
 
@@ -550,12 +550,13 @@ public class VentanaPrincipalControlador implements Initializable {
                 int idTipoVehiculo = tipoVehiculoSeleccionado.getId();
 
                 sentencia = conexion.prepareStatement(sql);
-                sentencia.setString(1, String.valueOf(txtFechaCita.getValue()));
-                sentencia.setString(2, txtHoraCita.getValue());
-                sentencia.setInt(3, idTipoInspeccion);
-                sentencia.setInt(4, idTipoVehiculo);
-                sentencia.setBoolean(5, Boolean.parseBoolean(txtActivaCita.getText()));
-                sentencia.setInt(6, Integer.parseInt(txtIdCita.getText()));
+                sentencia.setString(1,txtMatriculaCita.getText().toUpperCase());
+                sentencia.setString(2, String.valueOf(txtFechaCita.getValue()));
+                sentencia.setString(3, txtHoraCita.getValue());
+                sentencia.setInt(4, idTipoInspeccion);
+                sentencia.setInt(5, idTipoVehiculo);
+                sentencia.setBoolean(6, Boolean.parseBoolean(txtActivaCita.getText()));
+                sentencia.setInt(7, Integer.parseInt(txtIdCita.getText()));
 
                 int resultado = sentencia.executeUpdate();
 
@@ -583,8 +584,8 @@ public class VentanaPrincipalControlador implements Initializable {
         conexion = cbd.abrirConexion();
 
         // Comprobamos que los campos no estan vacios
-        if (!txtMatriculaVehicula.getText().isEmpty() || !txtModeloVehiculo.getText().isEmpty() || txtMarcaVehiculo.getValue() == null ||
-                !txtAñoVehiculo.getText().isEmpty() || !txtIdUsuarioVehiculo.getText().isEmpty() || txtTipoVehiculoVehiculo.getValue() == null) {
+        if (txtMatriculaCita.getText().isEmpty() || txtFechaCita.getValue() == null || txtHoraCita.getValue() == null ||
+                txtTipoVehiculoCita.getText().isEmpty() || txtTipoInspeccionCita.getValue() == null || txtPrecioCita.getText().isEmpty()) {
             mostrarAlerta("Campos vacíos", "Por favor, complete todos los campos.", Alert.AlertType.WARNING);
             return;
         }
@@ -1126,8 +1127,8 @@ public class VentanaPrincipalControlador implements Initializable {
         conexion = cbd.abrirConexion();
         comprobarConexion(conexion);
 
-        if (txtMatriculaVehicula.getText().isEmpty() || txtMarcaVehiculo.getSelectionModel().isEmpty() || txtModeloVehiculo.getText().isEmpty() ||
-                txtAñoVehiculo.getText().isEmpty() || txtTipoVehiculoVehiculo.getSelectionModel().isEmpty() || txtIdUsuarioVehiculo.getText().isEmpty()) {
+        if (txtMatriculaVehicula.getText().isEmpty() || txtMarcaVehiculo.getValue() == null || txtModeloVehiculo.getText().isEmpty() ||
+                txtAñoVehiculo.getText().isEmpty() || txtTipoVehiculoVehiculo.getValue() == null || txtIdUsuarioVehiculo.getText().isEmpty()) {
             mostrarAlerta("Campos vacíos", "Por favor, complete todos los campos.", Alert.AlertType.WARNING);
             return;
         }

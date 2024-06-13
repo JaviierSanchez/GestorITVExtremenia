@@ -121,7 +121,7 @@ public class RegisterController implements Initializable {
                     int filas = sentencia.executeUpdate();
 
                     if (filas > 0) {
-                        mostrarAlerta("Usuario registrado", "El usuario se registro con exito, inicie sesion", Alert.AlertType.INFORMATION);
+                        mostrarAlerta("Usuario registrado", "El usuario se registró con éxito, inicie sesion", Alert.AlertType.INFORMATION);
                         txtCorreo.getScene().getWindow().hide();
                         try {
                             new Main().start(new Stage());
